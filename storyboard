@@ -1,0 +1,13 @@
+Duplicar las envps en my_env, no liberamos envps
+Setup signals no liberamos no allocamos nada
+Expandir variables: (my_env)
+	leemos el input
+		si es $? mostramos el exit code
+		en otro caso: usamos (my_env)
+			creamos una variable y guardamos en ella el nombre de la varibale(var = HOME)
+			pasamos esa varibale junto con my_env a la funcionn que busca el valor de esta variable dentro de my_env
+			creamos otra vaibale en la que guardamos el resultado de la funcion anterior que seria lo que va despues del '='(no entiendo que tiene que ver con envp si todo esta en el input?
+			copiamos esta varibale en el resultado
+			liberamos la varibale
+			devolvemos el resultado.
+Ma;ana: parse input.

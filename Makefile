@@ -1,6 +1,6 @@
 NAME = minishell
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
 SRCS = \
 	main.c \
@@ -19,7 +19,7 @@ SRCS = \
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
 
-$(NAME): $(OBJS) Makefile libft
+$(NAME): $(OBJS) Makefile #libft
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
 
 all: $(NAME)

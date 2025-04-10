@@ -180,15 +180,15 @@ int ft_export(char **args, char ***envp)
         char    *eq = strchr(args[i], '=');
         if (eq)
         {
-            int     len = 0;
-            while ((*envp)[len])
-                len++;
+            int     name_len = eq - args[i]; // Correct variable name length
             int found = 0;
+
             // Ver si la varibale ya existe -> reemplazarla
-            for (int j = 0; j < len; j++)
+            for (int j = 0; (*envp)[j]; j++)
             {
-                if (!strncmp((*envp)[j], args[i], len) &&
-                (*envp)[j][len] == '=')
+                // Compare only the variable name part
+                if (!strncmp((*envp)[j], args[i], name_len) &&
+                (*envp)[j][name_len] == '=')
                 {
                     char *new = strdup(args[i]);
                     if (!new)
@@ -211,13 +211,24 @@ int ft_export(char **args, char ***envp)
                 if (!new_env)
                     return (1);
                 
+                // Copy all existing environment variables
                 for (int k = 0; k < count; k++)
                     new_env[k] = (*envp)[k];
+                
+                // Add new variable
                 new_env[count] = strdup(args[i]);
+                if (!new_env[count])
+                {
+                    free(new_env);
+                    return (1);
+                }
                 new_env[count + 1] = NULL;
 
-                free(*envp); // solo liberamos el array, no los strings
+                // Guardamos el antiguo array para liberar luego
+                //free_env(*envp);
                 *envp = new_env;
+                //free_env(*envp);
+                // Liberar solo el array viejo, no las cadenas que ya estan copiadas
             }
         }
         // Si no hay '=', se ignora (vérsion básica; se puede ampliar luego)

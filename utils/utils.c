@@ -22,6 +22,8 @@ int     ft_isdigit(int c)
 
 void    free_env(char **env)
 {
+    if (!env)
+        return ;
     int i = 0;
     while (env[i])
         free(env[i++]);
