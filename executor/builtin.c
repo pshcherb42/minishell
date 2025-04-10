@@ -15,44 +15,45 @@ int is_builtin(char *cmd)
     ); // libft
 }
 
-int exec_builtin(t_cmd *cmd, char **envp)
+int exec_builtin(t_cmd *cmd, char ***envp)
 {
     if (!cmd || !cmd->args || !cmd->args[0])
         return (1);
-    if (!strcmp(cmd->args[0], "exit")) // libft
+    
+    if (!strcmp(cmd->args[0], "exit")) // si es un exit
     {
-        printf("exit\n");
-        if (cmd->args[1])
+        printf("exit\n"); // imprime exit
+        if (cmd->args[1]) // si hay un string despues
         {
-            for (int i = 0; cmd->args[1][i]; i++)
+            for (int i = 0; cmd->args[1][i]; i++) // miramos todos los signos del primer argumento
             {
-                if (!ft_isdigit(cmd->args[1][i]))
+                if (!ft_isdigit(cmd->args[1][i])) // si no es un numero
                 {
                     fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd->args[1]); // cambiar a algo permitido
                     exit(255);
                 }
             }
-            if (cmd->args[2])
+            if (cmd->args[2]) // si hay dos argumentos despues del exit
             {
-                fprintf(stderr, "minishell: exit: too many arguments\n");
+                fprintf(stderr, "minishell: exit: too many arguments\n"); // mensaje de error
                 return (1);
             }
             exit(atoi(cmd->args[1]) % 256); // que hace esto? porque 256?
         }
         exit (0);
     }
-    else if (!strcmp(cmd->args[0], "cd")) // libft
-        return (ft_cd(cmd->args, envp)); // <- pasamos args y envp, luego guardar envp como cmd->env
+    else if (!strcmp(cmd->args[0], "cd")) // si es un cd
+        return (ft_cd(cmd->args, *envp)); // <- pasamos args y envp, luego guardar envp como cmd->env
     else if (!strcmp(cmd->args[0], "pwd")) //libft
         return (ft_pwd());
     else if (!strcmp(cmd->args[0], "echo")) // libft
         return (ft_echo(cmd->args));
     else if (!strcmp(cmd->args[0], "env"))
-        return (ft_env(envp));
+        return (ft_env(*envp));
     else if (!strcmp(cmd->args[0], "unset"))
-        return (ft_unset(cmd->args, &envp));
+        return (ft_unset(cmd->args, envp));
     else if (!strcmp(cmd->args[0], "export"))
-        return (ft_export(cmd->args, &envp));
+        return (ft_export(cmd->args, envp));
     return (1);
 }
 

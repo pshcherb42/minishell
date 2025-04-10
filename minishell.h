@@ -33,7 +33,7 @@ char	*expand_variables(const char *input, char **envp, int last_exit_code);
 char    *get_env_value(const char *var, char **envp);
 
 // funciones ejecucción
-int     execute_cmds(t_cmd *cmd, char **envp);
+int     execute_cmds(t_cmd *cmd, char ***envp);
 char	*get_cmd_path(char *cmd, char **envp);
 int     ft_cd(char **args, char **envp);
 int     ft_pwd(void);
@@ -44,7 +44,7 @@ int     ft_export(char **args, char ***envp);
 
 // funciones de built-ins
 int     is_builtin(char *cmd);
-int     exec_builtin(t_cmd *cmd, char **envp);
+int     exec_builtin(t_cmd *cmd, char ***envp);
 
 // funciones de señales
 void    setup_signals(void);

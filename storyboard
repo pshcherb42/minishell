@@ -10,4 +10,7 @@ Expandir variables: (my_env)
 			copiamos esta varibale en el resultado
 			liberamos la varibale
 			devolvemos el resultado.
-Ma;ana: parse input.
+
+Parse_input: lo que hace es split_args. Tiene otras cosas pero al parecer no las usamos por ahora
+
+split_args:
