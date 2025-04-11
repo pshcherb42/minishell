@@ -49,7 +49,7 @@ int main(int argc, char **argv, char **envp)
         char    *expanded = expand_variables(input, my_env, last_exit_code); // toma input original por ejemplo echo $VAR y lo transforma en echo hello
         if (*input)
             add_history(input);
-        cmds = parse_input(expanded); // devuelve comandos
+        cmds = parse_input(input, my_env, last_exit_code); // devuelve comandos
         if (cmds)
             last_exit_code = execute_cmds(cmds, &my_env);
         free_cmds(cmds);

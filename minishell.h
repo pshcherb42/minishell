@@ -12,6 +12,7 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <ctype.h>
 
 typedef struct s_cmd
 {
@@ -27,8 +28,8 @@ typedef struct s_cmd
 void    init_shell(void);
 
 // funciones parser
-t_cmd   *parse_input(char *input);
-char    **split_args(char *input);
+t_cmd   *parse_input(char *input, char **envp, int last_exit_code);
+char    **split_args(char *input, char **envp, int last_exit_code);
 char	*expand_variables(const char *input, char **envp, int last_exit_code);
 char    *get_env_value(const char *var, char **envp);
 
