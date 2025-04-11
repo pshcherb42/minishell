@@ -32,6 +32,7 @@ t_cmd   *parse_input(char *input, char **envp, int last_exit_code);
 char    **split_args(char *input, char **envp, int last_exit_code);
 char	*expand_variables(const char *input, char **envp, int last_exit_code);
 char    *get_env_value(const char *var, char **envp);
+int     validate_quotes(const char *input);
 
 // funciones ejecucción
 int     execute_cmds(t_cmd *cmd, char ***envp);

@@ -45,7 +45,12 @@ int main(int argc, char **argv, char **envp)
             printf("exit\n");
             break ;
         }
-
+        if (!validate_quotes(input)) // input porque la funcion tiene que analizar lo que escribio el usuario origialmente
+        {
+            fprintf(stderr, "minishell: syntax error: unclosed quote\n");
+            free(input);
+            continue ;
+        }
         char    *expanded = expand_variables(input, my_env, last_exit_code); // toma input original por ejemplo echo $VAR y lo transforma en echo hello
         if (*input)
             add_history(input);
