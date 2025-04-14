@@ -1,239 +1,244 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 17:14:59 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/04/14 19:49:30 by pshcherb         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-int is_builtin(char *cmd)
+int	is_parent_builtin(const char *cmd) // same as builtin but for pipes
 {
-    if (!cmd)
-        return (0);
-    return (
-        !strcmp(cmd, "cd") ||
-        !strcmp(cmd, "exit") ||
-        !strcmp(cmd, "pwd") ||
-        !strcmp(cmd, "echo") ||
-        !strcmp(cmd, "env") ||
-        !strcmp(cmd, "unset") ||
-        !strcmp(cmd, "export")
-    ); // libft
+	return (!strcmp(cmd, "cd")
+		|| !strcmp(cmd, "exit")
+		|| !strcmp(cmd, "export")
+		|| !strcmp(cmd, "unset"));
 }
 
-int exec_builtin(t_cmd *cmd, char ***envp)
+int	is_builtin(char *cmd) // checks if the given command is builtin
 {
-    if (!cmd || !cmd->args || !cmd->args[0])
-        return (1);
-    
-    if (!strcmp(cmd->args[0], "exit")) // si es un exit
-    {
-        printf("exit\n"); // imprime exit
-        if (cmd->args[1]) // si hay un string despues
-        {
-            for (int i = 0; cmd->args[1][i]; i++) // miramos todos los signos del primer argumento
-            {
-                if (!ft_isdigit(cmd->args[1][i])) // si no es un numero
-                {
-                    fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd->args[1]); // cambiar a algo permitido
-                    exit(255);
-                }
-            }
-            if (cmd->args[2]) // si hay dos argumentos despues del exit
-            {
-                fprintf(stderr, "minishell: exit: too many arguments\n"); // mensaje de error
-                return (1);
-            }
-            exit(atoi(cmd->args[1]) % 256); // que hace esto? porque 256?
-        }
-        exit (0);
-    }
-    else if (!strcmp(cmd->args[0], "cd")) // si es un cd
-        return (ft_cd(cmd->args, *envp)); // <- pasamos args y envp, luego guardar envp como cmd->env
-    else if (!strcmp(cmd->args[0], "pwd")) //libft
-        return (ft_pwd());
-    else if (!strcmp(cmd->args[0], "echo")) // libft
-        return (ft_echo(cmd->args));
-    else if (!strcmp(cmd->args[0], "env"))
-        return (ft_env(*envp));
-    else if (!strcmp(cmd->args[0], "unset"))
-        return (ft_unset(cmd->args, envp));
-    else if (!strcmp(cmd->args[0], "export"))
-        return (ft_export(cmd->args, envp));
-    return (1);
+	if (!cmd)
+		return (0);
+	return (!strcmp(cmd, "cd")
+		|| !strcmp(cmd, "exit")
+		|| !strcmp(cmd, "pwd")
+		|| !strcmp(cmd, "echo")
+		|| !strcmp(cmd, "env")
+		|| !strcmp(cmd, "unset")
+		|| !strcmp(cmd, "export"));
 }
 
-int ft_cd(char **args, char **envp)
+int	exec_builtin(t_cmd *cmd, char ***envp) // executes the builtin
 {
-    char    *target;
-    int     ret;
-    (void)envp;
-
-    if (!args[1]) // solo "cd"
-    {
-        target = getenv("HOME");
-        if (!target)
-        {
-            fprintf(stderr, "minishell: cd: HOME not set\n");
-            return (1);
-        }
-    }
-    else
-        target = args[1];
-
-    ret = chdir(target);
-    if (ret != 0)
-    {
-        perror("minishell: cd");
-        return (1);
-    }
-    // Bonus: actualizar PWD en entorno, luego lo haremos
-    return (0);
+	if (!cmd || !cmd->args || !cmd->args[0])
+		return (1);
+	if (!strcmp(cmd->args[0], "exit"))
+	{
+		printf("exit\n");
+		if (cmd->args[1])
+		{
+			for (int i = 0; cmd->args[1][i]; i++)
+			{
+				if (!ft_isdigit(cmd->args[1][i]))
+				{
+					fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd->args[1]);
+					exit(255);
+				}
+			}
+			if (cmd->args[2])
+			{
+				fprintf(stderr, "minishell: exit: too many arguments\n");
+				return (1);
+			}
+			exit(atoi(cmd->args[1]) % 256);
+		}
+		exit (0);
+	}
+	else if (!strcmp(cmd->args[0], "cd"))
+		return (ft_cd(cmd->args, *envp));
+	else if (!strcmp(cmd->args[0], "pwd"))
+		return (ft_pwd());
+	else if (!strcmp(cmd->args[0], "echo"))
+		return (ft_echo(cmd->args));
+	else if (!strcmp(cmd->args[0], "env"))
+		return (ft_env(*envp));
+	else if (!strcmp(cmd->args[0], "unset"))
+		return (ft_unset(cmd->args, envp));
+	else if (!strcmp(cmd->args[0], "export"))
+		return (ft_export(cmd->args, envp));
+	return (1);
 }
 
-int ft_pwd(void)
+int	ft_cd(char **args, char **envp) // changes current directory
 {
-    char    cwd[1024];
+	char	*target;
+	int		ret;
 
-    if (getcwd(cwd, sizeof(cwd)) == NULL) // que hace getcwd?
-    {
-        perror("minishell: pwd");
-        return (1);
-    }
-    printf("%s\n", cwd);
-    return (0);
+	(void)envp;
+	if (!args[1])
+	{
+		target = getenv("HOME");
+		if (!target)
+		{
+			fprintf(stderr, "minishell: cd: HOME not set\n");
+			return (1);
+		}
+	}
+	else
+		target = args[1];
+	ret = chdir(target);
+	if (ret != 0)
+	{
+		perror("minishell: cd");
+		return (1);
+	}
+	// Bonus: actualizar PWD en entorno, luego lo haremos
+	return (0);
 }
 
-int ft_echo(char **args)
+int	ft_pwd(void) // printd the working directory
 {
-    int i = 1;
-    int newline = 1;
+	char	cwd[1024];
 
-    // Manejo de multiples -n seguidos
-    if (args[i] && strncmp(args[i], "-n", 2) == 0)
-    {
-        while (args[i] && strspn(args[i], "-n") == strlen(args[i])) // verifica que el argumento esté formado solo por - y n, cubre casos como -n, -nnn etc.
-        {
-            newline = 0;
-            i++;
-        }
-    }
-
-    while (args[i])
-    {
-        printf("%s", args[i]);
-        if (args[i + 1])
-            printf(" "); // entre args, pero no despues del ultimo
-        i++;
-    }
-    if (newline)
-        printf("\n");
-    return (0);
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	{
+		perror("minishell: pwd");
+		return (1);
+	}
+	printf("%s\n", cwd);
+	return (0);
 }
 
-int ft_env(char **envp)
+int	ft_echo(char **args) // prints arguments, supports -n
 {
-    for (int i = 0; envp[i]; i++)
-    {
-        // Solo imprimimos las que tienen '='
-        if (strchr(envp[i], '=')) // libft
-            printf("%s\n", envp[i]);
-    }
-    return (0);
+	int	i;
+	int	newline;
+
+	i = 1;
+	newline = 1;
+	if (args[i] && strncmp(args[i], "-n", 2) == 0)
+	{
+		while (args[i] && strspn(args[i], "-n") == strlen(args[i]))
+		{
+			newline = 0;
+			i++;
+		}
+	}
+	while (args[i])
+	{
+		printf("%s", args[i]);
+		if (args[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (newline)
+		printf("\n");
+	return (0);
 }
 
-int ft_unset(char **args, char ***envp)
+int	ft_env(char **envp) // prints all environment variables
 {
-    int i = 1;
-    int j, k;
-
-    if (!args[1])
-        return (0);
-    
-    while (args[i])
-    {
-        j = 0;
-        while ((*envp)[j])
-        {
-            if (!strncmp((*envp)[j], args[i], strlen(args[i])) &&
-                (*envp)[j][strlen(args[i])] == '=')
-            {
-                free((*envp)[j]);
-                for (k = j; (*envp)[k]; k++)
-                    (*envp)[k] = (*envp)[k + 1];
-                continue ; // revisa la nueva linea en j
-            }
-            j++;
-        }
-        i++;
-    }
-    return (0);
+	for (int i = 0; envp[i]; i++)
+	{
+		if (strchr(envp[i], '='))
+			printf("%s\n", envp[i]);
+	}
+	return (0);
 }
 
-int ft_export(char **args, char ***envp)
+int	ft_unset(char **args, char ***envp) // removes a variable from the environment
 {
-    int i = 1;
+	int	i;
+	int	j;
+	int	k;
 
-    // Si no hay argumentos, imprimir todas las vars
-    if (!args[1])
-    {
-        for (int j = 0; (*envp)[j]; j++)
-            printf("declare -x %s\n", (*envp)[j]);
-        return (0);
-    }
+	i = 1;
+	if (!args[1])
+		return (0);
+	while (args[i])
+	{
+		j = 0;
+		while ((*envp)[j])
+		{
+			if (!strncmp((*envp)[j], args[i], strlen(args[i])) &&
+				(*envp)[j][strlen(args[i])] == '=')
+			{
+				free((*envp)[j]);
+				for (k = j; (*envp)[k]; k++)
+					(*envp)[k] = (*envp)[k + 1];
+				continue ;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
 
-    while (args[i])
-    {
-        char    *eq = strchr(args[i], '=');
-        if (eq)
-        {
-            int     name_len = eq - args[i]; // Correct variable name length
-            int found = 0;
+int	ft_export(char **args, char ***envp) // adds/modifies environment variables
+{
+	int		i;
+	char	*eq;
+	int		name_len;
+	int		found;
+	char	*new;
+	int		count;
+	char	**new_env;
 
-            // Ver si la varibale ya existe -> reemplazarla
-            for (int j = 0; (*envp)[j]; j++)
-            {
-                // Compare only the variable name part
-                if (!strncmp((*envp)[j], args[i], name_len) &&
-                (*envp)[j][name_len] == '=')
-                {
-                    char *new = strdup(args[i]);
-                    if (!new)
-                        return (1);
-                    free((*envp)[j]);
-                    (*envp)[j] = new;
-                    found = 1;
-                    break ;
-                }
-            }
-
-            // Si no existe -> añdirla
-            if (!found)
-            {
-                int count = 0;
-                while ((*envp)[count])
-                    count++;
-
-                char **new_env = malloc(sizeof(char *) * (count + 2));
-                if (!new_env)
-                    return (1);
-                
-                // Copy all existing environment variables
-                for (int k = 0; k < count; k++)
-                    new_env[k] = (*envp)[k];
-                
-                // Add new variable
-                new_env[count] = strdup(args[i]);
-                if (!new_env[count])
-                {
-                    free(new_env);
-                    return (1);
-                }
-                new_env[count + 1] = NULL;
-
-                // Guardamos el antiguo array para liberar luego
-                //free_env(*envp);
-                *envp = new_env;
-                //free_env(*envp);
-                // Liberar solo el array viejo, no las cadenas que ya estan copiadas
-            }
-        }
-        // Si no hay '=', se ignora (vérsion básica; se puede ampliar luego)
-        i++;
-    }
-    return (0);
+	i = 1;
+	if (!args[1])
+	{
+		for (int j = 0; (*envp)[j]; j++)
+			printf("declare -x %s\n", (*envp)[j]);
+		return (0);
+	}
+	while (args[i])
+	{
+		eq = strchr(args[i], '=');
+		if (eq)
+		{
+			name_len = eq - args[i];
+			found = 0;
+			for (int j = 0; (*envp)[j]; j++)
+			{
+				if (!strncmp((*envp)[j], args[i], name_len) &&
+					(*envp)[j][name_len] == '=')
+				{
+					new = strdup(args[i]);
+					if (!new)
+						return (1);
+					free((*envp)[j]);
+					(*envp)[j] = new;
+					found = 1;
+					break ;
+				}
+			}
+			if (!found)
+			{
+				count = 0;
+				while ((*envp)[count])
+					count++;
+				new_env = malloc(sizeof(char *) * (count + 2));
+				if (!new_env)
+					return (1);
+				for (int k = 0; k < count; k++)
+					new_env[k] = (*envp)[k];
+				new_env[count] = strdup(args[i]);
+				if (!new_env[count])
+				{
+					free(new_env);
+					return (1);
+				}
+				new_env[count + 1] = NULL;
+				*envp = new_env;
+			}
+		}
+		i++;
+	}
+	return (0);
 }

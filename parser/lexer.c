@@ -1,125 +1,136 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/14 17:14:28 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/04/14 18:38:04 by pshcherb         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
-static int  is_quote(char c)
+static int	is_quote(char c)
 {
-    return (c == '\'' || c == '"'); // Verifica si el caracter es comilla
+	return (c == '\'' || c == '"');
 }
 
-char    **split_args(char *input, char **envp, int last_exit_code) // dividir el input, leer las ' y "
+char	**split_args(char *input, char **envp, int last_exit_code)
 {
-    char    **args; // array de strings con los argumentos
-    char    quote_char = '\0'; // ni idea por ahora
-    int     in_quote = 0; // para ver si estas dentro
-    int     i = 0, j = 0; // contadores
+	char		**args;
+	char		quote_char;
+	int			in_quote;
+	int			i;
+	int			j;
+	int			start;
+	int			len;
+	char		*raw_token;
+	int			k;
+	int			m;
+	int			inside_quotes;
+	char		*expanded;
+	char		q_char;
 
-    args = malloc(sizeof(char *) * 100); // Reservamos espacio para hasta 100 argumentos
-    if (!args) // check malloc
-        return (NULL);
-    
-    while (input[i]) // mientras hay input
-    {
-        // Saltar espacios al inicio de cada argumento (solo si no estamos dentro de comillas)
-        while (input[i] == ' ' && !in_quote) // pasar espacios
-            i++;
-        if (!input[i]) // si no hay inpt salir
-            break ;
-        int start = i; // contador del principio
-        int len = 0; // contdor longitud
-
-        // Aquí recorremos el input hasta encontrar el fin del argumento
-        while (input[i])
-        {
-            if (is_quote(input[i]))
-            {
-                if (!in_quote) //  Entramos en comillas
-                {
-                    in_quote = 1; // ahora estamos dentro
-                    quote_char = input[i++]; // saltamos la comilla de apertura
-                    continue ; // seguimos
-                }
-                else if (input[i] == quote_char) // Cerramos comillas
-                {
-                    in_quote = 0;
-                    i++; // saltamos la comilla de cierre
-                    continue ;
-                }
-                else
-                {
-                    // Es una comilla distinta : la dejamos como parte del tokenn
-                    i++;
-                    continue ;
-                }
-            }
-            if (input[i] == ' ' && !in_quote) // pasams los espacios
-                break ;
-            i++; // aumentamos i
-        } // aumentar i y copiar las quotes en quote char?
-
-        // Copiar el token manualmente sin comillas
-        len = i - start; // longitud de la frase
-        char *raw_token = malloc(len + 1);
-        if (!raw_token) // check duplicado
-            return (NULL);
-        int k = 0;
-        int m = start;
-        int inside_quotes = 0;
-        char q_char = '\0';
-
-        while (m < i)
-        {
-            if (is_quote(input[m]))
-            {
-                if (!inside_quotes)
-                {
-                    inside_quotes = 1;
-                    q_char = input[m++];
-                    continue ;
-                }
-                else if (input[m] == q_char)
-                {
-                    inside_quotes = 0;
-                    m++;
-                    continue ;
-                }
-            }
-            raw_token[k++] = input[m++];
-        }
-        raw_token[k] = '\0';
-
-        // Expand only if not inside single quotes
-        char *expanded = raw_token; // guardamos innput en la variable expanded
-        if (!(quote_char == '\'')) // comprobamos comillas singles
-        {
-            expanded = expand_variables(raw_token, envp, last_exit_code); // expandimos variables
-            free(raw_token); // liberamos input sin expandir
-        }
-        args[j++] = expanded; // copiar contenido de la varibale
-    }
-    args[j] = NULL; // put an end
-    return (args); // return
+	quote_char = '\0';
+	in_quote = 0;
+	i = 0;
+	j = 0;
+	args = malloc(sizeof(char *) * 100);
+	if (!args)
+		return (NULL);
+	while (input[i])
+	{
+		while (input[i] == ' ' && !in_quote)
+			i++;
+		if (!input[i])
+			break ;
+		start = i;
+		len = 0;
+		while (input[i])
+		{
+			if (is_quote(input[i]))
+			{
+				if (!in_quote)
+				{
+					in_quote = 1;
+					quote_char = input[i++];
+					continue ;
+				}
+				else if (input[i] == quote_char)
+				{
+					in_quote = 0;
+					i++;
+					continue ;
+				}
+				else
+				{
+					i++;
+					continue ;
+				}
+			}
+			if (input[i] == ' ' && !in_quote)
+				break ;
+			i++;
+		}
+		len = i - start;
+		raw_token = malloc(len + 1);
+		if (!raw_token)
+			return (NULL);
+		k = 0;
+		m = start;
+		inside_quotes = 0;
+		q_char = '\0';
+		while (m < i)
+		{
+			if (is_quote(input[m]))
+			{
+				if (!inside_quotes)
+				{
+					inside_quotes = 1;
+					q_char = input[m++];
+					continue ;
+				}
+				else if (input[m] == q_char)
+				{
+					inside_quotes = 0;
+					m++;
+					continue ;
+				}
+			}
+			raw_token[k++] = input[m++];
+		}
+		raw_token[k] = '\0';
+		expanded = raw_token;
+		if (!(quote_char == '\''))
+		{
+			expanded = expand_variables(raw_token, envp, last_exit_code);
+			free(raw_token);
+		}
+		args[j++] = expanded;
+	}
+	args[j] = NULL;
+	return (args);
 }
 
-// Detecta ' o " y entra/sale de comillas
-// Si encuentra un espacio fuera de comillas, cierra el token
-// Copia el contenido sin comillas
-// Maneja multiples argumentos agrupados, incluso con comillas añadidas correctamente
-
-// Manejar errores de syntaxs
-int     validate_quotes(const char *input)
+int	validate_quotes(const char *input)
 {
-    char quote = '\0';
-    int i = 0;
+	char	quote;
+	int		i;
 
-    while (input[i])
-    {
-        if (is_quote(input[i]))
-        {
-            if (quote == '\0') // Abrimos comillas
-                quote = input[i];
-            else if (input[i] == quote) // Cerramos comillas
-                quote = '\0';
-        }
-        i++;
-    }
-    return (quote == '\0'); // Si no hay comillas abiertas, esta bien
+	quote = '\0';
+	i = 0;
+	while (input[i])
+	{
+		if (is_quote(input[i]))
+		{
+			if (quote == '\0')
+				quote = input[i];
+			else if (input[i] == quote)
+				quote = '\0';
+		}
+		i++;
+	}
+	return (quote == '\0');
 }
