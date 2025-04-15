@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/14 19:06:41 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/15 12:15:44 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ int	execute_cmds(t_cmd *cmd, char ***envp)
 		}
 		if (pid == 0)
 		{
+			signal(SIGINT, SIG_DFL);
+			signal(SIGQUIT, SIG_DFL);
 			if (prev_fd != -1)
 			{
 				dup2(prev_fd, STDIN_FILENO);
@@ -109,6 +111,11 @@ int	execute_cmds(t_cmd *cmd, char ***envp)
 			prev_fd = pipefd[0];
 		}
 		waitpid(pid, &status, 0);
+		if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) == SIGQUIT)
+				write(2, "Quit (core dumped)\n", 20);
+		}
 		cmd = cmd->next;
 	}
 	return (WEXITSTATUS(status));
