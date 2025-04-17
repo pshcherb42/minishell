@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:59 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/14 19:49:30 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/16 15:40:47 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	is_builtin(char *cmd) // checks if the given command is builtin
 
 int	exec_builtin(t_cmd *cmd, char ***envp) // executes the builtin
 {
+	long	exit_code;
+	
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
 	if (!strcmp(cmd->args[0], "exit"))
@@ -42,20 +44,25 @@ int	exec_builtin(t_cmd *cmd, char ***envp) // executes the builtin
 		printf("exit\n");
 		if (cmd->args[1])
 		{
-			for (int i = 0; cmd->args[1][i]; i++)
+			int i = 0;
+			if (cmd->args[1][0] == '-' || cmd->args[1][0] == '+')
+				i++;
+			while (cmd->args[1][i])
 			{
 				if (!ft_isdigit(cmd->args[1][i]))
 				{
 					fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd->args[1]);
 					exit(255);
 				}
+				i++;
 			}
 			if (cmd->args[2])
 			{
 				fprintf(stderr, "minishell: exit: too many arguments\n");
 				return (1);
 			}
-			exit(atoi(cmd->args[1]) % 256);
+			exit_code = strtol(cmd->args[1], NULL, 10);
+			exit((unsigned char)exit_code);
 		}
 		exit (0);
 	}

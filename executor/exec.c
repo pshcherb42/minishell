@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/15 12:15:44 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:08:39 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	execute_cmds(t_cmd *cmd, char ***envp)
 			perror("pipe");
 			return (1);
 		}
+		signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid < 0)
 		{
@@ -93,15 +94,25 @@ int	execute_cmds(t_cmd *cmd, char ***envp)
 				exit(EXIT_FAILURE);
 			if (is_builtin(cmd->args[0]))
 				exit(exec_builtin(cmd, envp));
-			path = get_cmd_path(cmd->args[0], *envp);
-			if (!path)
+			if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
 			{
-				fprintf(stderr, "minishell: %s: command not found\n", cmd->args[0]);
+				execve(cmd->args[0], cmd->args, *envp);
+				fprintf(stderr, "minishell: %s: command not found\n", cmd->args[0]); // prints reason no such file or directory
 				exit(127);
 			}
-			execve(path, cmd->args, *envp);
-			perror("execve");
-			exit(EXIT_FAILURE);
+			else
+			{
+				path = get_cmd_path(cmd->args[0], *envp);
+				if (!path)
+				{
+					fprintf(stderr, "minishell: %s: command not found\n", cmd->args[0]);
+					exit(127);
+				}
+				execve(path, cmd->args, *envp);
+				perror("minishell");
+				free(path);
+				exit(127);
+			}
 		}
 		if (prev_fd != -1)
 			close(prev_fd);
@@ -113,9 +124,13 @@ int	execute_cmds(t_cmd *cmd, char ***envp)
 		waitpid(pid, &status, 0);
 		if (WIFSIGNALED(status))
 		{
+			if (WTERMSIG(status) == SIGINT)
+				write(1, "\n", 1);
 			if (WTERMSIG(status) == SIGQUIT)
 				write(2, "Quit (core dumped)\n", 20);
 		}
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, SIG_IGN);
 		cmd = cmd->next;
 	}
 	return (WEXITSTATUS(status));

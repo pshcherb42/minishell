@@ -6,11 +6,16 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:33 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/15 11:14:05 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:39:03 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	init_shell(void)
+{
+	setup_signals();
+}
 
 static char	**dup_env(char **envp)
 {
@@ -34,24 +39,29 @@ static char	**dup_env(char **envp)
 	return (new_env);
 }
 
-void	init_shell(void)
+void	process_input(char *input, char ***envp)
 {
-	setup_signals();
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	char	*input;
-	t_cmd	*cmds;
-	int		last_exit_code;
-	char	**my_env;
-	char	*expanded;
+	char		*expanded;
+	t_cmd		*cmds;
+	static int	last_exit_code;
 
 	last_exit_code = 0;
-	my_env = dup_env(envp);
-	(void)argc;
-	(void)argv;
-	init_shell();
+	expanded = expand_variables(input, *envp, last_exit_code);
+	cmds = parse_input(input, *envp, last_exit_code);
+	if (cmds)
+		last_exit_code = execute_cmds(cmds, envp);
+	free_cmds(cmds);
+	free(expanded);
+}
+
+void	shell_loop(char ***envp)
+{
+	char	*input;
+	//char	*expanded;
+	//t_cmd	*cmds;
+	//int		last_exit_code;
+
+	//last_exit_code = 0;
 	while (1)
 	{
 		input = readline("minishell$ ");
@@ -66,15 +76,22 @@ int	main(int argc, char **argv, char **envp)
 			free(input);
 			continue ;
 		}
-		expanded = expand_variables(input, my_env, last_exit_code);
 		if (*input)
 			add_history(input);
-		cmds = parse_input(input, my_env, last_exit_code);
-		if (cmds)
-			last_exit_code = execute_cmds(cmds, &my_env);
-		free_cmds(cmds);
-		free(expanded);
+		process_input(input, envp);
 		free(input);
 	}
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	char	**my_env;
+
+	(void)argc;
+	(void)argv;
+	init_shell();
+	my_env = dup_env(envp);
+	shell_loop(&my_env);
 	free_env(my_env);
+	return (0);
 }

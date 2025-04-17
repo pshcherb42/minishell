@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:37 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/14 18:54:10 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:30:26 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,12 @@ char	*expand_variables(const char *input, char **envp, int last_exit_code)
 		return (NULL);
 	while (input[i])
 	{
-		if (input[i] == '$')
+		if (input[i] == '\\' && input[i + 1] == '$') // escapar $ dentro de ""
+		{
+			result[j++] = '$';
+			i += 2;
+		}
+		else if (input[i] == '$')
 		{
 			i++;
 			if (input[i] == '?')
@@ -56,6 +61,7 @@ char	*expand_variables(const char *input, char **envp, int last_exit_code)
 			}
 			else
 			{
+				k = 0;
 				while (input[i] && (isalnum(input[i]) || input[i] == '_'))
 					var[k++] = input[i++];
 				var[k] = '\0';
