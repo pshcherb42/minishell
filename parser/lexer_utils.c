@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:55:57 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/17 16:46:19 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:41:21 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,18 @@ int	parse_token_boundaries(const char *input, t_lexer_ctx *ctx)
 
 int	validate_quotes(const char *input)
 {
-	char	quote;
-	int		i;
+	char	quote; // some character
+	int		i; // contador
 
-	quote = '\0';
-	i = 0;
-	while (input[i])
+	quote = '\0'; // inicializamos
+	i = 0; // inicializamos
+	while (input[i]) // mientras tenemos input
 	{
+		if (input[i] == '\\')
+		{
+			i += 2;
+			continue ;
+		}
 		if (is_quote(input[i]))
 		{
 			if (quote == '\0')
@@ -63,34 +68,38 @@ int	validate_quotes(const char *input)
 	return (quote == '\0');
 }
 
-int     handle_escape(const char *input, t_lexer_ctx *ctx)
+int	handle_escape(const char *input, t_lexer_ctx *ctx)
 {
-    if (input[ctx->m] == '\\'
-        && ctx->inside_quotes
-        && ctx->q_char == '"'
-        && (input[ctx->m + 1] == '"' || input[ctx->m + 1] == '\\' || input[ctx->m + 1] == '$'))
-    {
-        ctx->raw_token[ctx->k++] = input[ctx->m + 1];
-        ctx->m += 2;
-        return (1);
-    }
-    return (0);
+	if (input[ctx->m] == '\\'
+		&& ctx->inside_quotes
+		&& ctx->q_char == '"'
+		&& (input[ctx->m + 1] == '"' || input[ctx->m + 1] == '\\'
+			|| input[ctx->m + 1] == '$'))
+	{
+		ctx->raw_token[ctx->k++] = input[ctx->m + 1];
+		ctx->m += 2;
+		return (1);
+	}
+	return (0);
 }
 
-int     handle_quote_chars(const char *input, t_lexer_ctx *ctx)
+int	handle_quote_chars(const char *input, t_lexer_ctx *ctx)
 {
-    if (input[ctx->m] == '\'' || input[ctx->m] == '"')
-    {
-        if (!ctx->inside_quotes)
-            ctx->q_char = input[ctx->m++];
-        else if (input[ctx->m] == ctx->q_char)
-        {
-            ctx->inside_quotes = 0;
-            ctx->m++;
-        }
-        else
-            ctx->raw_token[ctx->k++] = input[ctx->m++];
-        return (1);
-    }
-    return (0);
+	if (input[ctx->m] == '\'' || input[ctx->m] == '"')
+	{
+		if (!ctx->inside_quotes)
+		{
+			ctx->inside_quotes = 1;
+			ctx->q_char = input[ctx->m++];
+		}
+		else if (input[ctx->m] == ctx->q_char)
+		{
+			ctx->inside_quotes = 0;
+			ctx->m++;
+		}
+		else
+			ctx->raw_token[ctx->k++] = input[ctx->m++];
+		return (1);
+	}
+	return (0);
 }

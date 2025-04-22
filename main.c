@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:33 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/17 16:39:03 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/22 15:56:19 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,36 +39,35 @@ static char	**dup_env(char **envp)
 	return (new_env);
 }
 
-void	process_input(char *input, char ***envp)
+int	process_input(char *input, char ***envp, int last_exit_code)
 {
 	char		*expanded;
 	t_cmd		*cmds;
-	static int	last_exit_code;
 
-	last_exit_code = 0;
 	expanded = expand_variables(input, *envp, last_exit_code);
 	cmds = parse_input(input, *envp, last_exit_code);
+	for (int i = 0; cmds->args[i]; i++)
+    	printf("arg[%d] = [%s]\n", i, cmds->args[i]);
 	if (cmds)
 		last_exit_code = execute_cmds(cmds, envp);
 	free_cmds(cmds);
 	free(expanded);
+	return (last_exit_code);
 }
 
 void	shell_loop(char ***envp)
 {
-	char	*input;
-	//char	*expanded;
-	//t_cmd	*cmds;
-	//int		last_exit_code;
+	char	*input; // el input lo que escribimos
+	int		last_exit_code; // exit_code
 
-	//last_exit_code = 0;
-	while (1)
+	last_exit_code = 0;
+	while (1) // loop infinito
 	{
 		input = readline("minishell$ ");
 		if (!input)
 		{
 			printf("exit\n");
-			break ;
+			break ; // salimos del loop si no hay input
 		}
 		if (!validate_quotes(input))
 		{
@@ -78,20 +77,20 @@ void	shell_loop(char ***envp)
 		}
 		if (*input)
 			add_history(input);
-		process_input(input, envp);
+		process_input(input, envp, last_exit_code);
 		free(input);
 	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	**my_env;
+	char	**my_env; // mis envpis
 
 	(void)argc;
 	(void)argv;
-	init_shell();
-	my_env = dup_env(envp);
-	shell_loop(&my_env);
-	free_env(my_env);
+	init_shell(); // iniciamos señales ctrl+c ctrl+
+	my_env = dup_env(envp); // cambiamos los envipis
+	shell_loop(&my_env); // loop principal
+	free_env(my_env); // liberamos mis envipis
 	return (0);
 }

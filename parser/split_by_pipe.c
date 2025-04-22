@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 13:53:42 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/17 16:59:24 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/22 10:51:12 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,23 @@ int	update_quote_status(char c, t_lexer_ctx *ctx)
 
 static void	fill_segments(char **result, char *input)
 {
-	t_lexer_ctx *ctx;
+	t_lexer_ctx	ctx;
 
-	ctx->i = 0;
-	ctx->j = 0;
-	ctx->in_quote = 0;
-	while (input[ctx->i])
+	ctx.i = 0;
+	ctx.j = 0;
+	ctx.in_quote = 0;
+	while (input[ctx.i])
 	{
-		update_quote_status(input[ctx->i], ctx);
-		if (input[ctx->i] == '|' && !ctx->in_quote)
+		update_quote_status(input[ctx.i], &ctx);
+		if (input[ctx.i] == '|' && !ctx.in_quote)
 		{
-			result[ctx->j++] = strndup(input + ctx->start, ctx->i - ctx->start);
-			ctx->start = ctx->i + 1;
+			result[ctx.j++] = strndup(input + ctx.start, ctx.i - ctx.start);
+			ctx.start = ctx.i + 1;
 		}
-		ctx->i++;
+		ctx.i++;
 	}
-	result[ctx->j++] = strndup(input + ctx->start, ctx->i - ctx->start);
-	result[ctx->j] = NULL;
+	result[ctx.j++] = strndup(input + ctx.start, ctx.i - ctx.start);
+	result[ctx.j] = NULL;
 }
 
 char	**split_by_pipe(char *input)
