@@ -33,32 +33,33 @@ int	is_builtin(char *cmd) // checks if the given command is builtin
 		|| !strcmp(cmd, "export"));
 }
 
+int	handle_exit(char **args)
+{
+	printf("exit\n");
+	if (args[1])
+	{
+		if (!is_numeric(args[1]))
+		{
+			fprintf(stderr, "minishell: exit: %s: numeric argument required\n",
+				args[1]);
+			exit(255);
+		}
+		if (args[2])
+		{
+			fprintf(stderr, "minishell: exit: too many arguments\n");
+			return (1);
+		}
+		exit(atoi(args[1]) % 256);
+	}
+	exit(0);
+}
+
 int	exec_builtin(t_cmd *cmd, char ***envp) // executes the builtin
 {
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
 	if (!strcmp(cmd->args[0], "exit"))
-	{
-		printf("exit\n");
-		if (cmd->args[1])
-		{
-			for (int i = 0; cmd->args[1][i]; i++)
-			{
-				if (!ft_isdigit(cmd->args[1][i]))
-				{
-					fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd->args[1]);
-					exit(255);
-				}
-			}
-			if (cmd->args[2])
-			{
-				fprintf(stderr, "minishell: exit: too many arguments\n");
-				return (1);
-			}
-			exit(atoi(cmd->args[1]) % 256);
-		}
-		exit (0);
-	}
+		return (handle_exit(cmd->args));
 	else if (!strcmp(cmd->args[0], "cd"))
 		return (ft_cd(cmd->args, *envp));
 	else if (!strcmp(cmd->args[0], "pwd"))
@@ -97,9 +98,9 @@ int	ft_cd(char **args, char **envp) // changes current directory
 		perror("minishell: cd");
 		return (1);
 	}
-	// Bonus: actualizar PWD en entorno, luego lo haremos
 	return (0);
 }
+// Bonus: actualizar PWD en entorno, luego lo haremos
 
 int	ft_pwd(void) // printd the working directory
 {
@@ -141,17 +142,21 @@ int	ft_echo(char **args) // prints arguments, supports -n
 	return (0);
 }
 
-int	ft_env(char **envp) // prints all environment variables
+int	ft_env(char **envp)// prints all environment variables
 {
-	for (int i = 0; envp[i]; i++)
+	int	i;
+
+	i = 0;
+	while (envp[i])
 	{
 		if (strchr(envp[i], '='))
 			printf("%s\n", envp[i]);
+		i++;
 	}
 	return (0);
 }
 
-int	ft_unset(char **args, char ***envp) // removes a variable from the environment
+int	ft_unset(char **args, char ***envp)
 {
 	int	i;
 	int	j;
@@ -169,8 +174,12 @@ int	ft_unset(char **args, char ***envp) // removes a variable from the environme
 				(*envp)[j][strlen(args[i])] == '=')
 			{
 				free((*envp)[j]);
-				for (k = j; (*envp)[k]; k++)
+				k = j;
+				while ((*envp)[k])
+				{
 					(*envp)[k] = (*envp)[k + 1];
+					k++;
+				}
 				continue ;
 			}
 			j++;
