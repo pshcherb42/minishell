@@ -16,18 +16,19 @@ void	handle_sigint(int sig)
 {
 	(void)sig;
 	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	rl_replace_line("", 0); // borra la linea actual
+	rl_on_new_line(); // informa a readline que hay nueva linea
+	rl_redisplay();   // vuelve a mostrar el prompt
 }
 
 void	handle_sigquit(int sig)
 {
 	(void)sig;
+	// ignoramos Ctrl+\ como bash
 }
 
 void	setup_signals(void)
 {
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sigint); // Ctrl+C
+	signal(SIGQUIT, SIG_IGN); 	   // Ignoramos Ctrl+'\'
 }

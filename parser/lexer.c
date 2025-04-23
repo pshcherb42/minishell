@@ -6,85 +6,138 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:28 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/22 15:07:25 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/16 16:37:34 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_quote(char c)
+static int	is_quote(char c)
 {
 	return (c == '\'' || c == '"');
-}
-
-/*int	update_quote_status(char c, t_lexer_ctx *ctx)
-{
-	if ((c == '\'' || c == '"'))
-	{
-		if (!ctx->in_quote)
-		{
-			ctx->in_quote = 1;
-			ctx->quote_char = c;
-		}
-		else if (ctx->quote_char == c)
-		{
-			ctx->in_quote = 0;
-			ctx->quote_char = '\0';
-		}
-		return (1);
-	}
-	return (0);
-}*/
-
-static char	*extract_token(const char *input, t_lexer_ctx *ctx,
-							char **envp, int last_exit_code)
-{
-	printf("Extracting token from [%.*s]\n", ctx->len, input + ctx->start);
-	printf("ctx->len = %d, start = %d, i = %d\n", ctx->len, ctx->start, ctx->i);
-
-	ctx->raw_token = malloc(ctx->len + 1);
-	if (!ctx->raw_token)
-		return (NULL);
-	ctx->k = 0;
-	ctx->m = ctx->start;
-	ctx->inside_quotes = 0;
-	ctx->quote_char = '\0';
-	while (ctx->m < ctx->i)
-	{
-		if (handle_escape(input, ctx))
-			continue ;
-		if (handle_quote_chars(input, ctx))
-			continue ;
-		ctx->raw_token[ctx->k++] = input[ctx->m++];
-	}
-	ctx->raw_token[ctx->k] = '\0';
-	if (ctx->quote_char != '\'')
-	{
-		ctx->expanded = expand_variables(ctx->raw_token, envp, last_exit_code);
-		free(ctx->raw_token);
-		return (ctx->expanded);
-	}
-	return (ctx->raw_token);
 }
 
 char	**split_args(char *input, char **envp, int last_exit_code)
 {
 	char		**args;
-	t_lexer_ctx	ctx;
+	char		quote_char;
+	int			in_quote;
+	int			i;
+	int			j;
+	int			start;
+	int			len;
+	char		*raw_token;
+	int			k;
+	int			m;
+	int			inside_quotes;
+	char		*expanded;
+	char		q_char;
 
+	quote_char = '\0';
+	in_quote = 0;
+	i = 0;
+	j = 0;
 	args = malloc(sizeof(char *) * 100);
 	if (!args)
 		return (NULL);
-	init_lexer_ctx(&ctx);
-	while (input[ctx.i])
+	while (input[i])
 	{
-		if (!parse_token_boundaries(input, &ctx))
+		while (input[i] == ' ' && !in_quote)
+			i++;
+		if (!input[i])
 			break ;
-		ctx.expanded = extract_token(input, &ctx, envp, last_exit_code);
-		if (!ctx.expanded)
+		start = i;
+		len = 0;
+		while (input[i])
+		{
+			if (is_quote(input[i]))
+			{
+				if (!in_quote)
+				{
+					in_quote = 1;
+					quote_char = input[i++];
+					continue ;
+				}
+				else if (input[i] == quote_char)
+				{
+					in_quote = 0;
+					i++;
+					continue ;
+				}
+				else
+				{
+					i++;
+					continue ;
+				}
+			}
+			if (input[i] == ' ' && !in_quote)
+				break ;
+			i++;
+		}
+		len = i - start;
+		raw_token = malloc(len + 1);
+		if (!raw_token)
 			return (NULL);
-		args[ctx.j++] = ctx.expanded;
+		k = 0;
+		m = start;
+		inside_quotes = 0;
+		q_char = '\0';
+		while (m < i)
+		{
+			if (input[m] == '\\' && inside_quotes && q_char == '"'
+				&& (input[m + 1] == '"' || input[m + 1] == '\\' || input[m + 1] == '$'))
+			{
+				// escapamos ", \, o $
+				raw_token[k++] = input[m + 1];
+				m += 2;
+			}
+			else if (is_quote(input[m]))
+			{
+				if (!inside_quotes)
+				{
+					inside_quotes = 1;
+					q_char = input[m++];
+					continue ;
+				}
+				else if (input[m] == q_char)
+				{
+					inside_quotes = 0;
+					m++;
+					continue ;
+				}
+			}
+			raw_token[k++] = input[m++];
+		}
+		raw_token[k] = '\0';
+		expanded = raw_token;
+		if (!(quote_char == '\''))
+		{
+			expanded = expand_variables(raw_token, envp, last_exit_code);
+			free(raw_token);
+		}
+		args[j++] = expanded;
 	}
-	args[ctx.j] = NULL;
+	args[j] = NULL;
 	return (args);
+}
+
+int	validate_quotes(const char *input)
+{
+	char	quote;
+	int		i;
+
+	quote = '\0';
+	i = 0;
+	while (input[i])
+	{
+		if (is_quote(input[i]))
+		{
+			if (quote == '\0')
+				quote = input[i];
+			else if (input[i] == quote)
+				quote = '\0';
+		}
+		i++;
+	}
+	return (quote == '\0');
 }
