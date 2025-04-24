@@ -6,14 +6,14 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/23 14:17:56 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/24 11:43:12 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "Libft/libft.h"
+# include "libft/libft.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
