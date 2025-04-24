@@ -30,6 +30,12 @@ char	*get_env_value(const char *var, char **envp)
 	return (ft_strdup(""));
 }
 
+static void 	allocation_error(char *str)
+{
+    if (!str)
+        return ;
+}
+
 char	*expand_variables(const char *input, char **envp, int last_exit_code)
 {
 	char		*result;
@@ -48,16 +54,17 @@ char	*expand_variables(const char *input, char **envp, int last_exit_code)
 	t = 0;
 	v = 0;
 	result = malloc(4096);
-	if (!result)
-		return (NULL);
+	allocation_error(result);
+	/*if (!result)
+		return (NULL);*/
 	while (input[i])
 	{
 		if (input[i] == '\\' && input[i + 1] == '$')
 		{
 			result[j++] = '$';
 			i += 2;
-			while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
-				result[j++] = input[i++];
+			/*while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
+				result[j++] = input[i++];*/
 		}
 		else if (input[i] == '$')
 		{
