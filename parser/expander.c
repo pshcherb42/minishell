@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:37 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/24 14:32:07 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/24 16:38:29 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,3 +90,78 @@ char	*expand_variables(const char *input, char **envp, int last_exit_code)
 	result[j] = '\0';
 	return (result);
 }
+
+/*static int	copy_exit_code_to_result(char *result, int j, int last_exit_code)
+{
+	char	*itoa_str;
+	int		t;
+
+	t = 0;
+	itoa_str = ft_itoa(last_exit_code);
+	while (itoa_str[t])
+		result[j++] = itoa_str[t++];
+	free(itoa_str);
+	return (j);
+}
+
+static int	copy_env_value_to_result(char *result, int j, const char *var, char **envp)
+{
+	const char	*val;
+	int			v;
+
+	v = 0;
+	val = get_env_value(var, envp);
+	while (val[v])
+		result[j++] = val[v++];
+	free((char *)val);
+	return (j);
+}
+
+static int	handle_dollar_variable(const char *input, char *result, int *i, int j, char **envp, int last_exit_code)
+{
+	char	var[256];
+	int		k = 0;
+
+	if (input[*i] == '?')
+	{
+		(*i)++;
+		return copy_exit_code_to_result(result, j, last_exit_code);
+	}
+	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+		var[k++] = input[(*i)++];
+	var[k] = '\0';
+	return copy_env_value_to_result(result, j, var, envp);
+}
+
+static int	handle_escaped_dollar(const char *input, char *result, int *i, int j)
+{
+	j += (result[j++] = '$', 0);
+	*i += 2;
+	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
+		result[j++] = input[(*i)++];
+	return j;
+}
+
+char	*expand_variables(const char *input, char **envp, int last_exit_code)
+{
+	char	*result;
+	int		i = 0, j = 0;
+
+	result = malloc(4096);
+	if (!result)
+		return (NULL);
+	while (input[i])
+	{
+		if (input[i] == '\\' && input[i + 1] == '$')
+			j = handle_escaped_dollar(input, result, &i, j);
+		else if (input[i] == '$')
+		{
+			i++;
+			j = handle_dollar_variable(input, result, &i, j, envp, last_exit_code);
+		}
+		else
+			result[j++] = input[i++];
+	}
+	result[j] = '\0';
+	return (result);
+}*/
