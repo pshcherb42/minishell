@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:37 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/24 16:38:29 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/25 12:57:03 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ char	*get_env_value(const char *var, char **envp)
 static void 	allocation_error(char *str)
 {
     if (!str)
-        return ;
+    {
+		ft_printf("Memory allocation failed.\n");
+		exit(1);
+	}
 }
 
 char	*expand_variables(const char *input, char **envp, int last_exit_code)
@@ -59,14 +62,16 @@ char	*expand_variables(const char *input, char **envp, int last_exit_code)
 		return (NULL);*/
 	while (input[i])
 	{
-		if (input[i] == '\\' && input[i + 1] == '$')
+		/*if (input[i] == '\\' || input[i] == ';')
 		{
+			ft_printf("Unsupported character: '\\', ';'");
+			return (NULL);
 			result[j++] = '$';
 			i += 2;
-			/*while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
-				result[j++] = input[i++];*/
-		}
-		else if (input[i] == '$')
+			while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
+				result[j++] = input[i++];
+		}*/
+		if (input[i] == '$')
 		{
 			i++;
 			if (input[i] == '?')

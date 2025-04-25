@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:16 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/14 18:04:27 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/25 15:20:44 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,16 @@ t_cmd	*parse_single_command(char *input, char **envp, int last_exit_code)
 
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
+	{
+		free(cmd);
 		return (NULL);
+	}
 	tokens = split_args(input, envp, last_exit_code);
+	if (!tokens)
+	{
+		free(cmd);
+		return (NULL);
+	}
 	i = 0;
 	j = 0;
 	cmd->args = malloc(sizeof(char *) * 100);
