@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:52 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/14 17:13:54 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/24 17:26:34 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,21 @@ void	free_cmds(t_cmd *cmd)
 	free(cmd);
 }
 
-int	ft_isdigit(int c)
+int	ft_isnumeric(const char *str)
 {
-	return (c >= '0' && c <= '9');
+	int	i = 0;
+
+	if (!str || !str[0])
+		return (0);
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	while (str[i])
+	{
+		if (!(str[i] >= '0' && str[i] <= '9'))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void	free_env(char **env)
@@ -43,4 +55,35 @@ void	free_env(char **env)
 	while (env[i])
 		free(env[i++]);
 	free(env);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strdup(const char *s)
+{
+	int		i;
+	char	*dest;
+
+	i = 0;
+	while (s[i])
+		i++;
+	dest = malloc(sizeof(char) * (i + 1));
+	if (dest == NULL)
+		return (NULL);
+	i = 0;
+	while (s[i])
+	{
+		dest[i] = s[i];
+		i++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }

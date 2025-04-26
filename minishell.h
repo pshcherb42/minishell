@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/14 17:22:19 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/26 18:03:51 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ int		validate_quotes(const char *input);
 // funciones ejecucción
 int		open_redirs(t_cmd *cmd);
 int		execute_cmds(t_cmd *cmd, char ***envp);
+char	*join_path(const char *dir, const char *cmd);
+char	**split_path(const char *path);
+void	free_split(char **arr);
 char	*get_cmd_path(char *cmd, char **envp);
 int		ft_cd(char **args, char **envp);
 int		ft_pwd(void);
@@ -68,7 +71,14 @@ void	setup_signals(void);
 
 // otros utilitarios
 void	free_cmds(t_cmd *cmd);
-int		ft_isdigit(int c);
+int		ft_isnumeric(const char *str);
 void	free_env(char **env);
-
+int		ft_strcmp(const char *s1, const char *s2);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_atoi(const char *nptr);
+size_t	ft_strlen(const char *s);
+size_t	ft_strspn(const char *s, const char *accept);
+char	*ft_strdup(const char *s);
+char	*ft_strchr(const char *s, int c);
+void	ft_pstr(int fd, const char *str);
 #endif

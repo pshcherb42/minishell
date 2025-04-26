@@ -3,52 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:53 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/14 19:13:36 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/26 19:38:37 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char	*join_path(const char *dir, const char *cmd)
+char	*join_path(const char *dir, const char *cmd)//Создаёт строку "/usr/bin/ls" из "usr/bin" и "ls"
 {
 	char	*full;
 	int		len;
+	int		i;
+	int		j;
 
-	len = strlen(dir) + strlen(cmd) + 2;
-	full = malloc(len);
+	len = ft_strlen(dir) + ft_strlen(cmd) + 2;// считаем длину +1 для '/' и +1 для '\0'
+	full = malloc(sizeof(char) * len);
 	if (!full)
 		return (NULL);
-	snprintf(full, len, "%s/%s", dir, cmd);
+	i = 0;
+	while (dir[i])
+	{
+		full[i] = dir[i];
+		i++;
+	}
+	full[i++] = '/';
+	j = 0;
+	while (cmd[j])
+		full[i++] = cmd[j++];
+	full[i] = '\0';
 	return (full);
 }
 
-static char	**split_path(const char *path)
+static int	find_end(const char *path, int start)//ищем конец сегмента - часть до : 
 {
-	char	**result;
-	char	*copy;
-	char	*token;
-	int		i;
-
-	copy = strdup(path);
-	i = 0;
-	result = malloc(sizeof(char *) * 100);
-	if (!result)
-		return (NULL);
-	token = strtok(copy, ":");
-	while (token)
-	{
-		result[i++] = strdup(token);
-		token = strtok(NULL, ":");
-	}
-	result[i] = NULL;
-	free(copy);
-	return (result);
+	while (path[start] && path[start] != ':')
+		start++;
+	return (start);
 }
 
-static void	free_split(char **arr)
+void	free_split(char **arr)//освобождаем массив строк
 {
 	int	i;
 
@@ -58,41 +54,38 @@ static void	free_split(char **arr)
 	free(arr);
 }
 
-char	*get_cmd_path(char *cmd, char **envp)
+static int	update_start(const char *path, int end)//обновляем старт на следующий сегмент
 {
-	char	*path_env;
-	char	**paths;
-	char	*full_path;
+	if (path[end] == ':')//если сейчас стоит ':', пропускаем его
+		return (end + 1);
+	else
+		return (end);//иначе остаёмся и старт = /0 и выходим из вайл
+}
+
+char	**split_path(const char *path)//делим PATH нв части - разделение по :
+{
+	char	**result;
+	int		start;
+	int		end;
 	int		i;
 
-	path_env = NULL;
-	paths = NULL;
-	full_path = NULL;
+	result = malloc(sizeof(char *) * 100);
+	if (!result)
+		return (NULL);
+	start = 0;
 	i = 0;
-	if (strchr(cmd, '/'))
-		return (strdup(cmd));
-	while (envp[i])
+	while (path[start])
 	{
-		if (strncmp(envp[i], "PATH=", 5) == 0)
+		end = find_end(path, start);//находим конец текущего сегмента
+		result[i] = ft_substr(path, start, end - start);//вырезаем сегмент и кладем в массив
+		if (!result[i])
 		{
-			path_env = envp[i] + 5;
-			break ;
+			free_split(result);
+			return (NULL);
 		}
 		i++;
+		start = update_start(path, end);//обновляем стартовую позицию
 	}
-	if (!path_env)
-		return (NULL);
-	paths = split_path(path_env);
-	for (i = 0; paths[i]; i++)
-	{
-		full_path = join_path(paths[i], cmd);
-		if (access(full_path, X_OK) == 0)
-		{
-			free_split(paths);
-			return (full_path);
-		}
-		free(full_path);
-	}
-	free_split(paths);
-	return (NULL);
+	result[i] = NULL;
+	return (result);
 }
