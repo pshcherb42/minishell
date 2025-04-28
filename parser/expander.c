@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:37 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/25 12:57:03 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:41:32 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,62 +39,79 @@ static void 	allocation_error(char *str)
 	}
 }
 
+static int		exit_code_logic(int last_exit_code, char *result, int j)
+{
+	char	*itoa_str;
+	int		i;
+
+	i = 0;
+	itoa_str = ft_itoa(last_exit_code);
+	if (!itoa_str)
+	{
+		ft_printf("Memory allocation failed in exit_code_logic.\n");
+		exit(1);
+	}
+	while (itoa_str[i])
+		result[j++] = itoa_str[i++];
+	free(itoa_str);
+	return (j);
+}
+
+static char		*copy_name(const char *input, int i, char *var)
+{
+	int		j;
+
+	j = 0;
+	while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
+		var[j++] = input[i++];
+	var[j] = '\0';
+	return (i);
+}
+
 char	*expand_variables(const char *input, char **envp, int last_exit_code)
 {
 	char		*result;
 	char		var[256];
 	const char	*val;
-	char		*itoa_str;
 	int			i;
 	int			j;
-	int			k;
-	int 		t;
 	int 		v;
 
 	i = 0;
 	j = 0;
-	k = 0;
-	t = 0;
 	v = 0;
 	result = malloc(4096);
 	allocation_error(result);
-	/*if (!result)
-		return (NULL);*/
 	while (input[i])
 	{
-		/*if (input[i] == '\\' || input[i] == ';')
-		{
-			ft_printf("Unsupported character: '\\', ';'");
-			return (NULL);
-			result[j++] = '$';
-			i += 2;
-			while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
-				result[j++] = input[i++];
-		}*/
 		if (input[i] == '$')
 		{
 			i++;
 			if (input[i] == '?')
 			{
-				itoa_str = ft_itoa(last_exit_code);
-				t = 0;
-				while (itoa_str[t])
-					result[j++] = itoa_str[t++];
-				free(itoa_str);
+				j = exit_code_logic(last_exit_code, result, j);
 				i++;
 			}
 			else
 			{
-				k = 0;
-				while (input[i] && (ft_isalnum(input[i]) || input[i] == '_'))
-					var[k++] = input[i++];
-				var[k] = '\0';
+				i = copy_name(input, i, var);
 				val = get_env_value(var, envp);
 				v = 0;
 				while (val[v])
 					result[j++] = val[v++];
 				free((char *)val);
 			}
+			/*{
+				k = 0;
+				while (input[i] && (ft_isalnum(input[i]) || input[i] == '_')) // el nombre de la varibale puede contener numeros letras o _
+					var[k++] = input[i++]; // copiamos el nombre de la varibale 
+				var[k] = '\0';
+				val = get_env_value(var, envp); // pasamos el nombre de la varibale para expandir
+				v = 0;
+				while (val[v])
+					result[j++] = val[v++];
+				free((char *)val);
+			}*/
 		}
 		else
 			result[j++] = input[i++];
@@ -102,78 +119,3 @@ char	*expand_variables(const char *input, char **envp, int last_exit_code)
 	result[j] = '\0';
 	return (result);
 }
-
-/*static int	copy_exit_code_to_result(char *result, int j, int last_exit_code)
-{
-	char	*itoa_str;
-	int		t;
-
-	t = 0;
-	itoa_str = ft_itoa(last_exit_code);
-	while (itoa_str[t])
-		result[j++] = itoa_str[t++];
-	free(itoa_str);
-	return (j);
-}
-
-static int	copy_env_value_to_result(char *result, int j, const char *var, char **envp)
-{
-	const char	*val;
-	int			v;
-
-	v = 0;
-	val = get_env_value(var, envp);
-	while (val[v])
-		result[j++] = val[v++];
-	free((char *)val);
-	return (j);
-}
-
-static int	handle_dollar_variable(const char *input, char *result, int *i, int j, char **envp, int last_exit_code)
-{
-	char	var[256];
-	int		k = 0;
-
-	if (input[*i] == '?')
-	{
-		(*i)++;
-		return copy_exit_code_to_result(result, j, last_exit_code);
-	}
-	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
-		var[k++] = input[(*i)++];
-	var[k] = '\0';
-	return copy_env_value_to_result(result, j, var, envp);
-}
-
-static int	handle_escaped_dollar(const char *input, char *result, int *i, int j)
-{
-	j += (result[j++] = '$', 0);
-	*i += 2;
-	while (input[*i] && (ft_isalnum(input[*i]) || input[*i] == '_'))
-		result[j++] = input[(*i)++];
-	return j;
-}
-
-char	*expand_variables(const char *input, char **envp, int last_exit_code)
-{
-	char	*result;
-	int		i = 0, j = 0;
-
-	result = malloc(4096);
-	if (!result)
-		return (NULL);
-	while (input[i])
-	{
-		if (input[i] == '\\' && input[i + 1] == '$')
-			j = handle_escaped_dollar(input, result, &i, j);
-		else if (input[i] == '$')
-		{
-			i++;
-			j = handle_dollar_variable(input, result, &i, j, envp, last_exit_code);
-		}
-		else
-			result[j++] = input[i++];
-	}
-	result[j] = '\0';
-	return (result);
-}*/
