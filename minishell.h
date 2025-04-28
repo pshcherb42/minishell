@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/24 11:43:12 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/28 11:14:16 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ t_cmd	*parse_single_command(char *input, char **envp, int last_exit_code);
 t_cmd	*parse_input(char *input, char **envp, int last_exit_code);
 char	**split_args(char *input, char **envp, int last_exit_code);
 char	*expand_variables(const char *input, char **envp, int last_exit_code);
-char	*get_env_value(const char *var, char **envp);
+char	*get_env_value(char **envp, const char *input, int *i);
 int		validate_quotes(const char *input);
+void 	allocation_error(char *str);
 
 // funciones ejecucción
 int		open_redirs(t_cmd *cmd);

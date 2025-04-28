@@ -6,7 +6,7 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/04/24 11:41:26 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/04/28 10:51:58 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ SRCS = \
 	parser/lexer.c \
 	parser/parser.c \
 	parser/expander.c \
+	parser/parser_utils.c \
 	executor/exec.c \
 	executor/builtin.c \
 	executor/exec_utils.c \
