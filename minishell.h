@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/29 16:43:04 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/29 17:47:24 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,21 @@ typedef struct s_expand_ctx
 	int			i;
 	int 		j;
 }	t_expand_ctx;
+
+typedef struct s_split_vars
+{
+	int 	i;
+	int 	j;
+	int 	k;
+	int 	m;
+	int 	len;
+	int 	in_quote;
+	int 	inside_quotes;
+	char 	quote_char;
+	char 	q_char;
+	char 	*raw_token;
+	char 	*expanded;
+}	t_split_vars;
 
 // funciones de main
 void	init_shell(void);

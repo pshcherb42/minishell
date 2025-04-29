@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:28 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/25 15:12:05 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/29 18:24:30 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,117 +17,97 @@ static int	is_quote(char c)
 	return (c == '\'' || c == '"');
 }
 
+static void		read_token(t_split_vars *vars, char *input)
+{
+	while (input[vars->i])
+	{
+		if (is_quote(input[vars->i]) && !vars->in_quote)
+		{
+				vars->in_quote = 1;
+				vars->quote_char = input[vars->i++];
+				continue ;
+		}
+		if (vars->in_quote && input[vars->i] == vars->quote_char)
+		{
+			vars->in_quote = 0;
+			vars->i++;
+			continue ;
+		}
+		if (input[vars->i] == ' ' && !vars->in_quote)
+			break ;
+		vars->i++;
+	}
+}
+
 char	**split_args(char *input, char **envp, int last_exit_code)
 {
-	char		**args;
-	char		quote_char;
-	int			in_quote;
-	int			i;
-	int			j;
-	int			start;
-	int			len;
-	char		*raw_token;
-	int			k;
-	int			m;
-	int			inside_quotes;
-	char		*expanded;
-	char		q_char;
+	char			**args;
+	int				start;
+	t_split_vars	*vars;
 
-	quote_char = '\0';
-	in_quote = 0;
-	i = 0;
-	j = 0;
+	vars = malloc(sizeof(t_split_vars));
+	if (!vars)
+		return (NULL);
+	vars->quote_char = '\0';
+	vars->in_quote = 0;
+	vars->i = 0;
+	vars->j = 0;
 	args = malloc(sizeof(char *) * 100);
 	if (!args)
 		return (NULL);
-	while (input[i])
+	while (input[vars->i])
 	{
-		while (input[i] == ' ' && !in_quote)
-			i++;
-		if (!input[i])
+		while (input[vars->i] == ' ' && !vars->in_quote)
+			vars->i++;
+		if (!input[vars->i])
 			break ;
-		start = i;
-		len = 0;
-		while (input[i])
-		{
-			if (is_quote(input[i]))
-			{
-				if (!in_quote)
-				{
-					in_quote = 1;
-					quote_char = input[i++];
-					continue ;
-				}
-				else if (input[i] == quote_char)
-				{
-					in_quote = 0;
-					i++;
-					continue ;
-				}
-				else
-				{
-					i++;
-					continue ;
-				}
-			}
-			if (input[i] == ' ' && !in_quote)
-				break ;
-			i++;
-		}
-		len = i - start;
-		raw_token = malloc(len + 1);
-		if (!raw_token)
+		start = vars->i;
+		vars->len = 0;
+		read_token(vars, input);
+		vars->len = vars->i - start;
+		vars->raw_token = malloc(vars->len + 1);
+		if (!vars->raw_token)
 			return (NULL);
-		k = 0;
-		m = start;
-		inside_quotes = 0;
-		q_char = '\0';
-		while (m < i)
+		vars->k = 0;
+		vars->m = start;
+		vars->inside_quotes = 0;
+		vars->q_char = '\0';
+		while (vars->m < vars->i)
 		{
-			/*if (input[m] == '\\' && inside_quotes && q_char == '"'
-				&& (input[m + 1] == '"' || input[m + 1] == '\\' || input[m + 1] == '$'))
+			if (input[vars->m] == '\\' || input[vars->m] == ';')
 			{
-				// escapamos ", \, o $
-				raw_token[k++] = input[m + 1];
-				m += 2;
-			}*/
-			if (input[m] == '\\' || input[m] == ';')
-			{
-				ft_printf("Unsupported character: %c\n", input[m]);
-				free(raw_token);
-				/*while (j > 0)
-					free(args[--j]);
-				free(args);*/
+				ft_printf("Unsupported character: %c\n", input[vars->m]);
+				free(vars->raw_token);
 				return (NULL);
 			}
-			else if (is_quote(input[m]))
+			else if (is_quote(input[vars->m]))
 			{
-				if (!inside_quotes)
+				if (!vars->inside_quotes)
 				{
-					inside_quotes = 1;
-					q_char = input[m++];
+					vars->inside_quotes = 1;
+					vars->q_char = input[vars->m++];
 					continue ;
 				}
-				else if (input[m] == q_char)
+				else if (input[vars->m] == vars->q_char)
 				{
-					inside_quotes = 0;
-					m++;
+					vars->inside_quotes = 0;
+					vars->m++;
 					continue ;
 				}
 			}
-			raw_token[k++] = input[m++];
+			vars->raw_token[vars->k++] = input[vars->m++];
 		}
-		raw_token[k] = '\0';
-		expanded = raw_token;
-		//ft_printf("TOKEN[%d]: \"%s\"\n", j, expanded);
-		if (raw_token[0] != '\'' && ft_strchr(raw_token, '$'))
+		vars->raw_token[vars->k] = '\0';
+		vars->expanded = vars->raw_token;
+		ft_printf("TOKEN[%d]: \"%s\"\n", vars->j, vars->expanded);
+		if (vars->raw_token[0] != '\'' && ft_strchr(vars->raw_token, '$'))
 		{
-			expanded = expand_variables(raw_token, envp, last_exit_code);
-			free(raw_token);
+			vars->expanded = expand_variables(vars->raw_token, envp, last_exit_code);
+			free(vars->raw_token);
 		}
-		args[j++] = expanded;
+		args[vars->j++] = vars->expanded;
 	}
-	args[j] = NULL;
+	args[vars->j] = NULL;
 	return (args);
 }
 
