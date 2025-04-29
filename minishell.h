@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/28 11:14:16 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/29 16:43:04 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,35 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
+typedef struct s_expand_ctx
+{
+	const char	*input;
+	char		**envp;
+	char		*result;
+	int			last_exit_code;
+	int			i;
+	int 		j;
+}	t_expand_ctx;
+
 // funciones de main
 void	init_shell(void);
 
 // funciones parser
 t_cmd	*parse_single_command(char *input, char **envp, int last_exit_code);
 t_cmd	*parse_input(char *input, char **envp, int last_exit_code);
-char	**split_args(char *input, char **envp, int last_exit_code);
-char	*expand_variables(const char *input, char **envp, int last_exit_code);
-char	*get_env_value(char **envp, const char *input, int *i);
 int		validate_quotes(const char *input);
+char	**split_args(char *input, char **envp, int last_exit_code);
+// from expand.c
+char	*expand_variables(const char *input, char **envp, int last_exit_code);
+// from expand_utils.c
+void	handle_exit_code(t_expand_ctx *ctx);
+void	handle_env_var(t_expand_ctx *ctx);
 void 	allocation_error(char *str);
+// from env_lookup.c
+char	*get_env_value(t_expand_ctx *ctx, int *i);
+char	*find_env_value(t_expand_ctx *ctx, const char *var_name);
+char	*extract_var_name(t_expand_ctx *ctx, int *i);
+
 
 // funciones ejecucción
 int		open_redirs(t_cmd *cmd);
