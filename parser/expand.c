@@ -6,13 +6,13 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:35:54 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/29 16:46:02 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/30 17:55:41 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*expand_variables(const char *input, char **envp, int last_exit_code)
+char	*expand_variables(const char *input, char **envp, int lec)
 {
 	t_expand_ctx	ctx;
 
@@ -20,7 +20,7 @@ char	*expand_variables(const char *input, char **envp, int last_exit_code)
 	ctx.j = 0;
 	ctx.input = input;
 	ctx.envp = envp;
-	ctx.last_exit_code = last_exit_code;
+	ctx.last_exit_code = lec;
 	ctx.result = malloc(4096);
 	allocation_error(ctx.result);
 	while (input[ctx.i])

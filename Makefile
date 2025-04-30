@@ -6,7 +6,7 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/04/30 10:28:54 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/04/30 17:21:53 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,11 @@ LIBFT = libft/libft.a
 SRCS = \
 	main.c \
 	parser/parser.c \
+	parser/cmd_utils.c \
+	parser/split_pipe.c \
+	parser/tokenizer.c \
+	parser/redirection.c \
+	parser/parser_state.c \
 	parser/expand.c \
 	parser/expand_utils.c \
 	parser/env_lookup.c \

@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:33 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 13:54:25 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/30 18:15:29 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,31 +39,6 @@ void	init_shell(void)
 	setup_signals();
 }
 
-void print_cmd_list(t_cmd *cmd_list)
-{
-	int i;
-	int cmd_num = 1;
-
-	while (cmd_list)
-	{
-		printf("🔹 Command %d:\n", cmd_num++);
-		i = 0;
-		while (cmd_list->args && cmd_list->args[i])
-		{
-			printf("  arg[%d]: %s\n", i, cmd_list->args[i]);
-			i++;
-		}
-		if (cmd_list->infile)
-			printf("  infile: %s\n", cmd_list->infile);
-		if (cmd_list->outfile)
-			printf("  outfile: %s (append: %d)\n", cmd_list->outfile, cmd_list->append);
-		if (cmd_list->heredoc)
-			printf("  heredoc: %s\n", cmd_list->infile);
-		cmd_list = cmd_list->next;
-	}
-}
-
-
 int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
@@ -93,9 +68,8 @@ int	main(int argc, char **argv, char **envp)
 		}
 		expanded = expand_variables(input, my_env, last_exit_code);
 		if (*input)
-			add_history(input);	
+			add_history(input);
 		cmds = parse_input(input, my_env, last_exit_code);
-		print_cmd_list(cmds); // 🔍 Check what got parsed
 		if (cmds)
 			last_exit_code = execute_cmds(cmds, &my_env);
 		free_cmds(cmds);

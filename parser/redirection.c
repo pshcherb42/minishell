@@ -1,0 +1,64 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redirection.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/04/30 17:26:24 by pshcherb         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minishell.h"
+
+static int	handle_output_redirect(t_cmd *cmd, char **tokens, int i)
+{
+	if (!tokens[i + 1])
+		return (-1);
+	cmd->outfile = ft_strdup(tokens[++i]);
+	cmd->append = 0;
+	return (i + 1);
+}
+
+static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
+{
+	if (!tokens[i + 1])
+		return (-1);
+	cmd->outfile = ft_strdup(tokens[++i]);
+	cmd->append = 1;
+	return (i + 1);
+}
+
+static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
+{
+	if (!tokens[i + 1])
+		return (-1);
+	cmd->infile = ft_strdup(tokens[++i]);
+	cmd->heredoc = 0;
+	return (i + 1);
+}
+
+static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
+{
+	if (!tokens[i + 1])
+		return (-1);
+	cmd->infile = ft_strdup(tokens[++i]);
+	cmd->heredoc = 1;
+	return (i + 1);
+}
+
+int	handle_redirection(t_cmd *cmd, char **tokens, int i)
+{
+	if (!tokens[i])
+		return (i);
+	if (!ft_strcmp(tokens[i], ">"))
+		return (handle_output_redirect(cmd, tokens, i));
+	else if (!ft_strcmp(tokens[i], ">>"))
+		return (handle_append_redirect(cmd, tokens, i));
+	else if (!ft_strcmp(tokens[i], "<"))
+		return (handle_input_redirect(cmd, tokens, i));
+	else if (!ft_strcmp(tokens[i], "<<"))
+		return (handle_heredoc_redirect(cmd, tokens, i));
+	return (i);
+}

@@ -1,29 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strndup.c                                       :+:      :+:    :+:   */
+/*   cmd_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/30 11:16:42 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 18:17:46 by pshcherb         ###   ########.fr       */
+/*   Created: 2025/04/30 17:15:38 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/04/30 17:39:56 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdlib.h>
-#include <string.h>
+#include "../minishell.h"
 
-char	*ft_strndup(const char *s, size_t n)
+t_cmd	*init_cmd(void)
 {
-	size_t	l;
-	char	*d;
+	t_cmd	*cmd;
 
-	l = ft_strnlen(s, n);
-	d = malloc(l + 1);
-	if (!d)
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+	{
+		free(cmd);
 		return (NULL);
-	ft_memcpy(d, s, l);
-	d[l] = 0;
-	return (d);
+	}
+	cmd->args = malloc(sizeof(char *) * 100);
+	if (!cmd->args)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->append = 0;
+	cmd->heredoc = 0;
+	cmd->next = NULL;
+	return (cmd);
 }
