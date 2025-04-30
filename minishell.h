@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/29 17:47:24 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/04/30 15:33:45 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,18 @@ typedef struct s_split_vars
 	char 	q_char;
 	char 	*raw_token;
 	char 	*expanded;
+	int 	was_single_quoted;
 }	t_split_vars;
+
+typedef struct s_pipe_state
+{
+	int		i;
+	int		j;
+	int		start;
+	int		in_quote;
+	char	quote;
+	char	**result;
+}	t_pipe_state;
 
 // funciones de main
 void	init_shell(void);
@@ -80,6 +91,20 @@ void 	allocation_error(char *str);
 char	*get_env_value(t_expand_ctx *ctx, int *i);
 char	*find_env_value(t_expand_ctx *ctx, const char *var_name);
 char	*extract_var_name(t_expand_ctx *ctx, int *i);
+// from lexer_expand.c
+void	expand_token(t_split_vars *vars, char **envp, int l_e_c);
+// from lexer_token.c
+void	read_token(t_split_vars *vars, char *input);
+int		copy_token(t_split_vars *vars, char *input);
+int		init_token(t_split_vars *vars, int start);
+// from lexer_utils.c
+int	    is_quote(char c);
+char 	**free_and_return_null(t_split_vars *vars, char **args);
+int		validate_quotes(const char *input);
+t_split_vars		*init_vars(void);
+// from lexer_parse.c
+int		parse_token(t_split_vars *vars, char *input, char **envp, int l_e_c);
+char	**split_args(char *input, char **envp, int last_exit_code);
 
 
 // funciones ejecucción

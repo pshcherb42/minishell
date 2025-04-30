@@ -6,7 +6,7 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/18 18:00:47 by pshcherb          #+#    #+#              #
-#    Updated: 2025/03/12 14:08:36 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/04/30 14:51:08 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,9 @@ SRCS =	get_next_line.c \
 	ft_printf.c \
 	ft_printf_utils.c \
 	ft_array_count.c \
+	ft_strndup.c \
+	ft_strnlen.c \
+	ft_isspace.c \
 	ft_isalpha.c \
 	ft_isdigit.c \
 	ft_isalnum.c \
