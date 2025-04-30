@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
+#    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/04/30 17:21:53 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/04/30 19:19:10 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,14 @@ SRCS = \
 	parser/lexer_parse.c \
 	parser/lexer_token.c \
 	parser/lexer_utils.c \
+	executor/builtin_utils.c \
+	executor/ft_cd.c \
+	executor/ft_echo.c \
+	executor/ft_env.c \
+	executor/ft_export.c \
+	executor/ft_get_cmd_path.c \
+	executor/ft_pwd.c \
+	executor/ft_unset.c \
 	executor/exec.c \
 	executor/builtin.c \
 	executor/exec_utils.c \

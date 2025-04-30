@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:54:44 by akreise           #+#    #+#             */
-/*   Updated: 2025/04/26 19:55:50 by akreise          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:22:20 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*get_cmd_path(char *cmd, char **envp)
 	char	**paths;
 	char	*full_path;
 
-	if (ft_stchr(cmd, '/')) //указали путь к команде (./a.out)
+	if (ft_strchr(cmd, '/')) //указали путь к команде (./a.out)
 		return (ft_strdup(cmd));//вернули копию команды
 	path_env = find_path(envp);//ищм PATH в окружении
 	if (!path_env)

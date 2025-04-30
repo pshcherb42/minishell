@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:34:15 by akreise           #+#    #+#             */
-/*   Updated: 2025/04/24 17:53:59 by akreise          ###   ########.fr       */
+/*   Updated: 2025/04/30 19:20:59 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int	ft_export(char **args, char ***envp) // adds/modifies environment variables
 		if (eq)
 		{
 			name_len = eq - args[i];
-			if (!replace_env_ver(envp, args[i], name_len))
+			if (!replace_new_var(envp, args[i], name_len))
 			{
 				if (!add_env_var(envp, args[i]))
 					return (1);
