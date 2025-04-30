@@ -1,33 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   lexer_expand.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 18:20:30 by pshcherb         ###   ########.fr       */
+/*   Created: 2025/04/30 10:17:47 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/04/30 15:31:18 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	handle_sigint(int sig)
+void	expand_token(t_split_vars *vars, char **envp, int l_e_c)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-void	handle_sigquit(int sig)
-{
-	(void)sig;
-}
-
-void	setup_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	if (!vars->was_single_quoted && ft_strchr(vars->raw_token, '$'))
+	{
+		vars->expanded = expand_variables(vars->raw_token, envp, l_e_c);
+		free(vars->raw_token);
+	}
 }

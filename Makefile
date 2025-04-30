@@ -6,7 +6,7 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/04/14 17:13:22 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/04/30 17:21:53 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,11 +14,23 @@ NAME = minishell
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 
+LIBFT = libft/libft.a
+
 SRCS = \
 	main.c \
-	parser/lexer.c \
 	parser/parser.c \
-	parser/expander.c \
+	parser/cmd_utils.c \
+	parser/split_pipe.c \
+	parser/tokenizer.c \
+	parser/redirection.c \
+	parser/parser_state.c \
+	parser/expand.c \
+	parser/expand_utils.c \
+	parser/env_lookup.c \
+	parser/lexer_expand.c \
+	parser/lexer_parse.c \
+	parser/lexer_token.c \
+	parser/lexer_utils.c \
 	executor/exec.c \
 	executor/builtin.c \
 	executor/exec_utils.c \
@@ -31,16 +43,21 @@ SRCS = \
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
 
-$(NAME): $(OBJS) Makefile #libft
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) -lreadline
+$(NAME): $(OBJS) Makefile $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
+
+$(LIBFT):
+		make -C libft
 
 all: $(NAME)
 
 clean:
 	rm -f $(OBJS)
+	make clean -C libft
 
 fclean: clean
 	rm -f $(NAME)
+	make fclean -C libft
 
 re: fclean all
 

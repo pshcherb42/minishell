@@ -1,33 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   cmd_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 18:20:30 by pshcherb         ###   ########.fr       */
+/*   Created: 2025/04/30 17:15:38 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/04/30 17:39:56 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	handle_sigint(int sig)
+t_cmd	*init_cmd(void)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+	t_cmd	*cmd;
 
-void	handle_sigquit(int sig)
-{
-	(void)sig;
-}
-
-void	setup_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	cmd->args = malloc(sizeof(char *) * 100);
+	if (!cmd->args)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->append = 0;
+	cmd->heredoc = 0;
+	cmd->next = NULL;
+	return (cmd);
 }

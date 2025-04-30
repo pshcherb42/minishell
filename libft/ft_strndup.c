@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 18:20:30 by pshcherb         ###   ########.fr       */
+/*   Created: 2025/04/30 11:16:42 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/04/30 18:17:46 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "libft.h"
+#include <stdlib.h>
+#include <string.h>
 
-void	handle_sigint(int sig)
+char	*ft_strndup(const char *s, size_t n)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+	size_t	l;
+	char	*d;
 
-void	handle_sigquit(int sig)
-{
-	(void)sig;
-}
-
-void	setup_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	l = ft_strnlen(s, n);
+	d = malloc(l + 1);
+	if (!d)
+		return (NULL);
+	ft_memcpy(d, s, l);
+	d[l] = 0;
+	return (d);
 }
