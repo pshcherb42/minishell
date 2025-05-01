@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:33 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 18:15:29 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:38:08 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,24 @@ static char	**dup_env(char **envp)
 	return (new_env);
 }
 
-void	init_shell(void)
+void	update_shlvl(char ***envp)
+{
+	char	*lvl_str = get_env_value("SHLVL", *envp);
+	int		shlvl = 0;
+	char	*new_lvl;
+
+	if (lvl_str)
+		shlvl = ft_atoi(lvl_str);
+	shlvl++;
+	new_lvl = ft_itoa(shlvl);
+	set_env_value("SHLVL", new_lvl, envp);
+	free(new_lvl);
+}
+
+void	init_shell(char **envp)
 {
 	setup_signals();
+	update_shlvl(envp);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -51,7 +66,7 @@ int	main(int argc, char **argv, char **envp)
 	my_env = dup_env(envp);
 	(void)argc;
 	(void)argv;
-	init_shell();
+	init_shell(&my_env);
 	while (1)
 	{
 		input = readline("minishell$ ");

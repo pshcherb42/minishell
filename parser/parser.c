@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:16 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 17:50:15 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:18:26 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,13 @@ t_cmd	*parse_input(char *input, char **envp, int last_exit_code)
 {
 	t_parse_state	state;
 	t_cmd			*result;
+	char			*full_input;
 
-	state.segments = split_by_pipe(input);
+	full_input = read_continued_input(input);
+	if (!full_input)
+		return (NULL);
+	state.segments = split_by_pipe(full_input);
+	free(full_input);
 	if (!state.segments)
 		return (NULL);
 	state.head = NULL;

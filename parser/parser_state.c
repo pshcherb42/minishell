@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:58:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 17:25:23 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:22:14 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	process_segment(t_parse_state *state)
 	segment = state->segments[state->i];
 	if (is_empty_or_spaces(segment))
 	{
-		fprintf(stderr, "minishell: syntax error near unexpected token `|'\n");
+		ft_printf("minishell: syntax error near unexpected token `|'\n");
 		return (0);
 	}
 	new_cmd = parse_single_command(segment, state->envp, state->last_exit_code);

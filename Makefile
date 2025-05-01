@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
+#    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/04/30 19:19:10 by akreise          ###   ########.fr        #
+#    Updated: 2025/05/01 17:08:07 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ LIBFT = libft/libft.a
 SRCS = \
 	main.c \
 	parser/parser.c \
+	parser/parser_utils.c \
 	parser/cmd_utils.c \
 	parser/split_pipe.c \
 	parser/tokenizer.c \
@@ -28,6 +29,8 @@ SRCS = \
 	parser/expand_utils.c \
 	parser/env_lookup.c \
 	parser/lexer_expand.c \
+	parser/lexer_init.c \
+	parser/lexer_copy.c \
 	parser/lexer_parse.c \
 	parser/lexer_token.c \
 	parser/lexer_utils.c \
@@ -69,4 +72,5 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re 
+.PHONY: all clean fclean re
+

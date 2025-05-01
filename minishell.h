@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 19:03:58 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/01 17:06:19 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <readline/history.h>
 # include <ctype.h>
 
+# define ARGS_INIT_CAPACITY 10
+
 typedef struct s_cmd
 {
 	char			**args;
@@ -35,6 +37,7 @@ typedef struct s_cmd
 	int				append;
 	int				heredoc;
 	struct s_cmd	*next;
+	int				capacity;
 }	t_cmd;
 
 typedef struct s_expand_ctx
@@ -83,12 +86,25 @@ typedef struct s_parse_state
 	int		last_exit_code;
 }	t_parse_state;
 
+typedef struct s_token_state
+{
+	char			**args;
+	t_split_vars	*vars;
+	int				cap;
+	char			*input;
+	char			**envp;
+	int				lec;
+}	t_token_state;
+
 // funciones de main
 void			init_shell(void);
 
 // funciones parser
 t_cmd			*parse_single_command(char *input, char **envp, int l_e_c);
 t_cmd			*parse_input(char *input, char **envp, int last_exit_code);
+// from parser_utils.c
+char			*read_continued_input(const char *input);
+int				is_trailing_pipe(const char *input);
 // from parser_state.c
 int				is_empty_or_spaces(const char *str);
 int				process_segment(t_parse_state *state);
@@ -104,6 +120,7 @@ void			handle_quote(char c, char *quote, int *in_quote);
 char			**split_by_pipe(char *input);
 // from cmd_utils.c
 t_cmd			*init_cmd(void);
+char			**grow_args_array(char **old_args, int old_size, int *capacity);
 // from expand.c
 char			*expand_variables(const char *input, char **envp, int lec);
 // from expand_utils.c
@@ -114,11 +131,15 @@ void			allocation_error(char *str);
 char			*get_env_value(t_expand_ctx *ctx, int *i);
 char			*find_env_value(t_expand_ctx *ctx, const char *var_name);
 char			*extract_var_name(t_expand_ctx *ctx, int *i);
+// funciones lexer
 // from lexer_expand.c
 void			expand_token(t_split_vars *vars, char **envp, int l_e_c);
-// from lexer_token.c
-void			read_token(t_split_vars *vars, char *input);
+// from lexer_copy.c
 int				copy_token(t_split_vars *vars, char *input);
+int				handle_quote_char(t_split_vars *vars, char c);
+// from lexer_token.c
+void			read_token(t_split_vars *vars, char *input, int start);
+// from lexer_init.c
 int				init_token(t_split_vars *vars, int start);
 // from lexer_utils.c
 int				is_quote(char c);
@@ -130,18 +151,18 @@ int				parse_token(t_split_vars *vars, char *in, char **env, int lec);
 char			**split_args(char *input, char **envp, int last_exit_code);
 
 // funciones ejecucción
-int		open_redirs(t_cmd *cmd);
-int		execute_cmds(t_cmd *cmd, char ***envp);
-char	*join_path(const char *dir, const char *cmd);
-char	**split_path(const char *path);
-void	free_split(char **arr);
-char	*get_cmd_path(char *cmd, char **envp);
-int		ft_cd(char **args, char **envp);
-int		ft_pwd(void);
-int		ft_echo(char **args);
-int		ft_env(char **envp);
-int		ft_unset(char **args, char ***envp);
-int		ft_export(char **args, char ***envp);
+int				open_redirs(t_cmd *cmd);
+int				execute_cmds(t_cmd *cmd, char ***envp);
+char			*join_path(const char *dir, const char *cmd);
+char			**split_path(const char *path);
+void			free_split(char **arr);
+char			*get_cmd_path(char *cmd, char **envp);
+int				ft_cd(char **args, char **envp);
+int				ft_pwd(void);
+int				ft_echo(char **args);
+int				ft_env(char **envp);
+int				ft_unset(char **args, char ***envp);
+int				ft_export(char **args, char ***envp);
 
 // funciones de built-ins
 int				is_builtin(char *cmd);
@@ -154,16 +175,16 @@ void			handle_sigint(int sig);
 
 // otros utilitarios
 
-void	free_cmds(t_cmd *cmd);
-int		ft_isnumeric(const char *str);
-void	free_env(char **env);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-int		ft_atoi(const char *nptr);
-size_t	ft_strlen(const char *s);
-size_t	ft_strspn(const char *s, const char *accept);
-char	*ft_strdup(const char *s);
-char	*ft_strchr(const char *s, int c);
-void	ft_pstr(int fd, const char *str);
+void			free_cmds(t_cmd *cmd);
+int				ft_isnumeric(const char *str);
+void			free_env(char **env);
+int				ft_strncmp(const char *s1, const char *s2, size_t n);
+int				ft_atoi(const char *nptr);
+size_t			ft_strlen(const char *s);
+size_t			ft_strspn(const char *s, const char *accept);
+char			*ft_strdup(const char *s);
+char			*ft_strchr(const char *s, int c);
+void			ft_pstr(int fd, const char *str);
 void			free_cmds(t_cmd *cmd);
 int				ft_isdigit(int c);
 void			free_env(char **env);

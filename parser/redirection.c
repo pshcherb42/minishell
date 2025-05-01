@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 17:26:24 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/01 12:15:31 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 static int	handle_output_redirect(t_cmd *cmd, char **tokens, int i)
 {
 	if (!tokens[i + 1])
+	{
+		ft_printf("minishell: syntax error near unexpected token `newline'\n");
 		return (-1);
+	}
 	cmd->outfile = ft_strdup(tokens[++i]);
 	cmd->append = 0;
 	return (i + 1);
@@ -24,7 +27,10 @@ static int	handle_output_redirect(t_cmd *cmd, char **tokens, int i)
 static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
 {
 	if (!tokens[i + 1])
+	{
+		ft_printf("minishell: syntax error near unexpected token `newline'\n");
 		return (-1);
+	}
 	cmd->outfile = ft_strdup(tokens[++i]);
 	cmd->append = 1;
 	return (i + 1);
@@ -33,7 +39,10 @@ static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
 static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
 {
 	if (!tokens[i + 1])
+	{
+		ft_printf("minishell: syntax error near unexpected token `newline'\n");
 		return (-1);
+	}
 	cmd->infile = ft_strdup(tokens[++i]);
 	cmd->heredoc = 0;
 	return (i + 1);
@@ -42,7 +51,10 @@ static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
 static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 {
 	if (!tokens[i + 1])
+	{
+		ft_printf("minishell: syntax error near unexpected token `newline'\n");
 		return (-1);
+	}
 	cmd->infile = ft_strdup(tokens[++i]);
 	cmd->heredoc = 1;
 	return (i + 1);

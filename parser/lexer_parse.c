@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:20:20 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 17:57:09 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/01 15:50:52 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	parse_token(t_split_vars *vars, char *in, char **env, int lec)
 
 	start = vars->i;
 	vars->len = 0;
-	read_token(vars, in);
+	read_token(vars, in, start);
 	if (!init_token(vars, start))
 		return (0);
 	if (!copy_token(vars, in))
@@ -31,27 +31,47 @@ int	parse_token(t_split_vars *vars, char *in, char **env, int lec)
 	return (1);
 }
 
+static int	parse_and_store_token(t_token_state *state)
+{
+	while (state->input[state->vars->i] == ' ' && !state->vars->in_quote)
+		state->vars->i++;
+	if (!state->input[state->vars->i])
+		return (0);
+	if (!parse_token(state->vars, state->input, state->envp, state->lec))
+		return (-1);
+	if (state->vars->j >= state->cap - 1)
+	{
+		state->args = grow_args_array(state->args, state->vars->j, &state->cap);
+		if (!state->args)
+			return (-1);
+	}
+	state->args[state->vars->j++] = state->vars->expanded;
+	return (1);
+}
+
 char	**split_args(char *input, char **envp, int last_exit_code)
 {
-	char			**args;
-	t_split_vars	*vars;
+	t_token_state	state;
+	int				ret;
 
-	vars = init_vars();
-	if (!vars)
+	state.vars = init_vars();
+	if (!state.vars)
 		return (NULL);
-	args = malloc(sizeof(char *) * 100);
-	if (!args)
+	state.cap = ARGS_INIT_CAPACITY;
+	state.args = malloc(sizeof(char *) * state.cap);
+	if (!state.args)
 		return (NULL);
-	while (input[vars->i])
+	state.input = input;
+	state.envp = envp;
+	state.lec = last_exit_code;
+	while (input[state.vars->i])
 	{
-		while (input[vars->i] == ' ' && !vars->in_quote)
-			vars->i++;
-		if (!input[vars->i])
+		ret = parse_and_store_token(&state);
+		if (ret == -1)
+			return (free_and_return_null(state.vars, state.args));
+		if (ret == 0)
 			break ;
-		if (!parse_token(vars, input, envp, last_exit_code))
-			return (free_and_return_null(vars, args));
-		args[vars->j++] = vars->expanded;
 	}
-	args[vars->j] = NULL;
-	return (args);
+	state.args[state.vars->j] = NULL;
+	return (state.args);
 }

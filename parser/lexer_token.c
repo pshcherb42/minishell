@@ -6,85 +6,55 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:15:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 15:43:07 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:07:06 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	read_token(t_split_vars *vars, char *input)
+static int	is_operator(char c)
 {
-	while (input[vars->i])
-	{
-		if (is_quote(input[vars->i]) && !vars->in_quote)
-		{
-			vars->in_quote = 1;
-			vars->quote_char = input[vars->i++];
-			continue ;
-		}
-		if (vars->in_quote && input[vars->i] == vars->quote_char)
-		{
-			vars->in_quote = 0;
-			vars->i++;
-			continue ;
-		}
-		if (input[vars->i] == ' ' && !vars->in_quote)
-			break ;
-		vars->i++;
-	}
+	return (c == '<' || c == '>' || c == '|');
 }
 
-static int	handle_quote_char(t_split_vars *vars, char c)
+static void	handle_quotes(t_split_vars *vars, char c)
 {
-	if (!vars->inside_quotes)
+	if (is_quote(c) && !vars->in_quote)
 	{
-		vars->inside_quotes = 1;
-		vars->q_char = c;
-		if (c == '\'')
-			vars->was_single_quoted = 1;
-		return (1);
+		vars->in_quote = 1;
+		vars->quote_char = c;
 	}
-	else if (c == vars->q_char)
+	else if (vars->in_quote && c == vars->quote_char)
+		vars->in_quote = 0;
+}
+
+static int	handle_operator(t_split_vars *vars, char *input, int start)
+{
+	if (vars->i == start)
 	{
-		vars->inside_quotes = 0;
+		if ((input[vars->i] == '<' || input[vars->i] == '>')
+			&& input[vars->i + 1] && input[vars->i] == input[vars->i + 1])
+			vars->i += 2;
+		else
+			vars->i += 1;
 		return (1);
 	}
 	return (0);
 }
 
-int	copy_token(t_split_vars *vars, char *input)
+void	read_token(t_split_vars *vars, char *input, int start)
 {
-	while (vars->m < vars->i)
+	while (input[vars->i])
 	{
-		if (input[vars->m] == '\\' || input[vars->m] == ';')
+		handle_quotes(vars, input[vars->i]);
+		if (!vars->in_quote && is_operator(input[vars->i]))
 		{
-			ft_printf("Unsupported character: %c\n", input[vars->m]);
-			free(vars->raw_token);
-			return (0);
+			if (handle_operator(vars, input, start))
+				break ;
+			break ;
 		}
-		else if (is_quote(input[vars->m]))
-		{
-			if (handle_quote_char(vars, input[vars->m]))
-			{
-				vars->m++;
-				continue ;
-			}
-		}
-		vars->raw_token[vars->k++] = input[vars->m++];
+		if (!vars->in_quote && input[vars->i] == ' ')
+			break ;
+		vars->i++;
 	}
-	return (1);
-}
-
-int	init_token(t_split_vars *vars, int start)
-{
-	vars->len = vars->i - start;
-	vars->raw_token = malloc(vars->len + 1);
-	if (!vars->raw_token)
-		return (0);
-	vars->k = 0;
-	vars->m = start;
-	vars->inside_quotes = 0;
-	vars->was_single_quoted = 0;
-	vars->q_char = '\0';
-	return (1);
 }
