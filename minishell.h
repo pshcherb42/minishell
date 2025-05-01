@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 19:03:58 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/01 18:11:03 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,8 @@ char			**split_args(char *input, char **envp, int last_exit_code);
 // funciones ejecucción
 int		open_redirs(t_cmd *cmd);
 int		execute_cmds(t_cmd *cmd, char ***envp);
+void    handle_child_exit( int status);
+void    run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp);
 char	*join_path(const char *dir, const char *cmd);
 char	**split_path(const char *path);
 void	free_split(char **arr);

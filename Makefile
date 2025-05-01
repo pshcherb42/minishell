@@ -6,7 +6,7 @@
 #    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/04/30 19:19:10 by akreise          ###   ########.fr        #
+#    Updated: 2025/05/01 18:06:20 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,8 @@ SRCS = \
 	executor/ft_pwd.c \
 	executor/ft_unset.c \
 	executor/exec.c \
+	executor/open_redirs.c \
+	executor/exec_child.c \
 	executor/builtin.c \
 	executor/exec_utils.c \
 	signals/signals.c \
