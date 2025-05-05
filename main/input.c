@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/02 11:57:54 by pshcherb         ###   ########.fr       */
+/*   Created: 2025/05/02 10:42:26 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/05/02 12:09:45 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-volatile sig_atomic_t g_sigquit_flag = 0;
+extern volatile sig_atomic_t g_sigquit_flag;
 
-void	handle_sigint(int sig)
+char	*get_valid_input(void)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+	char	*input;
 
-void	handle_sigquit(int sig)
-{
-	(void)sig;
-	g_sigquit_flag = 1;
-}
-
-void	setup_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
-	signal(SIGTSTP, SIG_IGN);
+	input = readline("minishell$ ");
+	if (g_sigquit_flag)
+	{
+		free(input);
+		g_sigquit_flag = 0;
+		printf("Quit (core dumped)\n");
+		exit(131);
+	}
+	if (!input)
+		return (NULL);
+	if (!validate_quotes(input))
+	{
+		fprintf(stderr, "minishell: syntax error: unclosed quote\n");
+		free(input);
+		return (get_valid_input());
+	}
+	return (input);
 }

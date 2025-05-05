@@ -6,7 +6,7 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/05/01 17:08:07 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/05/05 13:06:43 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,11 @@ CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address
 LIBFT = libft/libft.a
 
 SRCS = \
-	main.c \
+	main/main.c \
+	main/init.c \
+	main/env_utils.c \
+	main/input.c \
+	main/shell_loop.c \
 	parser/parser.c \
 	parser/parser_utils.c \
 	parser/cmd_utils.c \
@@ -49,7 +53,8 @@ SRCS = \
 	redirection/redir.c \
 	env/env.c \
 	env/export.c \
-	utils/utils.c 
+	utils/utils.c \
+	utils/utils2.c
 
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)

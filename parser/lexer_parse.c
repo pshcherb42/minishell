@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:20:20 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 15:50:52 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/02 12:39:11 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ char	**split_args(char *input, char **envp, int last_exit_code)
 			break ;
 	}
 	state.args[state.vars->j] = NULL;
+	free(state.vars);
 	return (state.args);
 }

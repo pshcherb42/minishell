@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:34:15 by akreise           #+#    #+#             */
-/*   Updated: 2025/04/30 19:20:59 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/05 14:39:06 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,11 @@ int	add_env_var(char ***envp, char *arg)
 	new_env[i] = ft_strdup(arg);
 	if (!new_env[i])
 	{
-		free(new_env);
+		free_token_array(new_env);
 		return (1);
 	}
 	new_env[i + 1] = NULL;
+	free_env(*envp);
 	*envp = new_env;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:05:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 10:55:16 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/02 15:15:15 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	free_token_array(char **tokens)
 	int	i;
 
 	i = 0;
+	if (!tokens)
+		return ;
 	while (tokens[i])
 	{
 		free(tokens[i]);

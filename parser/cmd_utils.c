@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:15:38 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 10:55:14 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/05 12:57:45 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ t_cmd	*init_cmd(void)
 
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
-	{
-		free(cmd);
 		return (NULL);
-	}
 	cmd->capacity = ARGS_INIT_CAPACITY;
 	cmd->args = malloc(sizeof(char *) * cmd->capacity);
 	if (!cmd->args)

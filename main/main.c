@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/02 11:57:54 by pshcherb         ###   ########.fr       */
+/*   Created: 2025/04/14 17:13:33 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/05/05 13:12:07 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-volatile sig_atomic_t g_sigquit_flag = 0;
-
-void	handle_sigint(int sig)
+int	main(int argc, char **argv, char **envp)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
+	char	**my_env;
 
-void	handle_sigquit(int sig)
-{
-	(void)sig;
-	g_sigquit_flag = 1;
-}
+	(void)argc;
+	(void)argv;
 
-void	setup_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
-	signal(SIGTSTP, SIG_IGN);
+	my_env = dup_env(envp);
+	init_shell(my_env);
+	run_shell_loop(&my_env);
+	free_env(my_env);
+	rl_clear_history();
+    rl_cleanup_after_signal();
+	return (0);
 }

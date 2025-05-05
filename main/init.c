@@ -1,37 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/02 11:57:54 by pshcherb         ###   ########.fr       */
+/*   Created: 2025/05/02 10:36:58 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/05/02 10:46:56 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-volatile sig_atomic_t g_sigquit_flag = 0;
-
-void	handle_sigint(int sig)
+void	update_shlvl(char ***envp)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	char	*lvl_str;
+	int		lvl;
+	char	*new_lvl;
+
+	lvl_str = find_env_var(*envp, "SHLVL");
+	if (!lvl_str)
+		lvl = 1;
+	else
+		lvl = ft_atoi(lvl_str) + 1;
+	if (lvl < 0)
+		lvl = 0;
+	else if (lvl > 999)
+		lvl = 1;
+	new_lvl = ft_itoa(lvl);
+	if (!new_lvl)
+		return ;
+	set_env_value(new_lvl, envp);
+	free(new_lvl);
 }
 
-void	handle_sigquit(int sig)
+void	init_shell(char **envp)
 {
-	(void)sig;
-	g_sigquit_flag = 1;
-}
-
-void	setup_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
-	signal(SIGTSTP, SIG_IGN);
+	setup_signals();
+	update_shlvl(&envp);
 }

@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 17:06:19 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:06:03 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@
 # include <ctype.h>
 
 # define ARGS_INIT_CAPACITY 10
+
+extern volatile	sig_atomic_t	q_sigquit_flag;
 
 typedef struct s_cmd
 {
@@ -97,7 +99,18 @@ typedef struct s_token_state
 }	t_token_state;
 
 // funciones de main
-void			init_shell(void);
+// from init.c
+void			init_shell(char **envp);
+void			update_shlvl(char ***envp);
+// from env_utils.c
+void			set_env_value(const char *value, char ***envp);
+char			*find_env_var(char **envp, const char *name);
+char			**dup_env(char **envp);
+// from input.c
+char			*get_valid_input(void);
+// from shell_loop.c
+int				process_input(char *input, char ***envp, int last_exit_code);
+void			run_shell_loop(char ***envp);
 
 // funciones parser
 t_cmd			*parse_single_command(char *input, char **envp, int l_e_c);
@@ -185,7 +198,7 @@ size_t			ft_strspn(const char *s, const char *accept);
 char			*ft_strdup(const char *s);
 char			*ft_strchr(const char *s, int c);
 void			ft_pstr(int fd, const char *str);
-void			free_cmds(t_cmd *cmd);
+void			free_cmd_list(t_cmd *cmd);
 int				ft_isdigit(int c);
 void			free_env(char **env);
 
