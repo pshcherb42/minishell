@@ -6,7 +6,11 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2025/05/05 13:06:43 by pshcherb         ###   ########.fr        #
+=======
+#    Updated: 2025/05/03 17:38:08 by akreise          ###   ########.fr        #
+>>>>>>> akreise_2
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,11 +46,14 @@ SRCS = \
 	executor/ft_cd.c \
 	executor/ft_echo.c \
 	executor/ft_env.c \
+	executor/ft_exit.c \
 	executor/ft_export.c \
 	executor/ft_get_cmd_path.c \
 	executor/ft_pwd.c \
 	executor/ft_unset.c \
 	executor/exec.c \
+	executor/open_redirs.c \
+	executor/exec_child.c \
 	executor/builtin.c \
 	executor/exec_utils.c \
 	signals/signals.c \

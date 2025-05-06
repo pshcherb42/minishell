@@ -5,147 +5,87 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 19:04:32 by akreise          ###   ########.fr       */
+/*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
+/*   Updated: 2025/05/01 18:29:43 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	open_infile(t_cmd *cmd)//файл для ввода?-cat < input.txt — здесь input.txt это infile
+static	int	create_pipe(t_cmd *cmd, int pipefd[2])//занимается созданием pipe (канала) между процессами
 {
-	int	fd;//файловый дескриптор (номер открытого файла)
-
-	if (!cmd->infile)//если файл пустой не сущ
-		return (1);
-	if (cmd->heredoc)//обрабатывается отдельно
-		return (1);
-	fd = open(cmd->infile, O_RDONLY);//открыли только для чтения
-	if (fd < 0)//файл открыть не получилось (например, его нет)
-	{
-		perror(cmd->infile);
-		return (0);
-	}
-	dup2(fd, STDIN_FILENO);//Подменяем стандартный ввод (stdin-клавиатура) на наш файл
-	close(fd);//закрываем старый файловый дескриптор (fd)
-	return (1);
-}
-
-static int	open_outfile(t_cmd *cmd)
-{
-	int	fd;
-	
-	if (!cmd->outfile)
-		return (1);
-	if (cmd->append)//если добавляем в конец <<
-		fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);//апп-добавить вконец, креат создаст файл - 0644 — права на файл: владелец может читать/писать, остальные только читать
-	else//если перезаписываем файл >
-		fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);//O_TRUNC — очищаем файл перед записью.
-	if (fd < 0)
-	{
-		perror(cmd->outfile);
-		return (0);
-	}
-	dup2(fd, STDOUT_FILENO);//Подменяем стандартный ввод (stdout-экран) на наш файл
-	close(fd);//заменили 0-ввод клавы на номер файла, поэтому этот очистили(остается 0 read(0, buffer, 100))
-	return (1);
-}
-
-int	open_redirs(t_cmd *cmd)//открывает файлы, которые указаны у команды для редиректа ввода/вывода
-{
-	if (!open_infile(cmd))//если не удалось открыть файл и пришла ошибка
-		return (0);
-	if (!open_outfile(cmd))
-		return (0);
-	return (1);
-}
-
-int	execute_cmds(t_cmd *cmd, char ***envp)
-{
-	int		pipefd[2];
-	int		prev_fd;
-	pid_t	pid;
-	int		status;
-	char	*path;
-
-	prev_fd = -1;
-	if (!cmd || !cmd->args || !cmd->args[0])
-		return (1);
-	while (cmd)
-	{
-		if (is_builtin(cmd->args[0]) && is_parent_builtin(cmd->args[0]))
-		{
-			return (exec_builtin(cmd, envp));
-		}
-		if (cmd->next && pipe(pipefd) < 0)
+	if(cmd->next)
+	{//pipefd[0] — дескриптор чтения (read end),pipefd[1] — дескриптор записи (write end)
+		if (pipe(pipefd) < 0)
 		{
 			perror("pipe");
-			return (1);
+			return (0);
 		}
-		signal(SIGINT, SIG_IGN);
+	}
+	return (1);
+}
+
+//управляет пайпами в родительском процессе после того, как была создана новая команда и запущен дочерний процесс
+static	void	handle_parent_pipe(t_cmd *cmd, int pipefd[2], int *prev_fd)
+{
+	if (*prev_fd != -1)//Если предыдущий дескриптор был установлен, закрываем его
+		close(*prev_fd);//Если не закрывать — утечка дескрипторов
+	if (cmd->next)//если есть след команда делаем пайп
+	{
+		close(pipefd[1]);//write end — родителю он не нужен, его закрываем
+		*prev_fd = pipefd[0];//его сохраняем в *prev_fd, чтобы в следующей итерации dup2(prev_fd, STDIN) в дочке подцепил stdin от прошлой команды
+	}
+}
+
+//создаёшь pipe (у тебя появляется pipefd[0] — читать, pipefd[1] — писать);Данные, которые записываются в pipefd[1], можно прочитать через pipefd[0]
+//в дочернем процессе первой команды ты перенаправляешь STDOUT в pipefd[1];
+//во второй команде ты читаешь STDIN из pipefd[0]
+
+//перебирает все команды, создаёт пайпы, форкает процессы, запускает дочерние процессы и следит за их завершением
+static	int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd)//цикл по всем командам
+{
+	int		pipefd[2];//массив под пайп: pipefd[0] — чтение, pipefd[1] — запись
+	pid_t	pid;//ID процесса, получаемый от fork()
+	int		status;//код завершения процесса
+
+	while (cmd)//пока у нас есть команды
+	{
+		if (is_builtin(cmd->args[0]) && is_parent_builtin(cmd->args[0]))//export, cd, unset должны выполняться в родителе
+			return (exec_builtin(cmd, envp));//т.к. меняют среду оболочки, исполняем и выходим
+		if (!create_pipe(cmd, pipefd))//Создание пайпа, если это не последняя команда
+			return (1);
+		signal(SIGINT, SIG_IGN);//Игнорируем SIGINT в родителе, родитель не должен умирать от Ctrl+C — только дети
 		pid = fork();
 		if (pid < 0)
-		{
-			perror("fork");
-			return (1);
-		}
-		if (pid == 0)
-		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
-			if (prev_fd != -1)
-			{
-				dup2(prev_fd, STDIN_FILENO);
-				close(prev_fd);
-			}
-			if (cmd->next)
-			{
-				close(pipefd[0]);
-				dup2(pipefd[1], STDOUT_FILENO);
-				close(pipefd[1]);
-			}
-			if (!open_redirs(cmd))
-				exit(EXIT_FAILURE);
-			if (is_builtin(cmd->args[0]))
-				exit(exec_builtin(cmd, envp));
-			if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
-			{
-				execve(cmd->args[0], cmd->args, *envp);
-				fprintf(stderr, "minishell: %s: command not found\n", cmd->args[0]); // prints reason no such file or directory
-				exit(127);
-			}
-			else
-			{
-				path = get_cmd_path(cmd->args[0], *envp);
-				if (!path)
-				{
-					fprintf(stderr, "minishell: %s: command not found\n", cmd->args[0]);
-					exit(127);
-				}
-				execve(path, cmd->args, *envp);
-				perror("minishell");
-				free(path);
-				exit(127);
-			}
-		}
-		if (prev_fd != -1)
-			close(prev_fd);
-		if (cmd->next)
-		{
-			close(pipefd[1]);
-			prev_fd = pipefd[0];
-		}
-		waitpid(pid, &status, 0);
-		if (WIFSIGNALED(status))
-		{
-			if (WTERMSIG(status) == SIGINT)
-				write(1, "\n", 1);
-			if (WTERMSIG(status) == SIGQUIT)
-				write(2, "Quit (core dumped)\n", 20);
-		}
-		signal(SIGINT, handle_sigint);
-		signal(SIGQUIT, SIG_IGN);
+			return (perror("fork"), 1);
+		if (pid == 0)//в дочернем процессе
+			run_child(cmd, prev_fd, pipefd, envp);//там настраивается ввод-вывод, редиректы и вызывается execve или builtin.
+		handle_parent_pipe(cmd, pipefd, &prev_fd);//Закрываем старый prev_fd и сохраняем pipefd[0] — для следующей команды
+		waitpid(pid, &status, 0);//ждем завершения чаилда
+		handle_child_exit(status);//обработка выхода
+		signal(SIGINT, handle_sigint);//снова разрешаем ловить Ctrl+C (прерывание), теперь обрабатываем через свою handle_sigint
+		signal(SIGQUIT, SIG_IGN);//игнорируем Ctrl+, чтобы minishell не завершился и не скинул core
 		cmd = cmd->next;
 	}
-	return (WEXITSTATUS(status));
+	return (status);
 }
+
+//акрываем предыдущий если он был создан, если это не первая команда, 
+//если есть далььше команды мы закрываем запись, и сохраняем в перд. 
+//для следующей команды чтобы мы прочитали вызод с прошлой команды
+
+int	execute_cmds(t_cmd *cmd, char ***envp)//запускает команды и проверки
+{
+	int prev_fd;//файловый дескриптор предыдущей команды
+	int status;//статус завершения последнего дочернего процесса
+
+	prev_fd = -1;//изначально предыдущий дескриптор не существует
+	if (!cmd || !cmd->args || !cmd->args[0])//если cmd = NULL или команда пуста
+		return (1);
+	status = execute_loop(cmd, envp, prev_fd);//запускаем цикл по командам
+	return (WEXITSTATUS(status));//безопасный способ узнать, с каким кодом завершилась последняя команда
+}
+
+//сли дочерний процесс сделал exit(0), то WEXITSTATUS(status) даст 0;
+//если был exit(42), то вернётся 42;
+//если процесс был убит сигналом, это не считается "нормальным завершением", и WEXITSTATUS(status) выдаст мусор

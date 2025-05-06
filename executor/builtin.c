@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:59 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/30 19:05:39 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/03 17:35:08 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,34 +33,12 @@ int	is_builtin(char *cmd) // checks if the given command is builtin
 		|| !ft_strcmp(cmd, "export"));
 }
 
-int	handle_exit(char **args)
-{
-	printf("exit\n");
-	if (args[1])
-	{
-		if (!ft_isnumeric(args[1]))
-		{
-			ft_pstr(2, "minishell: exit: ");
-			ft_pstr(2, args[1]);
-			ft_pstr(2, ": numeric argument required\n");
-			exit(255);
-		}
-		if (args[2])
-		{
-			ft_pstr(2, "minishell: exit: too many arguments\n");
-			return (1);
-		}
-		exit(ft_atoi(args[1]) % 256);
-	}
-	exit(0);
-}
-
 int	exec_builtin(t_cmd *cmd, char ***envp) // executes the builtin
 {
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "exit"))
-		return (handle_exit(cmd->args));
+		return (ft_exit(cmd->args));
 	else if (!ft_strcmp(cmd->args[0], "cd"))
 		return (ft_cd(cmd->args, *envp));
 	else if (!ft_strcmp(cmd->args[0], "pwd"))

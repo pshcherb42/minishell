@@ -6,7 +6,11 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/05 17:20:12 by pshcherb         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/03 17:37:36 by akreise          ###   ########.fr       */
+>>>>>>> akreise_2
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +169,7 @@ int				parse_token(t_split_vars *vars, char *in, char **env, int lec);
 char			**split_args(char *input, char **envp, int last_exit_code);
 
 // funciones ejecucción
+<<<<<<< HEAD
 int				open_redirs(t_cmd *cmd);
 int				execute_cmds(t_cmd *cmd, char ***envp);
 char			*join_path(const char *dir, const char *cmd);
@@ -177,18 +182,36 @@ int				ft_echo(char **args);
 int				ft_env(char **envp);
 int				ft_unset(char **args, char ***envp);
 int				ft_export(char **args, char ***envp);
+=======
+int		open_redirs(t_cmd *cmd);
+int		execute_cmds(t_cmd *cmd, char ***envp);
+void    handle_child_exit( int status);
+void    run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp);
+char	*join_path(const char *dir, const char *cmd);
+char	**split_path(const char *path);
+void	free_split(char **arr);
+char	*get_cmd_path(char *cmd, char **envp);
+int		ft_cd(char **args, char **envp);
+int		ft_pwd(void);
+int		ft_echo(char **args);
+int		ft_env(char **envp);
+int		ft_unset(char **args, char ***envp);
+int		ft_export(char **args, char ***envp);
+int		ft_exit(char **args);
+>>>>>>> akreise_2
 
 // funciones de built-ins
-int				is_builtin(char *cmd);
-int				is_parent_builtin(const char *cmd);
-int				exec_builtin(t_cmd *cmd, char ***envp);
+int		is_builtin(char *cmd);
+int		is_parent_builtin(const char *cmd);
+int		exec_builtin(t_cmd *cmd, char ***envp);
 
 // funciones de señales
-void			setup_signals(void);
-void			handle_sigint(int sig);
+void	setup_signals(void);
+void	handle_sigint(int sig);
 
 // otros utilitarios
 
+<<<<<<< HEAD
 void			free_cmds(t_cmd *cmd);
 int				ft_isnumeric(const char *str);
 void			free_env(char **env);
@@ -202,5 +225,20 @@ void			ft_pstr(int fd, const char *str);
 void			free_cmd_list(t_cmd *cmd);
 int				ft_isdigit(int c);
 void			free_env(char **env);
+=======
+void	free_cmds(t_cmd *cmd);
+int		ft_isnumeric(const char *str);
+void	free_env(char **env);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_atoi(const char *nptr);
+size_t	ft_strlen(const char *s);
+size_t	ft_strspn(const char *s, const char *accept);
+char	*ft_strdup(const char *s);
+char	*ft_strchr(const char *s, int c);
+void	ft_pstr(int fd, const char *str);
+void	free_cmds(t_cmd *cmd);
+int		ft_isdigit(int c);
+void	free_env(char **env);
+>>>>>>> akreise_2
 
 #endif

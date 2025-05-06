@@ -6,7 +6,11 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:52 by pshcherb          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/05/02 16:21:21 by pshcherb         ###   ########.fr       */
+=======
+/*   Updated: 2025/05/03 17:39:02 by akreise          ###   ########.fr       */
+>>>>>>> akreise_2
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +41,8 @@ int	ft_isnumeric(const char *str)
 		return (0);
 	if (str[i] == '-' || str[i] == '+')
 		i++;
+	if (!str[i])
+		return (0);
 	while (str[i])
 	{
 		if (!(str[i] >= '0' && str[i] <= '9'))

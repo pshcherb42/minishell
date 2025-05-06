@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:54:44 by akreise           #+#    #+#             */
-/*   Updated: 2025/04/30 19:22:20 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/01 12:59:28 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static	char	*search_cmd(char **paths, char *cmd)//ищем команду в PAT
 	return (NULL);
 }
 
-char	*get_cmd_path(char *cmd, char **envp)
+char	*get_cmd_path(char *cmd, char **envp)//найти путь к команде
 {
 	char	*path_env;
 	char	**paths;
