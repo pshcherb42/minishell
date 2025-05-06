@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:52 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/24 17:26:34 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/03 17:39:02 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	ft_isnumeric(const char *str)
 		return (0);
 	if (str[i] == '-' || str[i] == '+')
 		i++;
+	if (!str[i])
+		return (0);
 	while (str[i])
 	{
 		if (!(str[i] >= '0' && str[i] <= '9'))

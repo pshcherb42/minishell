@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 18:11:03 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/03 17:37:36 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,15 +144,16 @@ int		ft_echo(char **args);
 int		ft_env(char **envp);
 int		ft_unset(char **args, char ***envp);
 int		ft_export(char **args, char ***envp);
+int		ft_exit(char **args);
 
 // funciones de built-ins
-int				is_builtin(char *cmd);
-int				is_parent_builtin(const char *cmd);
-int				exec_builtin(t_cmd *cmd, char ***envp);
+int		is_builtin(char *cmd);
+int		is_parent_builtin(const char *cmd);
+int		exec_builtin(t_cmd *cmd, char ***envp);
 
 // funciones de señales
-void			setup_signals(void);
-void			handle_sigint(int sig);
+void	setup_signals(void);
+void	handle_sigint(int sig);
 
 // otros utilitarios
 
@@ -166,8 +167,8 @@ size_t	ft_strspn(const char *s, const char *accept);
 char	*ft_strdup(const char *s);
 char	*ft_strchr(const char *s, int c);
 void	ft_pstr(int fd, const char *str);
-void			free_cmds(t_cmd *cmd);
-int				ft_isdigit(int c);
-void			free_env(char **env);
+void	free_cmds(t_cmd *cmd);
+int		ft_isdigit(int c);
+void	free_env(char **env);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/04/24 15:34:48 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/03 18:14:49 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@ int	ft_cd(char **args, char **envp) // changes current directory
 	int		ret;
 
 	(void)envp;
+	if (args[2])
+	{
+		ft_pstr(2, "minishell: cd: too many arguments\n");
+		return (1);
+	}
 	if (!args[1])
 	{
 		target = getenv("HOME");
