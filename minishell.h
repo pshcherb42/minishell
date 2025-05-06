@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/05 13:06:03 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:20:12 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ typedef struct s_split_vars
 	char	*raw_token;
 	char	*expanded;
 	int		was_single_quoted;
+	int		syntax_error;
 }	t_split_vars;
 
 typedef struct s_pipe_state

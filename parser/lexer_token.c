@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:15:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 17:07:06 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/06 14:31:12 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,13 @@ void	read_token(t_split_vars *vars, char *input, int start)
 		handle_quotes(vars, input[vars->i]);
 		if (!vars->in_quote && is_operator(input[vars->i]))
 		{
+			if (is_invalid_operator_sequence(input, vars->i))
+			{
+				ft_printf("minishell: syntax error near unexpected token `%c'\n", input[vars->i]);
+				vars->i = ft_strlen(input);
+				vars->syntax_error = 1;
+				break;
+			}
 			if (handle_operator(vars, input, start))
 				break ;
 			break ;

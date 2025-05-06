@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:43:57 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/05 15:49:29 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/05 17:16:31 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,16 @@
 
 int	process_input(char *input, char ***envp, int last_exit_code)
 {
-	//char	*expanded;
 	t_cmd	*cmds;
 	int		exit_code;
 
 	exit_code = last_exit_code;
-	//expanded = expand_variables(input, *envp, last_exit_code);
 	if (*input)
 		add_history(input);
 	cmds = parse_input(input, *envp, last_exit_code);
 	if (cmds)
 		exit_code = execute_cmds(cmds, envp);
 	free_cmd_list(cmds);
-	//free(expanded);
 	return (exit_code);
 }
 
