@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/06 15:13:35 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/09 17:37:53 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,45 +165,57 @@ int				parse_token(t_split_vars *vars, char *in, char **env, int lec);
 char			**split_args(char *input, char **envp, int last_exit_code);
 
 // funciones ejecucción
-int		open_redirs(t_cmd *cmd);
-int		execute_cmds(t_cmd *cmd, char ***envp);
-void    handle_child_exit( int status);
-void    run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp);
-char	*join_path(const char *dir, const char *cmd);
-char	**split_path(const char *path);
-void	free_split(char **arr);
-char	*get_cmd_path(char *cmd, char **envp);
-int		ft_cd(char **args, char **envp);
-int		ft_pwd(void);
-int		ft_echo(char **args);
-int		ft_env(char **envp);
-int		ft_unset(char **args, char ***envp);
-int		ft_export(char **args, char ***envp);
-int		ft_exit(char **args);
+int				open_redirs(t_cmd *cmd);
+int				execute_cmds(t_cmd *cmd, char ***envp);
+void			handle_child_exit( int status);
+void			run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp);
+char			*join_path(const char *dir, const char *cmd);
+char			**split_path(const char *path);
+void			free_split(char **arr);
+char			*get_cmd_path(char *cmd, char **envp);
+int				ft_cd(char **args, char **envp);
+int				ft_pwd(void);
+int				ft_echo(char **args);
+int				ft_env(char **envp);
+int				ft_unset(char **args, char ***envp);
+int				ft_export(char **args, char ***envp);
+int				is_valid(const char *str);
+int				add_new(char ***envp, const char *arg,
+					const char *var_name, int name_len);
+int				ft_add_eq(char ***envp, char *arg, int name_len);
+int				add_env_var(char ***envp, char *arg);
+char			*ft_strjoin_free(char *s1, const char *s2);
+int				var_exists(char **envp, const char *var_name);
+int				add_if_needed(char ***envp, char *arg);
+int				replace_new_var(char ***envp, char *arg, int name_len);
+void			print_all(char **envp);
+char			*prep_joined(const char *arg, const char *var_name);
+int				ft_add_eq(char ***envp, char *arg, int name_len);
+int				ft_exit(char **args);
 
 // funciones de built-ins
-int		is_builtin(char *cmd);
-int		is_parent_builtin(const char *cmd);
-int		exec_builtin(t_cmd *cmd, char ***envp);
+int				is_builtin(char *cmd);
+int				is_parent_builtin(const char *cmd);
+int				exec_builtin(t_cmd *cmd, char ***envp);
 
 // funciones de señales
-void	setup_signals(void);
-void	handle_sigint(int sig);
+void			setup_signals(void);
+void			handle_sigint(int sig);
 
 // otros utilitarios
 
-void	free_cmds(t_cmd *cmd);
-int		ft_isnumeric(const char *str);
-void	free_env(char **env);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-int		ft_atoi(const char *nptr);
-size_t	ft_strlen(const char *s);
-size_t	ft_strspn(const char *s, const char *accept);
-char	*ft_strdup(const char *s);
-char	*ft_strchr(const char *s, int c);
-void	ft_pstr(int fd, const char *str);
-void	free_cmd_list(t_cmd *cmd);
-int		ft_isdigit(int c);
-void	free_env(char **env);
+void			free_cmds(t_cmd *cmd);
+int				ft_isnumeric(const char *str);
+void			free_env(char **env);
+int				ft_strncmp(const char *s1, const char *s2, size_t n);
+int				ft_atoi(const char *nptr);
+size_t			ft_strlen(const char *s);
+size_t			ft_strspn(const char *s, const char *accept);
+char			*ft_strdup(const char *s);
+char			*ft_strchr(const char *s, int c);
+void			ft_pstr(int fd, const char *str);
+void			free_cmd_list(t_cmd *cmd);
+int				ft_isdigit(int c);
+void			free_env(char **env);
 
 #endif

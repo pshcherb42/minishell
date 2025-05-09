@@ -6,7 +6,7 @@
 #    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/05/06 15:12:01 by akreise          ###   ########.fr        #
+#    Updated: 2025/05/09 17:06:59 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,9 @@ SRCS = \
 	executor/ft_env.c \
 	executor/ft_exit.c \
 	executor/ft_export.c \
+	executor/export_utils.c \
+	executor/export_add_eq.c \
+	executor/export_utils_2.c \
 	executor/ft_get_cmd_path.c \
 	executor/ft_pwd.c \
 	executor/ft_unset.c \
