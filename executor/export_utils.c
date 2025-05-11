@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/09 17:53:12 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/11 16:28:11 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,21 @@ static	void	sort_envp(char **env)
 	}
 }
 
+static	void	print_var(const char *entry)
+{
+	ft_pstr(1, "declare -x ");
+	ft_pstr(1, entry);
+	ft_pstr(1, "\n");
+}
+
 static	void	print_line(const char *entry)
 {
 	char	*eq;
 	char	*name;
 	char	*value;
 
+	if (ft_strncmp(entry, "_=", 2) == 0)
+		return ;
 	eq = ft_strchr(entry, '=');
 	if (eq)
 	{
@@ -85,11 +94,7 @@ static	void	print_line(const char *entry)
 		free(value);
 	}
 	else
-	{
-		ft_pstr(1, "declare -x ");
-		ft_pstr(1, entry);
-		ft_pstr(1, "\n");
-	}
+		print_var(entry);
 }
 
 void	print_all(char **envp)
@@ -109,23 +114,4 @@ void	print_all(char **envp)
 		i++;
 	}
 	free(sorted);
-}
-
-//вляется ли строка допустимым идентификатором переменной окружения
-int	is_valid(const char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str || (!isalpha(str[0]) && str[0] != '_')) //начинаем с буквы или _
-		return (0);
-	while (str[i] && str[i] != '=') //Остальные до'=' должны быть буквами, цифрами или подчёркиваниями
-	{
-		if (str[i] == '+' && str[i + 1] == '=')
-			return (1); //если есть +=, то всё ок
-		if (!isalnum(str[i]) && str[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1); //все гуд
 }
