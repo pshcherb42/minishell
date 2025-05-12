@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:33 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/05 13:12:07 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/12 14:38:08 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,6 @@ int	main(int argc, char **argv, char **envp)
 	run_shell_loop(&my_env);
 	free_env(my_env);
 	rl_clear_history();
-    rl_cleanup_after_signal();
+	rl_cleanup_after_signal();
 	return (0);
 }

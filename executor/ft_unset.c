@@ -6,13 +6,13 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:54:44 by akreise           #+#    #+#             */
-/*   Updated: 2025/04/24 17:42:41 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/12 15:26:34 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	remove_env_var(char ***envp, int index)
+static	void	remove_env_var(char ***envp, int index)
 {
 	int	k;
 

@@ -6,7 +6,7 @@
 #    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/05/09 17:06:59 by akreise          ###   ########.fr        #
+#    Updated: 2025/05/12 15:06:00 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ SRCS = \
 	parser/lexer_utils.c \
 	executor/builtin_utils.c \
 	executor/ft_cd.c \
+	executor/cd_utils.c \
 	executor/ft_echo.c \
 	executor/ft_env.c \
 	executor/ft_exit.c \
