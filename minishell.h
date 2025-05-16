@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/12 15:31:03 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/16 17:38:53 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,9 @@ int				ft_add_eq(char ***envp, char *arg, int name_len);
 // funciones de señales
 void			setup_signals(void);
 void			handle_sigint(int sig);
+
+// from heredoc.c
+int	handle_heredoc(const char *delimiter);
 
 // otros utilitarios
 void			free_cmds(t_cmd *cmd);

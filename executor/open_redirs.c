@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_redirs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 18:04:47 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/16 17:15:29 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,14 @@ static int	open_infile(t_cmd *cmd)//файл для ввода?-cat < input.txt 
 	if (!cmd->infile)//если файл пустой не сущ
 		return (1);
 	if (cmd->heredoc)//обрабатывается отдельно
+	{
+		fd = handle_heredoc(cmd->infile);
+		if (fd == -1)
+			return (0);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
 		return (1);
+	}
 	fd = open(cmd->infile, O_RDONLY);//открыли только для чтения
 	if (fd < 0)//файл открыть не получилось (например, его нет)
 	{

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
+#    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/05/12 15:06:00 by akreise          ###   ########.fr        #
+#    Updated: 2025/05/16 17:39:45 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ SRCS = \
 	executor/exec_utils.c \
 	signals/signals.c \
 	redirection/redir.c \
+	redirection/heredoc.c \
 	env/env.c \
 	env/export.c \
 	utils/utils.c \
