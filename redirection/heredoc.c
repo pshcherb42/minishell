@@ -6,30 +6,34 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:42:32 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/16 17:57:56 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/16 19:41:51 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	handle_here_doc(int *p_fd, char *argv)
+void	handle_here_doc(int *p_fd, const char *delimiter)
 {
-	line = readline("> ");
-	if (!line)
-		break ;
-	if (ft_strcmp(line, delimiter) == 0)
+	char	*line;
+
+	while (1)
 	{
+		line = readline("> ");
+		if (!line)
+			break ;
+		if (ft_strcmp(line, delimiter) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(p_fd[1], line, ft_strlen(line));
+		write(p_fd[1], "\n", 1);
 		free(line);
-		break ;
 	}
-	write(p_fd[1], line, ft_strlen(line));
-	write(p_fd[1], "\n", 1);
-	free(line);
 }
 
 int	handle_heredoc(const char *delimiter)
 {
-	char	*line;
 	int		p_fd[2];
 
 	if (pipe(p_fd) == -1)
@@ -37,10 +41,7 @@ int	handle_heredoc(const char *delimiter)
 		perror("pipe");
 		return (-1);
 	}
-	while (1)
-	{
-		handle_here_doc();
-	}
+	handle_here_doc(p_fd, delimiter);
 	close(p_fd[1]);
 	return (p_fd[0]);
 }
