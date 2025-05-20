@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/16 19:39:45 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/16 20:16:33 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ void			setup_signals(void);
 void			handle_sigint(int sig);
 
 // from heredoc.c
-void			handle_here_doc(int *p_fd, const char *delimiter);
+void			handle_here_doc(int *p_fd, const char *delimiter, int expand);
 int				handle_heredoc(const char *delimiter);
 
 // otros utilitarios
