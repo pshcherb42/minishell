@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:58:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 15:22:14 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/20 18:54:10 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,15 @@ int	is_empty_or_spaces(const char *str)
 	return (1);
 }
 
+static int	is_invalid_syntax(const char *segment)
+{
+	while (*segment && ft_isspace((unsigned char)*segment))
+		segment++;
+	if (*segment == ';' || *segment == '|')
+		return (1);
+	return (0);
+}
+
 int	process_segment(t_parse_state *state)
 {
 	char	*segment;
@@ -31,7 +40,12 @@ int	process_segment(t_parse_state *state)
 	segment = state->segments[state->i];
 	if (is_empty_or_spaces(segment))
 	{
-		ft_printf("minishell: syntax error near unexpected token `|'\n");
+		ft_printf("minishell: syntax error near unexpected token `|'\n", segment);
+		return (0);
+	}
+	else if (is_invalid_syntax(segment))
+	{
+		ft_printf("minishell: syntax error near unexpected token `%s'\n", segment);
 		return (0);
 	}
 	new_cmd = parse_single_command(segment, state->envp, state->last_exit_code);

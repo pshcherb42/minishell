@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:42:26 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/02 12:09:45 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:04:44 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*get_valid_input(void)
 		return (NULL);
 	if (!validate_quotes(input))
 	{
-		fprintf(stderr, "minishell: syntax error: unclosed quote\n");
+		ft_printf("minishell: syntax error: unclosed quote\n");
 		free(input);
 		return (get_valid_input());
 	}

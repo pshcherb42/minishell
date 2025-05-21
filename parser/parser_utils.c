@@ -6,13 +6,13 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:38:12 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/01 15:28:30 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:41:21 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*read_continued_input(const char *input)
+/*char	*read_continued_input(const char *input)
 {
 	char	*full_input;
 	char	*next_line;
@@ -32,7 +32,7 @@ char	*read_continued_input(const char *input)
 		free(next_line);
 	}
 	return (full_input);
-}
+}*/
 
 static int	is_outside_quotes(const char *input, int index)
 {

@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/05 15:28:32 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:01:08 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,15 @@ static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 	}
 	if (cmd->infile)
 		free(cmd->infile);
-	cmd->infile = ft_strdup(tokens[++i]);
+	cmd->infile = ft_strdup(tokens[++i]); 
 	cmd->heredoc = 1;
+	// el cambio
+	cmd->heredoc_fd = handle_heredoc(cmd->infile); // 🧠 Se ejecuta en parseo
+	if (cmd->heredoc_fd < 0)
+	{
+		ft_printf("minishell: heredoc failed\n");
+		return (-1);
+	}
 	return (i + 1);
 }
 

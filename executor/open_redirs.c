@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/16 17:15:29 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/21 13:01:14 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ static int	open_infile(t_cmd *cmd)//файл для ввода?-cat < input.txt 
 		return (1);
 	if (cmd->heredoc)//обрабатывается отдельно
 	{
-		fd = handle_heredoc(cmd->infile);
-		if (fd == -1)
-			return (0);
-		dup2(fd, STDIN_FILENO);
-		close(fd);
+		// el cambio
+		if (cmd->heredoc_fd < 0)
+		return (0);
+		dup2(cmd->heredoc_fd, STDIN_FILENO); // Redirige stdin
+		close(cmd->heredoc_fd);
 		return (1);
 	}
 	fd = open(cmd->infile, O_RDONLY);//открыли только для чтения

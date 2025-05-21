@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/20 15:19:22 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:44:18 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_cmd
 	char			*outfile;
 	int				append;
 	int				heredoc;
+	int				heredoc_fd; // nuevo campo
 	struct s_cmd	*next;
 	int				capacity;
 }	t_cmd;
@@ -117,7 +118,7 @@ void			run_shell_loop(char ***envp);
 t_cmd			*parse_single_command(char *input, char **envp, int l_e_c);
 t_cmd			*parse_input(char *input, char **envp, int last_exit_code);
 // from parser_utils.c
-char			*read_continued_input(const char *input);
+//char			*read_continued_input(const char *input);
 int				is_trailing_pipe(const char *input);
 // from parser_state.c
 int				is_empty_or_spaces(const char *str);
