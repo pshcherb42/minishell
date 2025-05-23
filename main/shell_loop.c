@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shell_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:43:57 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/05 17:16:31 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:22:43 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	process_input(char *input, char ***envp, int last_exit_code)
 		add_history(input);
 	cmds = parse_input(input, *envp, last_exit_code);
 	if (cmds)
-		exit_code = execute_cmds(cmds, envp);
+		exit_code = execute_cmds(cmds, envp, last_exit_code);
 	free_cmd_list(cmds);
 	return (exit_code);
 }

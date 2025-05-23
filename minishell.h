@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/21 12:44:18 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/23 17:52:41 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ int				is_builtin(char *cmd);
 int				is_parent_builtin(const char *cmd);
 int				exec_builtin(t_cmd *cmd, char ***envp);
 // from exec.c
-int				execute_cmds(t_cmd *cmd, char ***envp);
+int				execute_cmds(t_cmd *cmd, char ***envp, int last_exit_code);
 // from exec_child.c
 void			run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp);
 void			handle_child_exit( int status);

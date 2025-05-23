@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/21 15:13:23 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/23 18:39:43 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ static	char	*get_oldpwd(void)
 	oldpwd = getenv("OLDPWD"); // Получаем OLDPWD из envp
 	if (!oldpwd)
 		return (NULL);
-	ft_pstr(1, oldpwd);  // Печатаем старую директорию
-	ft_pstr(1, "\n");
+	// ft_pstr(1, oldpwd);  // Печатаем старую директорию
+	// ft_pstr(1, "\n");
 	return (ft_strdup(oldpwd));  // Возвращаем старую директорию
 }
 
