@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:20:49 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/21 16:41:54 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/26 18:00:39 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static	void	exec_child_cmd(t_cmd *cmd, char ***envp)//отвечает за вы
 		execve(cmd->args[0], cmd->args, *envp);//заменяет текущий процесс новой программойe
 		ft_pstr(2, "minishell: ");
 		ft_pstr(2, cmd->args[0]);
-		ft_pstr(2, ": command not found\n");
+		ft_pstr(2, ": no such file or directory\n");
 		exit(127);
 	}      
 	path = get_cmd_path(cmd->args[0], *envp);//если путь не был указан явно, ищет команду во всех директориях из переменной окружения PATH.
