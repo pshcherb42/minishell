@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 19:54:49 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:43:38 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*prep_joined(const char *arg, const char *var_name)
 	char	*joined;
 
 	name_len = ft_strlen(var_name);
-	joined = ft_strdup(arg + name_len + 2); // пропускаем +=
+	joined = ft_strdup(arg + name_len + 2);
 	return (joined);
 }
 
@@ -40,7 +40,6 @@ char	*ft_strjoin_free(char *s1, const char *s2)
 	return (joined);
 }
 
-// Проверяет, существует ли переменная с именем `var_name` в envp
 int	var_exists(char **envp, const char *var_name)
 {
 	int		i;
@@ -58,21 +57,20 @@ int	var_exists(char **envp, const char *var_name)
 	return (0);
 }
 
-//вляется ли строка допустимым идентификатором переменной окружения
 int	is_valid(const char *str)
 {
 	int	i;
 
 	i = 0;
-	if (!str || (!isalpha(str[0]) && str[0] != '_')) //начинаем с буквы или _
+	if (!str || (!isalpha(str[0]) && str[0] != '_'))
 		return (0);
-	while (str[i] && str[i] != '=') //Остальные до'=' должны быть буквами, цифрами или подчёркиваниями
+	while (str[i] && str[i] != '=')
 	{
 		if (str[i] == '+' && str[i + 1] == '=')
-			return (1); //если есть +=, то всё ок
+			return (1);
 		if (!isalnum(str[i]) && str[i] != '_')
 			return (0);
 		i++;
 	}
-	return (1); //все гуд
+	return (1);
 }

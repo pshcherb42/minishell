@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:24:32 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:43:57 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,15 @@ static	int	check_args(char **args)
 	return (0);
 }
 
-// Получает текущую директорию (используется для OLDPWD и PWD)
 char	*get_current_dir(void)
 {
 	char	cwd[1024];
 
 	if (!getcwd(cwd, sizeof(cwd)))
-		return (NULL);// Просто возвращаем NULL, если не удалось получить директорию
-	return (ft_strdup(cwd));// Возвращаем текущую директорию
+		return (NULL);
+	return (ft_strdup(cwd));
 }
 
-// Пытается сменить директорию 
 static int	try_change_dir(char *target)
 {
 	if (chdir(target) != 0)
@@ -52,7 +50,6 @@ static int	try_change_dir(char *target)
 	return (0);
 }
 
-// Выполняет всю логику смены директории после получения путей
 static int	perform_cd_operation(char *target, char *oldpwd,
 		char **envp, int is_dash)
 {

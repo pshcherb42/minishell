@@ -6,13 +6,12 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:34:15 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/23 17:35:24 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:45:06 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Заменяет уже существующую переменную, если имя совпадает
 int	replace_new_var(char ***envp, char *arg, int name_len)
 {
 	int		i;
@@ -108,7 +107,7 @@ static	int	process_arg(char *arg, char ***envp)
 	return (0);
 }
 
-int	ft_export(char **args, char ***envp) // adds/modifies environment variables
+int	ft_export(char **args, char ***envp)
 {
 	int	i;
 	int	status;

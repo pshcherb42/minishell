@@ -6,13 +6,13 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:59 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/03 17:35:08 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:38:23 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_parent_builtin(const char *cmd) // same as builtin but for pipes
+int	is_parent_builtin(const char *cmd)
 {
 	return (!ft_strcmp(cmd, "cd")
 		|| !ft_strcmp(cmd, "exit")
@@ -20,7 +20,7 @@ int	is_parent_builtin(const char *cmd) // same as builtin but for pipes
 		|| !ft_strcmp(cmd, "unset"));
 }
 
-int	is_builtin(char *cmd) // checks if the given command is builtin
+int	is_builtin(char *cmd)
 {
 	if (!cmd)
 		return (0);
@@ -33,7 +33,7 @@ int	is_builtin(char *cmd) // checks if the given command is builtin
 		|| !ft_strcmp(cmd, "export"));
 }
 
-int	exec_builtin(t_cmd *cmd, char ***envp) // executes the builtin
+int	exec_builtin(t_cmd *cmd, char ***envp)
 {
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);

@@ -6,13 +6,13 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:54:44 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/01 12:59:28 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:45:38 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static	char	*find_path(char **envp)//ищем PATH= в окружении
+static	char	*find_path(char **envp)
 {
 	int	i;
 
@@ -20,13 +20,13 @@ static	char	*find_path(char **envp)//ищем PATH= в окружении
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-			return (envp[i] + 5);//возвращааем место после PATH= - путь
+			return (envp[i] + 5);
 		i++;
 	}
 	return (NULL);
 }
 
-static	char	*search_cmd(char **paths, char *cmd)//ищем команду в PATH
+static	char	*search_cmd(char **paths, char *cmd)
 {
 	char	*full_path;
 	int		i;
@@ -34,32 +34,32 @@ static	char	*search_cmd(char **paths, char *cmd)//ищем команду в PAT
 	i = 0;
 	while (paths[i])
 	{
-		full_path = join_path(paths[i], cmd);//склеиваем команду и папку
+		full_path = join_path(paths[i], cmd);
 		if (!full_path)
 			return (NULL);
-		if (access(full_path, X_OK) == 0) //проверили существует и работает ли
-			return (full_path);//вернули если нашли верный путь
-		free(full_path);//освободили если не тот путь
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		free(full_path);
 		i++;
 	}
 	return (NULL);
 }
 
-char	*get_cmd_path(char *cmd, char **envp)//найти путь к команде
+char	*get_cmd_path(char *cmd, char **envp)
 {
 	char	*path_env;
 	char	**paths;
 	char	*full_path;
 
-	if (ft_strchr(cmd, '/')) //указали путь к команде (./a.out)
-		return (ft_strdup(cmd));//вернули копию команды
-	path_env = find_path(envp);//ищм PATH в окружении
+	if (ft_strchr(cmd, '/'))
+		return (ft_strdup(cmd));
+	path_env = find_path(envp);
 	if (!path_env)
 		return (NULL);
-	paths = split_path(path_env);//делим PATH на части по :
+	paths = split_path(path_env);
 	if (!paths)
 		return (NULL);
-	full_path = search_cmd(paths, cmd);//ищем команду - ее путь
+	full_path = search_cmd(paths, cmd);
 	free_split(paths);
 	return (full_path);
 }

@@ -6,13 +6,12 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:33:55 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/11 16:36:38 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:47:07 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//возвращающая 1 если значение в допустимом диапазоне long long или 0 если нет
 static	int	is_in_llrange(const char *str)
 {
 	int		sign;
@@ -22,24 +21,24 @@ static	int	is_in_llrange(const char *str)
 
 	sign = 1;
 	i = 0;
-	max = "9223372036854775807";//max long long
-	min = "9223372036854775808";//min long long
+	max = "9223372036854775807";
+	min = "9223372036854775808";
 	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
 			sign = -1;
 		i++;
 	}
-	while (str[i] == '0')//если 00000000003 то мы нули просто пропускаем
+	while (str[i] == '0')
 		i++;
-	if (ft_strlen(&str[i]) > 19)//если длина после знака и нулей > 19 то это точно не long long
+	if (ft_strlen(&str[i]) > 19)
 		return (0);
-	if (ft_strlen(&str[i]) < 19)//если меньше - все ок
+	if (ft_strlen(&str[i]) < 19)
 		return (1);
-	if (sign == 1)//если строка = 19 то сравниваем с макс или мин в зав от знака
+	if (sign == 1)
 		return (strncmp(&str[i], max, 19) <= 0);
 	else
-		return (strncmp(&str[i], min, 19) < 0); 
+		return (strncmp(&str[i], min, 19) < 0);
 }
 
 int	ft_exit(char **args)

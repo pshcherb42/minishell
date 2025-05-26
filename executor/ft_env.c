@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/04/24 16:19:23 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:44:26 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-int	ft_env(char **envp)// prints all environment variables
+int	ft_env(char **envp)
 {
 	int	i;
 

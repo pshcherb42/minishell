@@ -3,55 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:20:49 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 18:00:39 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/26 20:41:09 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static	void	set_signals(void)//настраивает поведение сигналов SIGINT и SIGQUIT на стандартное
+static	void	set_signals(void)
 {
-	signal(SIGINT, SIG_DFL);//нажимаем Ctrl+C — команда прерывается
-	signal(SIGQUIT, SIG_DFL);//нажимаем Ctrl+\ — появится "Quit (core dumped)" и процесс завершится
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 static	void	redirect_pipes(t_cmd *cmd, int prev_fd, int pipefd[2])
 {
-	if (prev_fd != -1)//если это не первая команда
+	if (prev_fd != -1)
 	{
-		dup2(prev_fd, STDIN_FILENO);//перенаправляем STDIN на конец предыдущего pipe
-		close(prev_fd);//закрываем старый дескриптор
+		dup2(prev_fd, STDIN_FILENO);
+		close(prev_fd);
 	}
-	if (cmd->next)//если это не последняя команда
+	if (cmd->next)
 	{
-		close(pipefd[0]);//закрываем неиспользуемый конец pipe (чтение)
-		dup2(pipefd[1], STDOUT_FILENO);//перенаправляем STDOUT на начало текущего pipe (запись)
-		close(pipefd[1]);//закрываем старый дескриптор
+		close(pipefd[0]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
 	}
 }
 
-static	void	exec_child_cmd(t_cmd *cmd, char ***envp)//отвечает за выполнение команды — встроенной или внешней
+static	void	exec_child_cmd(t_cmd *cmd, char ***envp)
 {
 	char	*path;
 
-	if (is_builtin(cmd->args[0]))//Если команда встроенная (типа echo, cd и др.)
-		exit(exec_builtin(cmd, envp));//сразу её выполняем через exec_builtin и завершаем процесс с exit
-	if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')//Если путь к команде начинается с / (абсолютный путь) или . (относительный)
+	if (is_builtin(cmd->args[0]))
+		exit(exec_builtin(cmd, envp));
+	if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
 	{
-		execve(cmd->args[0], cmd->args, *envp);//заменяет текущий процесс новой программойe
+		execve(cmd->args[0], cmd->args, *envp);
 		ft_pstr(2, "minishell: ");
 		ft_pstr(2, cmd->args[0]);
 		ft_pstr(2, ": no such file or directory\n");
 		exit(127);
-	}      
-	path = get_cmd_path(cmd->args[0], *envp);//если путь не был указан явно, ищет команду во всех директориях из переменной окружения PATH.
+	}
+	path = get_cmd_path(cmd->args[0], *envp);
 	if (!path)
 	{
 		ft_pstr(2, "minishell; ");
-        ft_pstr(2, cmd->args[0]);
+		ft_pstr(2, cmd->args[0]);
 		ft_pstr(2, "; command not found\n");
 		exit(127);
 	}
@@ -61,24 +61,22 @@ static	void	exec_child_cmd(t_cmd *cmd, char ***envp)//отвечает за вы
 	exit(EXIT_FAILURE);
 }
 
-//она запускается в дочернем процессе после fork, и готовит всё для исполнения команды
 void	run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp)
 {
-	set_signals();//в родителе SIGINT (Ctrl+C) был игнорирован, но дочерний должен уметь 
-	redirect_pipes(cmd, prev_fd, pipefd);//Настраиваем stdin и stdout через dup2
-	if (!open_redirs(cmd))//Открывает файлы из редиректов в команде
+	set_signals();
+	redirect_pipes(cmd, prev_fd, pipefd);
+	if (!open_redirs(cmd))
 		exit(EXIT_FAILURE);
-	exec_child_cmd(cmd, envp);//Сам запуск команды
+	exec_child_cmd(cmd, envp);
 }
 
-//status — это код, полученный от waitpid
-void	handle_child_exit( int status)//анализирует почему завершился дочерний процесс
+void	handle_child_exit( int status)
 {
-	if (WIFSIGNALED(status))//возвращает номер сигнала, вызвавшего завершение
+	if (WIFSIGNALED(status))
 	{
-		if (WTERMSIG(status) == SIGINT)//когда нажимаешь Ctrl+C, показывают новую строку ввода
+		if (WTERMSIG(status) == SIGINT)
 			write(1, "\n", 1);
-		if (WTERMSIG(status) == SIGQUIT)//нажимаем Ctrl+
+		if (WTERMSIG(status) == SIGQUIT)
 			write(2, "Quit (core dumped)\n", 20);
 	}
 }

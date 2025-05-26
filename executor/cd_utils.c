@@ -6,13 +6,12 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:13:45 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:39:12 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Создает строку вида VAR=VALUE
 char	*join_env_entry(const char *var_name, const char *value)
 {
 	char	*entry;
@@ -21,7 +20,7 @@ char	*join_env_entry(const char *var_name, const char *value)
 
 	var_len = ft_strlen(var_name);
 	val_len = ft_strlen(value);
-	entry = malloc(var_len + val_len + 2); // +1 for '=' and +1 for '\0'
+	entry = malloc(var_len + val_len + 2);
 	if (!entry)
 		return (NULL);
 	ft_memcpy(entry, var_name, var_len);
@@ -31,7 +30,6 @@ char	*join_env_entry(const char *var_name, const char *value)
 	return (entry);
 }
 
-// Получает путь для "cd -" из локального envp
 static char	*get_oldpwd(char **envp)
 {
 	char	*oldpwd;
@@ -65,7 +63,6 @@ static char	*home_tilde(char *arg, char **envp)
 	return (full_path);
 }
 
-// Получает целевой путь для смены директории
 char	*get_target_path(char **args, char **envp)
 {
 	char	*home;

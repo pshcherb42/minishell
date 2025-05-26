@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/09 17:17:23 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:43:10 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static char	*get_old_val(const char *entry)
 
 	eq = ft_strchr(entry, '=');
 	if (!eq)
-		return (ft_strdup("")); // на случай если переменная без =
+		return (ft_strdup(""));
 	return (ft_strdup(eq + 1));
 }
 

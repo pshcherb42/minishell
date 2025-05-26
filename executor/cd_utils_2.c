@@ -6,13 +6,12 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 19:53:11 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:38:49 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Функция для поиска переменной в локальном envp
 char	*find_env_var_local(char **envp, const char *name)
 {
 	int		i;
@@ -23,13 +22,12 @@ char	*find_env_var_local(char **envp, const char *name)
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-			return (envp[i] + len + 1); // Возвращаем значение после '='
+			return (envp[i] + len + 1);
 		i++;
 	}
 	return (NULL);
 }
 
-// Обновляет существующую переменную окружения
 static int	update_existing_env(char **envp, const char *var_name,
 		const char *value, size_t len)
 {
@@ -53,7 +51,6 @@ static int	update_existing_env(char **envp, const char *var_name,
 	return (0);
 }
 
-// Добавляет новую переменную окружения в конец массива
 static void	add_new_env(char **envp, const char *var_name, const char *value)
 {
 	int		i;
@@ -69,7 +66,6 @@ static void	add_new_env(char **envp, const char *var_name, const char *value)
 	envp[i + 1] = NULL;
 }
 
-// Основная функция замены/добавления переменной окружения
 void	replace_env(const char *var_name, const char *value, char **envp)
 {
 	size_t	len;
@@ -86,7 +82,7 @@ void	update_env_vars(char *oldpwd, char **envp)
 
 	newpwd = get_current_dir();
 	if (!newpwd)
-		return ; // Если не удалось получить текущую директорию, не обновляем PWD
+		return ;
 	replace_env("OLDPWD", oldpwd, envp);
 	replace_env("PWD", newpwd, envp);
 	free(newpwd);

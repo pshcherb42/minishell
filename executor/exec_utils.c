@@ -6,20 +6,20 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:53 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/26 19:38:37 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:41:37 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*join_path(const char *dir, const char *cmd)//Создаёт строку "/usr/bin/ls" из "usr/bin" и "ls"
+char	*join_path(const char *dir, const char *cmd)
 {
 	char	*full;
 	int		len;
 	int		i;
 	int		j;
 
-	len = ft_strlen(dir) + ft_strlen(cmd) + 2;// считаем длину +1 для '/' и +1 для '\0'
+	len = ft_strlen(dir) + ft_strlen(cmd) + 2;
 	full = malloc(sizeof(char) * len);
 	if (!full)
 		return (NULL);
@@ -37,14 +37,14 @@ char	*join_path(const char *dir, const char *cmd)//Создаёт строку "
 	return (full);
 }
 
-static int	find_end(const char *path, int start)//ищем конец сегмента - часть до : 
+static int	find_end(const char *path, int start)
 {
 	while (path[start] && path[start] != ':')
 		start++;
 	return (start);
 }
 
-void	free_split(char **arr)//освобождаем массив строк
+void	free_split(char **arr)
 {
 	int	i;
 
@@ -54,15 +54,15 @@ void	free_split(char **arr)//освобождаем массив строк
 	free(arr);
 }
 
-static int	update_start(const char *path, int end)//обновляем старт на следующий сегмент
+static int	update_start(const char *path, int end)
 {
-	if (path[end] == ':')//если сейчас стоит ':', пропускаем его
+	if (path[end] == ':')
 		return (end + 1);
 	else
-		return (end);//иначе остаёмся и старт = /0 и выходим из вайл
+		return (end);
 }
 
-char	**split_path(const char *path)//делим PATH нв части - разделение по :
+char	**split_path(const char *path)
 {
 	char	**result;
 	int		start;
@@ -76,15 +76,15 @@ char	**split_path(const char *path)//делим PATH нв части - разд�
 	i = 0;
 	while (path[start])
 	{
-		end = find_end(path, start);//находим конец текущего сегмента
-		result[i] = ft_substr(path, start, end - start);//вырезаем сегмент и кладем в массив
+		end = find_end(path, start);
+		result[i] = ft_substr(path, start, end - start);
 		if (!result[i])
 		{
 			free_split(result);
 			return (NULL);
 		}
 		i++;
-		start = update_start(path, end);//обновляем стартовую позицию
+		start = update_start(path, end);
 	}
 	result[i] = NULL;
 	return (result);
