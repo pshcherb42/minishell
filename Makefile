@@ -85,5 +85,16 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+# Target for running tests
+test: $(NAME)
+	@echo "Ensuring test scripts are executable..."
+	@chmod +x test_basic_features.sh || (echo "Failed to make test_basic_features.sh executable"; exit 1)
+	@chmod +x test_leaks.sh || (echo "Failed to make test_leaks.sh executable"; exit 1)
+	@echo "Running basic feature tests..."
+	@./test_basic_features.sh
+	@echo "Running leak detection tests (Valgrind)..."
+	@./test_leaks.sh
+	@echo "All tests completed."
+
+.PHONY: all clean fclean re test
 
