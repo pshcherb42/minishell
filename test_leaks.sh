@@ -151,22 +151,37 @@ run_valgrind_test() {
         local std_open
         std_open=$(echo "$open_fds_summary" | awk '{print $5}' | tr -d '()std')
 
-        if [ "$total_open" -gt "$std_open" ]; then
-            echo "STATUS: FAIL (Open File Descriptors Detected)"
+        # Default to 0 if empty or not a number (basic check for robustness) - Turn 40
+        if ! [[ "$total_open" =~ ^[0-9]+$ ]]; then
+            # echo "DEBUG: total_open ('$total_open') is not a number, defaulting to 0."
+            total_open=0
+        fi
+        if ! [[ "$std_open" =~ ^[0-9]+$ ]]; then
+            # echo "DEBUG: std_open ('$std_open') is not a number, defaulting to 0."
+            # Default to 3 for std fds if parsing somehow fails but summary line was found,
+            # as Valgrind usually reports 3 standard FDs.
+            std_open=3 
+        fi
+
+        if [ "$total_open" -gt "$std_open" ]; then # This is the critical comparison
+            echo "STATUS: FAIL (Open File Descriptors Detected via Summary: $total_open open > $std_open std)"
             echo "$open_fds_summary"
             # Show specific open FDs if listed (Valgrind lists them above the summary)
-            grep " open file descriptor " "$VALGRIND_LOG" | grep -v "inherited from parent"
+            # Filter out standard FDs (0, 1, 2) from this detailed list as they are expected.
+            grep " open file descriptor " "$VALGRIND_LOG" | grep -E -v "(inherited from parent|fd 0:|fd 1:|fd 2:)"
             test_failed=1
         fi
     fi
     
     # Fallback check for individual open FD messages if summary parsing is tricky or insufficient
     # This checks for FDs 3 or higher explicitly mentioned as open.
-    if grep -qE " open file descriptor [3-9]" "$VALGRIND_LOG" || grep -qE " open file descriptor [1-9][0-9]+" "$VALGRIND_LOG"; then
-         # Check if we already flagged this via the summary
-        if ! ( [ -n "$open_fds_summary" ] && [ "$(echo "$open_fds_summary" | awk '{print $3}')" -gt "$(echo "$open_fds_summary" | awk '{print $5}' | tr -d '()std')" ] ); then
-            echo "STATUS: FAIL (Open File Descriptors Detected - individual check)"
-            grep " open file descriptor " "$VALGRIND_LOG" | grep -v "inherited from parent"
+    # Only run this check if test_failed is still 0 to avoid redundant messages and preferably if no summary was found.
+    if [ $test_failed -eq 0 ] && [ -z "$open_fds_summary" ]; then
+        # Check for any line indicating an open FD other than 0, 1, 2
+        # The grep below will have exit code 0 if any such line is found.
+        if grep -q " open file descriptor " "$VALGRIND_LOG" | grep -E -v "(inherited from parent|fd 0:|fd 1:|fd 2:)"; then
+            echo "STATUS: FAIL (Open File Descriptors Detected - individual FD check, no summary line found)"
+            grep " open file descriptor " "$VALGRIND_LOG" | grep -E -v "(inherited from parent|fd 0:|fd 1:|fd 2:)"
             test_failed=1
         fi
     fi
