@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/21 13:01:08 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/23 16:01:33 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
 
 static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
 {
+	//int	fd;
+	
 	if (!tokens[i + 1])
 	{
 		ft_printf("minishell: syntax error near unexpected token `newline'\n");
