@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 18:05:05 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:24:32 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static	int	check_args(char **args)
 }
 
 // Получает текущую директорию (используется для OLDPWD и PWD)
-static char	*get_current_dir(void)
+char	*get_current_dir(void)
 {
 	char	cwd[1024];
 
@@ -52,54 +52,51 @@ static int	try_change_dir(char *target)
 	return (0);
 }
 
-static void	update_env_vars(char *oldpwd, char **envp)
+// Выполняет всю логику смены директории после получения путей
+static int	perform_cd_operation(char *target, char *oldpwd,
+		char **envp, int is_dash)
 {
 	char	*newpwd;
 
-	newpwd = get_current_dir();
-	if (!newpwd)
-		return ;// Если не удалось получить текущую директорию, не обновляем PWD
-	replace_env("OLDPWD", oldpwd, envp);
-	replace_env("PWD", newpwd, envp);
-	free(newpwd);
+	if (try_change_dir(target))
+	{
+		free(target);
+		free(oldpwd);
+		return (1);
+	}
+	if (is_dash)
+	{
+		newpwd = get_current_dir();
+		if (newpwd)
+		{
+			ft_pstr(1, newpwd);
+			ft_pstr(1, "\n");
+			free(newpwd);
+		}
+	}
+	update_env_vars(oldpwd, envp);
+	free(target);
+	free(oldpwd);
+	return (0);
 }
 
 int	ft_cd(char **args, char **envp)
 {
 	char	*target;
 	char	*oldpwd;
-    int     is_dash_arg;
+	int		is_dash_arg;
 
-	if (check_args(args))// Проверка на правильность количества аргументов
+	if (check_args(args))
 		return (1);
-    is_dash_arg = (args[1] && ft_strcmp(args[1], "-") == 0);
-	target = get_target_path(args, envp);// Получаем путь для смены директории
+	is_dash_arg = (args[1] && ft_strcmp(args[1], "-") == 0);
+	target = get_target_path(args, envp);
 	if (!target)
 		return (1);
-	oldpwd = get_current_dir();// Получаем текущую директорию для OLDPWD
+	oldpwd = get_current_dir();
 	if (!oldpwd)
 	{
 		free(target);
 		return (1);
 	}
-	if (try_change_dir(target))// Пытаемся сменить директорию
-	{
-		free(target);
-		free(oldpwd);
-		return (1);
-	}
-    if (is_dash_arg)
-    {
-        char *newpwd = get_current_dir();
-        if (newpwd)
-        {
-            ft_pstr(1, newpwd);
-            ft_pstr(1, "\n");
-            free(newpwd);
-        }
-    }
-	update_env_vars(oldpwd, envp);// Обновляем PWD и OLDPWD в окружении
-	free(target);
-	free(oldpwd);
-	return (0);
+	return (perform_cd_operation(target, oldpwd, envp, is_dash_arg));
 }

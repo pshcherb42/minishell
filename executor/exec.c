@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/23 18:20:21 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:06:22 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,52 @@ static	void	handle_parent_pipe(t_cmd *cmd, int pipefd[2], int *prev_fd)
 //в дочернем процессе первой команды ты перенаправляешь STDOUT в pipefd[1];
 //во второй команде ты читаешь STDIN из pipefd[0]
 
+// Выполняет одну команду в пайплайне
+static int	execute_single_cmd(t_cmd *cmd, char ***envp, int *prev_fd)
+{
+	int		pipefd[2];
+	pid_t	pid;
+	int		status;
+
+	if (!create_pipe(cmd, pipefd))
+		return (1);
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid < 0)
+		return (perror("fork"), 1);
+	if (pid == 0)
+		run_child(cmd, *prev_fd, pipefd, envp);
+	handle_parent_pipe(cmd, pipefd, prev_fd);
+	waitpid(pid, &status, 0);
+	handle_child_exit(status);
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	else
+		return (1);
+}
+
+static int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd,
+		int last_exit_code)
+{
+	int	current_exit_code;
+
+	current_exit_code = last_exit_code;
+	while (cmd)
+	{
+		if (is_builtin(cmd->args[0]) && is_parent_builtin(cmd->args[0]))
+			return (exec_builtin(cmd, envp));
+		current_exit_code = execute_single_cmd(cmd, envp, &prev_fd);
+		cmd = cmd->next;
+	}
+	return (current_exit_code);
+}
+
 //перебирает все команды, создаёт пайпы, форкает процессы, запускает дочерние процессы и следит за их завершением
-static	int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd, int last_exit_code)//цикл по всем командам
+/*static	int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd, int last_exit_code)//цикл по всем командам
 {
 	int		pipefd[2];//массив под пайп: pipefd[0] — чтение, pipefd[1] — запись
 	pid_t	pid;//ID процесса, получаемый от fork()
@@ -76,7 +120,7 @@ static	int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd, int last_exit_cod
 		cmd = cmd->next;
 	}
 	return (current_exit_code);
-}
+}*/
 
 //акрываем предыдущий если он был создан, если это не первая команда, 
 //если есть далььше команды мы закрываем запись, и сохраняем в перд. 

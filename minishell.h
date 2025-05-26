@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/26 18:04:21 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 20:24:48 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,10 +190,17 @@ int				open_redirs(t_cmd *cmd);
 char			*get_cmd_path(char *cmd, char **envp);
 // from ft_cd.c
 int				ft_cd(char **args, char **envp);
+char			*get_current_dir(void);
 // from cd_utils.c
 void			replace_env(const char *var_name, const char *value,
 					char **envp);
 char			*get_target_path(char **args, char **envp);
+char			*join_env_entry(const char *var_name, const char *value);
+// from cd_utils_2.c
+char			*find_env_var_local(char **envp, const char *name);
+void			replace_env(const char *var_name, const char *value,
+					char **envp);
+void			update_env_vars(char *oldpwd, char **envp);
 // from ft_echo.c
 int				ft_echo(char **args);
 // from ft_env.c
