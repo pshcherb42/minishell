@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/23 17:52:41 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/26 18:04:21 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int				ft_cd(char **args, char **envp);
 // from cd_utils.c
 void			replace_env(const char *var_name, const char *value,
 					char **envp);
-char			*get_target_path(char **args);
+char			*get_target_path(char **args, char **envp);
 // from ft_echo.c
 int				ft_echo(char **args);
 // from ft_env.c
