@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_state.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:58:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/20 18:54:10 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:33:00 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,14 @@ int	process_segment(t_parse_state *state)
 	segment = state->segments[state->i];
 	if (is_empty_or_spaces(segment))
 	{
-		ft_printf("minishell: syntax error near unexpected token `|'\n", segment);
+		ft_printf("minishell: syntax error near unexpected token `|'\n",
+			segment);
 		return (0);
 	}
 	else if (is_invalid_syntax(segment))
 	{
-		ft_printf("minishell: syntax error near unexpected token `%s'\n", segment);
+		ft_printf("minishell: syntax error near unexpected token `%s'\n",
+			segment);
 		return (0);
 	}
 	new_cmd = parse_single_command(segment, state->envp, state->last_exit_code);

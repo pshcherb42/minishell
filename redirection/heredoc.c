@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:42:32 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/21 13:57:36 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:36:00 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	handle_here_doc(int *p_fd, const char *delimiter)
 {
 	char	*line;
+
 	while (1)
 	{
 		line = readline("> ");
@@ -40,7 +41,7 @@ int	handle_heredoc(const char *delimiter)
 		perror("pipe");
 		return (-1);
 	}
-	handle_here_doc(p_fd, delimiter); // espera input
-	close(p_fd[1]); // escribes antes de cerrar
-	return (p_fd[0]); // devuelve fd para lectura
+	handle_here_doc(p_fd, delimiter);
+	close(p_fd[1]);
+	return (p_fd[0]);
 }

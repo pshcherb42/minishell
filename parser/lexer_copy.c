@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_copy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 17:03:54 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/20 16:44:15 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:31:04 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,6 @@ int	copy_token(t_split_vars *vars, char *input)
 {
 	while (vars->m < vars->i)
 	{
-		/*if (input[vars->m] == '\\' || input[vars->m] == ';')
-		{
-			ft_printf("Unsupported character: %c\n", input[vars->m]);
-			free(vars->raw_token);
-			return (0);
-		}*/
 		if (is_quote(input[vars->m]))
 		{
 			if (handle_quote_char(vars, input[vars->m]))

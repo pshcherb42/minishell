@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/26 20:24:48 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/27 15:29:30 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 # define ARGS_INIT_CAPACITY 10
 
-extern volatile	sig_atomic_t	q_sigquit_flag;
+extern volatile sig_atomic_t	q_sigquit_flag;
 
 typedef struct s_cmd
 {
