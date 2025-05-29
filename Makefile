@@ -6,7 +6,7 @@
 #    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/05/26 20:20:38 by akreise          ###   ########.fr        #
+#    Updated: 2025/05/29 15:17:43 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,6 @@ SRCS = \
 	executor/builtin.c \
 	executor/exec_utils.c \
 	signals/signals.c \
-	redirection/redir.c \
 	redirection/heredoc.c \
 	utils/utils.c \
 	utils/utils2.c

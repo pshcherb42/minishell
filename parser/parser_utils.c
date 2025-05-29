@@ -3,36 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:38:12 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/20 16:41:21 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/29 15:17:26 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/*char	*read_continued_input(const char *input)
-{
-	char	*full_input;
-	char	*next_line;
-	char	*tmp;
-
-	if (is_empty_or_spaces(input))
-		return (NULL);
-	full_input = ft_strdup(input);
-	while (is_trailing_pipe(full_input))
-	{
-		next_line = readline("> ");
-		if (!next_line)
-			break ;
-		tmp = full_input;
-		full_input = ft_strjoin(tmp, next_line);
-		free(tmp);
-		free(next_line);
-	}
-	return (full_input);
-}*/
 
 static int	is_outside_quotes(const char *input, int index)
 {
