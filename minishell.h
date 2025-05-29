@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/27 15:29:30 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:31:21 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,9 +205,10 @@ void			update_env_vars(char *oldpwd, char **envp);
 int				ft_echo(char **args);
 // from ft_env.c
 char			*ft_strchr(const char *s, int c);
-int				ft_env(char **envp);
+int				ft_env(char **args, char **envp);
 // from ft_exit.c
 int				ft_exit(char **args);
+int				ft_exit_child(char **args);
 // from ft_pwd.c
 int				ft_pwd(void);
 // from ft_unset.c

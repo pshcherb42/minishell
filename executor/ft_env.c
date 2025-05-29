@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:44:26 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/29 15:39:01 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,15 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-int	ft_env(char **envp)
+int	ft_env(char **args, char **envp)
 {
 	int	i;
 
+	if (args[1])
+	{
+		ft_pstr(2, "minishell: env: too many arguments\n");
+		return (1);
+	}
 	i = 0;
 	while (envp[i])
 	{

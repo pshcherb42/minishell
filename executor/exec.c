@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:47:19 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:23:44 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,11 @@ static int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd,
 	current_exit_code = last_exit_code;
 	while (cmd)
 	{
+		if (!ft_strcmp(cmd->args[0], "exit"))
+		{
+			if (!cmd->next && prev_fd == -1)
+				return (ft_exit(cmd->args));
+		}
 		if (is_builtin(cmd->args[0]) && is_parent_builtin(cmd->args[0]))
 			return (exec_builtin(cmd, envp));
 		current_exit_code = execute_single_cmd(cmd, envp, &prev_fd);

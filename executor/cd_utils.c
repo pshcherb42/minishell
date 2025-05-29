@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:39:12 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:02:29 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*join_env_entry(const char *var_name, const char *value)
 	return (entry);
 }
 
-static char	*get_oldpwd(char **envp)
+/*static char	*get_oldpwd(char **envp)
 {
 	char	*oldpwd;
 
@@ -38,7 +38,7 @@ static char	*get_oldpwd(char **envp)
 	if (!oldpwd)
 		return (NULL);
 	return (ft_strdup(oldpwd));
-}
+}*/
 
 static char	*home_tilde(char *arg, char **envp)
 {
@@ -63,7 +63,7 @@ static char	*home_tilde(char *arg, char **envp)
 	return (full_path);
 }
 
-char	*get_target_path(char **args, char **envp)
+/*char	*get_target_path(char **args, char **envp)
 {
 	char	*home;
 
@@ -75,6 +75,43 @@ char	*get_target_path(char **args, char **envp)
 		if (!home)
 			return (NULL);
 		return (ft_strdup(home));
+	}
+	if (args[1][0] == '~')
+		return (home_tilde(args[1], envp));
+	return (ft_strdup(args[1]));
+}*/
+
+static int	print_cd_env_error(const char *var_name)
+{
+	ft_pstr(2, "minishell: cd: ");
+	ft_pstr(2, var_name);
+	ft_pstr(2, " not set\n");
+	return (1);
+}
+
+char	*get_target_path(char **args, char **envp)
+{
+	char	*var;
+
+	if (args[1] && ft_strcmp(args[1], "-") == 0)
+	{
+		var = find_env_var_local(envp, "OLDPWD");
+		if (!var)
+		{
+			print_cd_env_error("OLDPWD");
+			return (NULL);
+		}
+		return (ft_strdup(var));
+	}
+	if (!args[1])
+	{
+		var = find_env_var_local(envp, "HOME");
+		if (!var)
+		{
+			print_cd_env_error("HOME");
+			return (NULL);
+		}
+		return (ft_strdup(var));
 	}
 	if (args[1][0] == '~')
 		return (home_tilde(args[1], envp));

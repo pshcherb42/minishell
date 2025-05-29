@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:59 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/26 20:38:23 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/29 16:30:54 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	is_parent_builtin(const char *cmd)
 {
 	return (!ft_strcmp(cmd, "cd")
-		|| !ft_strcmp(cmd, "exit")
 		|| !ft_strcmp(cmd, "export")
 		|| !ft_strcmp(cmd, "unset"));
 }
@@ -38,7 +37,7 @@ int	exec_builtin(t_cmd *cmd, char ***envp)
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "exit"))
-		return (ft_exit(cmd->args));
+		return (ft_exit_child(cmd->args));
 	else if (!ft_strcmp(cmd->args[0], "cd"))
 		return (ft_cd(cmd->args, *envp));
 	else if (!ft_strcmp(cmd->args[0], "pwd"))
@@ -46,7 +45,7 @@ int	exec_builtin(t_cmd *cmd, char ***envp)
 	else if (!ft_strcmp(cmd->args[0], "echo"))
 		return (ft_echo(cmd->args));
 	else if (!ft_strcmp(cmd->args[0], "env"))
-		return (ft_env(*envp));
+		return (ft_env(cmd->args, *envp));
 	else if (!ft_strcmp(cmd->args[0], "unset"))
 		return (ft_unset(cmd->args, envp));
 	else if (!ft_strcmp(cmd->args[0], "export"))
