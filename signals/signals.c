@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/27 15:35:42 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/29 15:27:54 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,13 @@ void	handle_sigquit(int sig)
 {
 	(void)sig;
 	g_sigquit_flag = 1;
+}
+
+void	heredoc_sigint(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	exit(1);
 }
 
 void	setup_signals(void)

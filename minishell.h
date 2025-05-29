@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/27 15:29:30 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/29 15:29:08 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,13 +229,18 @@ int				add_new(char ***envp, const char *arg,
 					const char *var_name, int name_len);
 int				ft_add_eq(char ***envp, char *arg, int name_len);
 
-// funciones de señales
+// signals.c
 void			setup_signals(void);
 void			handle_sigint(int sig);
+void			heredoc_sigint(int sig);
 
 // from heredoc.c
 void			handle_here_doc(int *p_fd, const char *delimiter);
 int				handle_heredoc(const char *delimiter);
+int				handle_here_fork(int *p_fd, const char *delimiter);
+void			handle_here_doc(int *p_fd, const char *delimiter);
+void			handle_here_child(int *p_fd, const char *delimiter);
+int				handle_here_father(pid_t pid, int *p_fd, int *status);
 
 // otros utilitarios
 void			free_cmds(t_cmd *cmd);
