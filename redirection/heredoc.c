@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:42:32 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/29 15:29:33 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:17:51 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,11 @@ int	handle_here_fork(int *p_fd, const char *delimiter)
 		exit(0);
 	}
 	else
+	{
 		p_fd[0] = handle_here_father(pid, p_fd, &status);
+		if (p_fd[0] == -1)
+			return (-1);  // heredoc cancelado con Ctrl+C
+	}
 	return (0);
 }
 

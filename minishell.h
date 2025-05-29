@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/29 15:29:08 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:52:09 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct s_cmd
 	int				append;
 	int				heredoc;
 	int				heredoc_fd; // nuevo campo
+	int				heredoc_interrupted;
 	struct s_cmd	*next;
 	int				capacity;
 }	t_cmd;
