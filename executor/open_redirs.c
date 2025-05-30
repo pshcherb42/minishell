@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 17:30:07 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:46:11 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,19 @@ static int	open_infile(t_cmd *cmd)
 {
 	int	fd;
 
+	if (cmd->heredoc && cmd->heredoc_file)
+    {
+        fd = open(cmd->heredoc_file, O_RDONLY);
+        if (fd < 0)
+        {
+            perror("heredoc temp file");
+            return (0);
+        }
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+        return (1);
+    }
 	if (!cmd->infile)
-		return (1);
-	if (cmd->heredoc)
 		return (1);
 	fd = open(cmd->infile, O_RDONLY);
 	if (fd < 0)

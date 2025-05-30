@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:52 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/06 15:18:31 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/30 18:47:47 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ void	free_cmds(t_cmd *cmd)
 	i = 0;
 	if (!cmd)
 		return ;
+	if (cmd->heredoc_file)
+    {
+        cleanup_temp_file(cmd->heredoc_file);
+        cmd->heredoc_file = NULL;
+    }
 	if (cmd->args)
 	{
 		while (cmd->args[i])

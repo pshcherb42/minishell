@@ -6,107 +6,110 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:42:32 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 18:34:49 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 20:35:43 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
-
-int		handle_here_father(pid_t pid, int *p_fd, int *status)
+int	handle_here_father(pid_t pid, int *status, char **temp_file)
 {
 	signal(SIGINT, SIG_IGN);
-	close(p_fd[1]);  // el padre no escribe
 	waitpid(pid, status, 0);
 	signal(SIGINT, handle_sigint);
 	if (WIFSIGNALED(*status) && WTERMSIG(*status) == SIGINT)
 	{
-		close(p_fd[0]);
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-		return (130);  // heredoc fue cancelado
+		write(1, "^C\n", 3);
+		if (*temp_file)
+		{
+			cleanup_temp_file(*temp_file);
+			*temp_file = NULL;
+		}
+		return (-1);
 	}
-	return (p_fd[0]);
+	if (WIFEXITED(*status) && WEXITSTATUS(*status) != 0)
+	{
+		if (*temp_file)
+		{
+			cleanup_temp_file(*temp_file);
+			*temp_file = NULL;
+		}
+		return (-1);
+	}
+	return (0);
 }
 
-void	handle_here_child(int *p_fd, const char *delimiter)
+void	handle_here_child(const char *delimiter, char **temp_file)
 {
-	int	interrupted;
 	signal(SIGINT, heredoc_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	close(p_fd[0]);  // el hijo no necesita leer
-	interrupted = handle_here_doc(p_fd, delimiter);
-	close(p_fd[1]);
-	if (interrupted)
-		exit(1);
+	if (handle_here_doc(delimiter, temp_file) == -1)
+		exit(130);
 	exit(0);
 }
 
-int	handle_here_doc(int *p_fd, const char *delimiter)
+static int	read_heredoc_lines(const char *delimiter, const char *filename)
 {
 	char	*line;
 
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
-			return (1);
+		if (!line || g_sigquit_flag)
+		{
+			if (line)
+				free(line);
+			return (-1);
+		}
 		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
 		}
-		if (!g_sigquit_flag)
+		if (!write_to_temp_file(filename, line))
 		{
-			write(p_fd[1], line, ft_strlen(line));
-			write(p_fd[1], "\n", 1);
+			free(line);
+			return (-1);
 		}
 		free(line);
 	}
 	return (0);
 }
 
-int	handle_here_fork(int *p_fd, const char *delimiter)
+int	handle_here_doc(const char *delimiter, char **temp_file)
 {
-	pid_t	pid;
-	int		status;
-	
-	pid = fork();
-	if (pid == -1)
+	char	*filename;
+
+	filename = create_temp_file();
+	if (!filename)
 	{
-		perror("fork");
-		close(p_fd[0]);
-		close(p_fd[1]);
+		perror("Error creating temp file");
 		return (-1);
 	}
-	else if (pid == 0)
+	*temp_file = filename;
+	if (read_heredoc_lines(delimiter, filename) == -1)
 	{
-		handle_here_child(p_fd,delimiter);
-		exit(0);
-	}
-	else
-	{
-		p_fd[0] = handle_here_father(pid, p_fd, &status);
-		if (p_fd[0] == -1)
-			return (-1);  // heredoc cancelado con Ctrl+C
+		cleanup_temp_file(filename);
+		*temp_file = NULL;
+		return (-1);
 	}
 	return (0);
 }
 
-int	handle_heredoc(const char *delimiter)
+int	handle_here_fork(const char *delimiter, char **temp_file)
 {
-	int		p_fd[2];
+	pid_t	pid;
+	int		status;
 
-	if (pipe(p_fd) == -1)
+	pid = fork();
+	if (pid == -1)
 	{
-		perror("pipe");
+		perror("fork");
 		return (-1);
 	}
-	if (handle_here_fork(p_fd, delimiter) == -1)
-		return (-1);
-	close(p_fd[1]);
-	return (p_fd[0]);
+	else if (pid == 0)
+		handle_here_child(delimiter, temp_file);
+	else
+		return (handle_here_father(pid, &status, temp_file));
+	return (0);
 }
