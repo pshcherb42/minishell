@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 18:31:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 20:35:49 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 21:24:35 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,30 @@ int	write_to_temp_file(const char *filename, const char *line)
 	return (1);
 }
 
-int	handle_heredoc(const char *delimiter, char **temp_file)
+int	handle_here_fork(const char *delimiter, char **temp_file)
 {
-	return (handle_here_fork(delimiter, temp_file));
+	pid_t	pid;
+	int		status;
+	char	*filename;
+
+	filename = create_temp_file();
+	if (!filename)
+	{
+		perror("Error creating temp file");
+		return (-1);
+	}
+	*temp_file = filename;
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		cleanup_temp_file(filename);
+		*temp_file = NULL;
+		return (-1);
+	}
+	else if (pid == 0)
+		handle_here_child(delimiter, filename);
+	else
+		return (handle_here_father(pid, &status, temp_file));
+	return (0);
 }

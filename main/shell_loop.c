@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:43:57 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 18:52:48 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 21:29:19 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ int	process_input(char *input, char ***envp, int last_exit_code)
 	if (cmds)
 	{
 		if (cmds->heredoc_interrupted)
-        {
-            cleanup_cmd_heredocs(cmds);  // Limpia archivos temporales
-            free_cmd_list(cmds);
-            return (130);  // Retorna exit code de interrupción
-        }
+		{
+			cleanup_cmd_heredocs(cmds);
+			free_cmd_list(cmds);
+			return (130);
+		}
 		exit_code = execute_cmds(cmds, envp, last_exit_code);
 	}
 	if (cmds)
-        cleanup_cmd_heredocs(cmds);
+		cleanup_cmd_heredocs(cmds);
 	free_cmd_list(cmds);
 	return (exit_code);
 }

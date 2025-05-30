@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:22:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 16:14:32 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 21:33:31 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	free_args(char **args)
 
 	i = 0;
 	if (!args)
-		return;
+		return ;
 	while (args[i])
 	{
 		free(args[i++]);

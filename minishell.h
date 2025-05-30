@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 20:36:12 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 21:24:52 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,12 +238,12 @@ void			handle_sigint(int sig);
 void			heredoc_sigint(int sig);
 
 // from heredoc.c
-int				handle_here_fork(const char *delimiter, char **temp_file);
-int				handle_here_doc(const char *delimiter, char **temp_file);
-void			handle_here_child(const char *delimiter, char **temp_file);
+int				handle_here_doc(const char *delimiter, const char *filename);
+void			handle_here_child(const char *delimiter, const char *filename);
 int				handle_here_father(pid_t pid, int *status, char **temp_file);
+int				handle_heredoc(const char *delimiter, const char *filename);
 // from tmp_heredoc.c
-int				handle_heredoc(const char *delimiter, char **temp_file);
+int				handle_here_fork(const char *delimiter, char **temp_file);
 int				write_to_temp_file(const char *filename, const char *line);
 void			cleanup_temp_file(char *filename);
 char			*create_temp_file(void);

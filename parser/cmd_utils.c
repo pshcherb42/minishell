@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:15:38 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 19:57:56 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 21:30:24 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_cmd	*init_cmd(void)
 	cmd->heredoc = 0;
 	cmd->next = NULL;
 	cmd->heredoc_file = NULL;
-	cmd->heredoc_interrupted = 0;  // AGREGA ESTA LÍNEA
+	cmd->heredoc_interrupted = 0;
 	return (cmd);
 }
 
@@ -57,15 +57,16 @@ char	**grow_args_array(char **old_args, int old_size, int *capacity)
 
 void	cleanup_cmd_heredocs(t_cmd *cmd)
 {
-    t_cmd *current = cmd;
-    
-    while (current)
-    {
-        if (current->heredoc_file)
-        {
-            cleanup_temp_file(current->heredoc_file);
-            current->heredoc_file = NULL;
-        }
-        current = current->next;
-    }
+	t_cmd	*current;
+
+	current = cmd;
+	while (current)
+	{
+		if (current->heredoc_file)
+		{
+			cleanup_temp_file(current->heredoc_file);
+			current->heredoc_file = NULL;
+		}
+		current = current->next;
+	}
 }

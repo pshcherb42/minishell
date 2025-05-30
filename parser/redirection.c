@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 20:09:56 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 21:31:29 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
 		free(cmd->infile);
 	cmd->infile = ft_strdup(tokens[++i]);
 	if (cmd->heredoc && cmd->heredoc_fd >= 0)
-    {
-        close(cmd->heredoc_fd);
-        cmd->heredoc_fd = -1;
-    }
+	{
+		close(cmd->heredoc_fd);
+		cmd->heredoc_fd = -1;
+	}
 	cmd->heredoc = 0;
 	return (i + 1);
 }
@@ -69,14 +69,14 @@ static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 	if (cmd->infile)
 		free(cmd->infile);
 	if (cmd->heredoc_file)
-        cleanup_temp_file(cmd->heredoc_file);
+		cleanup_temp_file(cmd->heredoc_file);
 	cmd->infile = ft_strdup(tokens[++i]);
 	cmd->heredoc = 1;
 	if (handle_here_fork(cmd->infile, &cmd->heredoc_file) == -1)
-    {
-        cmd->heredoc_interrupted = 1;
-        return (-2);
-    }
+	{
+		cmd->heredoc_interrupted = 1;
+		return (-2);
+	}
 	return (i + 1);
 }
 
