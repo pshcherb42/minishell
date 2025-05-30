@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:05:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/02 15:15:15 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:15:51 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	fill_cmd_from_tokens(t_cmd *cmd, char **tokens)
 		res = handle_redirection(cmd, tokens, i);
 		if (res == -1)
 		{
+			//free_args(cmd->args);
 			cmd->args[0] = NULL;
 			return ;
 		}

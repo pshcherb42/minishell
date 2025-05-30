@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   open_redirs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/26 20:47:29 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/30 17:30:07 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,7 @@ static int	open_infile(t_cmd *cmd)
 	if (!cmd->infile)
 		return (1);
 	if (cmd->heredoc)
-	{
-		if (cmd->heredoc_fd < 0)
-			return (0);
-		dup2(cmd->heredoc_fd, STDIN_FILENO);
-		close(cmd->heredoc_fd);
 		return (1);
-	}
 	fd = open(cmd->infile, O_RDONLY);
 	if (fd < 0)
 	{

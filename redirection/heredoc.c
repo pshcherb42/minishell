@@ -6,34 +6,46 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:42:32 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/29 18:17:51 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:34:49 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+
+
 int		handle_here_father(pid_t pid, int *p_fd, int *status)
 {
+	signal(SIGINT, SIG_IGN);
 	close(p_fd[1]);  // el padre no escribe
 	waitpid(pid, status, 0);
+	signal(SIGINT, handle_sigint);
 	if (WIFSIGNALED(*status) && WTERMSIG(*status) == SIGINT)
 	{
 		close(p_fd[0]);
-		return (-1);  // heredoc fue cancelado
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+		return (130);  // heredoc fue cancelado
 	}
 	return (p_fd[0]);
 }
 
 void	handle_here_child(int *p_fd, const char *delimiter)
 {
+	int	interrupted;
 	signal(SIGINT, heredoc_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	close(p_fd[0]);  // el hijo no necesita leer
-	handle_here_doc(p_fd, delimiter);
+	interrupted = handle_here_doc(p_fd, delimiter);
 	close(p_fd[1]);
+	if (interrupted)
+		exit(1);
+	exit(0);
 }
 
-void	handle_here_doc(int *p_fd, const char *delimiter)
+int	handle_here_doc(int *p_fd, const char *delimiter)
 {
 	char	*line;
 
@@ -41,16 +53,20 @@ void	handle_here_doc(int *p_fd, const char *delimiter)
 	{
 		line = readline("> ");
 		if (!line)
-			break ;
+			return (1);
 		if (ft_strcmp(line, delimiter) == 0)
 		{
 			free(line);
 			break ;
 		}
-		write(p_fd[1], line, ft_strlen(line));
-		write(p_fd[1], "\n", 1);
+		if (!g_sigquit_flag)
+		{
+			write(p_fd[1], line, ft_strlen(line));
+			write(p_fd[1], "\n", 1);
+		}
 		free(line);
 	}
+	return (0);
 }
 
 int	handle_here_fork(int *p_fd, const char *delimiter)

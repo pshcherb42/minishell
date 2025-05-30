@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/29 17:53:01 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:29:09 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@ static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
 	if (cmd->infile)
 		free(cmd->infile);
 	cmd->infile = ft_strdup(tokens[++i]);
+	if (cmd->heredoc && cmd->heredoc_fd >= 0)
+    {
+        close(cmd->heredoc_fd);
+        cmd->heredoc_fd = -1;
+    }
 	cmd->heredoc = 0;
 	return (i + 1);
 }

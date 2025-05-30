@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/29 17:52:09 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:34:58 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 
 # define ARGS_INIT_CAPACITY 10
 
-extern volatile sig_atomic_t	q_sigquit_flag;
+extern volatile sig_atomic_t	g_sigquit_flag;
 
 typedef struct s_cmd
 {
@@ -39,6 +39,7 @@ typedef struct s_cmd
 	int				append;
 	int				heredoc;
 	int				heredoc_fd; // nuevo campo
+	//char			*heredoc_file;
 	int				heredoc_interrupted;
 	struct s_cmd	*next;
 	int				capacity;
@@ -236,10 +237,9 @@ void			handle_sigint(int sig);
 void			heredoc_sigint(int sig);
 
 // from heredoc.c
-void			handle_here_doc(int *p_fd, const char *delimiter);
 int				handle_heredoc(const char *delimiter);
 int				handle_here_fork(int *p_fd, const char *delimiter);
-void			handle_here_doc(int *p_fd, const char *delimiter);
+int				handle_here_doc(int *p_fd, const char *delimiter);
 void			handle_here_child(int *p_fd, const char *delimiter);
 int				handle_here_father(pid_t pid, int *p_fd, int *status);
 
@@ -252,5 +252,6 @@ char			*ft_strdup(const char *s);
 void			free_cmd_list(t_cmd *cmd);
 int				ft_isdigit(int c);
 void			free_env(char **env);
+void			free_args(char **args);
 
 #endif

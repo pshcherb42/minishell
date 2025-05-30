@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:20:49 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:41:09 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/30 17:25:10 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,11 @@ static	void	exec_child_cmd(t_cmd *cmd, char ***envp)
 void	run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp)
 {
 	set_signals();
+	if (cmd->heredoc && cmd->heredoc_fd >= 0)
+    {
+        dup2(cmd->heredoc_fd, STDIN_FILENO);
+        close(cmd->heredoc_fd);
+    }
 	redirect_pipes(cmd, prev_fd, pipefd);
 	if (!open_redirs(cmd))
 		exit(EXIT_FAILURE);

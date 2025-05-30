@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/29 17:57:44 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 15:03:39 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,11 @@ int	execute_cmds(t_cmd *cmd, char ***envp, int last_exit_code)
 	int	status;
 
 	prev_fd = -1;
-	if (!cmd || !cmd->args || !cmd->args[0])
+	if (!cmd)
+		return (1);
+	if (cmd->heredoc && cmd->heredoc_fd < 0)
+		return (130);
+	if (!cmd->args || !cmd->args[0])
 		return (1);
 	status = execute_loop(cmd, envp, prev_fd, last_exit_code);
 	return (status);

@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/29 15:27:54 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:55:34 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,9 @@ void	handle_sigquit(int sig)
 void	heredoc_sigint(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
-	exit(1);
+	g_sigquit_flag = 1;
+	//write(1, "\n", 1);
+	exit(130);
 }
 
 void	setup_signals(void)
