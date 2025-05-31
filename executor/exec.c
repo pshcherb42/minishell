@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/30 21:26:25 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/31 19:55:44 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ static int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd,
 	current_exit_code = last_exit_code;
 	while (cmd)
 	{
+		if (!ft_strcmp(cmd->args[0], "exit"))
+		{
+			if (!cmd->next && prev_fd == -1)
+				return (ft_exit(cmd->args));
+		}
 		if (is_builtin(cmd->args[0]) && is_parent_builtin(cmd->args[0]))
 			return (exec_builtin(cmd, envp));
 		current_exit_code = execute_single_cmd(cmd, envp, &prev_fd);
