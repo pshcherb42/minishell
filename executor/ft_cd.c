@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:43:57 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/31 19:46:18 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,15 @@ static	int	check_args(char **args)
 
 char	*get_current_dir(void)
 {
-	char	cwd[1024];
+	char	*cwd;
 
-	if (!getcwd(cwd, sizeof(cwd)))
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		ft_pstr(2, "minishell: cd: cannot get current directory\n");
 		return (NULL);
-	return (ft_strdup(cwd));
+	}
+	return (cwd);
 }
 
 static int	try_change_dir(char *target)
