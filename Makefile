@@ -6,7 +6,7 @@
 #    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/05/29 15:17:43 by akreise          ###   ########.fr        #
+#    Updated: 2025/05/31 21:07:39 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRCS = \
 	executor/exec.c \
 	executor/open_redirs.c \
 	executor/exec_child.c \
+	executor/child_utils.c \
 	executor/builtin.c \
 	executor/exec_utils.c \
 	signals/signals.c \

@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:20:49 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:41:09 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/31 21:08:30 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,34 +31,6 @@ static	void	redirect_pipes(t_cmd *cmd, int prev_fd, int pipefd[2])
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 	}
-}
-
-static	void	exec_child_cmd(t_cmd *cmd, char ***envp)
-{
-	char	*path;
-
-	if (is_builtin(cmd->args[0]))
-		exit(exec_builtin(cmd, envp));
-	if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
-	{
-		execve(cmd->args[0], cmd->args, *envp);
-		ft_pstr(2, "minishell: ");
-		ft_pstr(2, cmd->args[0]);
-		ft_pstr(2, ": no such file or directory\n");
-		exit(127);
-	}
-	path = get_cmd_path(cmd->args[0], *envp);
-	if (!path)
-	{
-		ft_pstr(2, "minishell; ");
-		ft_pstr(2, cmd->args[0]);
-		ft_pstr(2, "; command not found\n");
-		exit(127);
-	}
-	execve(path, cmd->args, *envp);
-	perror("execve");
-	free(path);
-	exit(EXIT_FAILURE);
 }
 
 void	run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp)
