@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:43:57 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/31 19:51:16 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,18 @@ char	*get_current_dir(void)
 
 static int	try_change_dir(char *target)
 {
+	struct stat	st;
+
 	if (chdir(target) != 0)
 	{
 		ft_pstr(2, "minishell: cd: ");
 		ft_pstr(2, target);
-		ft_pstr(2, ": No such file or directory\n");
+		ft_pstr(2, ": ");
+
+		if (stat(target, &st) == 0)
+			ft_pstr(2, "Permission denied\n");
+		else
+			ft_pstr(2, "No such file or directory\n");
 		return (1);
 	}
 	return (0);

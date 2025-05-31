@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/29 16:02:29 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/31 19:46:52 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,6 @@ char	*join_env_entry(const char *var_name, const char *value)
 	entry[var_len + val_len + 1] = '\0';
 	return (entry);
 }
-
-/*static char	*get_oldpwd(char **envp)
-{
-	char	*oldpwd;
-
-	oldpwd = find_env_var_local(envp, "OLDPWD");
-	if (!oldpwd)
-		return (NULL);
-	return (ft_strdup(oldpwd));
-}*/
 
 static char	*home_tilde(char *arg, char **envp)
 {
@@ -63,24 +53,6 @@ static char	*home_tilde(char *arg, char **envp)
 	return (full_path);
 }
 
-/*char	*get_target_path(char **args, char **envp)
-{
-	char	*home;
-
-	if (args[1] && ft_strcmp(args[1], "-") == 0)
-		return (get_oldpwd(envp));
-	if (!args[1])
-	{
-		home = find_env_var_local(envp, "HOME");
-		if (!home)
-			return (NULL);
-		return (ft_strdup(home));
-	}
-	if (args[1][0] == '~')
-		return (home_tilde(args[1], envp));
-	return (ft_strdup(args[1]));
-}*/
-
 static int	print_cd_env_error(const char *var_name)
 {
 	ft_pstr(2, "minishell: cd: ");
@@ -89,7 +61,7 @@ static int	print_cd_env_error(const char *var_name)
 	return (1);
 }
 
-char	*get_target_path(char **args, char **envp)
+static char	*handle_special_args(char **args, char **envp)
 {
 	char	*var;
 
@@ -103,6 +75,8 @@ char	*get_target_path(char **args, char **envp)
 		}
 		return (ft_strdup(var));
 	}
+	if (args[1] && args[1][0] == '\0')
+		return (ft_strdup("."));
 	if (!args[1])
 	{
 		var = find_env_var_local(envp, "HOME");
@@ -113,6 +87,16 @@ char	*get_target_path(char **args, char **envp)
 		}
 		return (ft_strdup(var));
 	}
+	return (NULL);
+}
+
+char	*get_target_path(char **args, char **envp)
+{
+	char	*result;
+
+	result = handle_special_args(args, envp);
+	if (result)
+		return (result);
 	if (args[1][0] == '~')
 		return (home_tilde(args[1], envp));
 	return (ft_strdup(args[1]));
