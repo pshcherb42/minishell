@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:34:15 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/31 19:35:01 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/31 20:23:41 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ int	add_env_var(char ***envp, char *arg)
 	new_env[i] = ft_strdup(arg);
 	if (!new_env[i])
 	{
-		free_token_array(new_env);
+		free_args(new_env);
 		return (1);
 	}
 	new_env[i + 1] = NULL;
-	free_token_array(*envp);
+	free_args(*envp);
 	*envp = new_env;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:22:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 21:33:31 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/31 20:18:10 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@ void	free_cmd_list(t_cmd *cmd)
 	while (cmd)
 	{
 		tmp = cmd->next;
-		free_token_array(cmd->args);
-		free(cmd->infile);
-		free(cmd->outfile);
-		free(cmd);
+		free_cmds(cmd);
 		cmd = tmp;
 	}
 }
@@ -36,8 +33,7 @@ void	free_args(char **args)
 		return ;
 	while (args[i])
 	{
-		free(args[i++]);
-		args[i] = NULL;
+		free(args[i]);
 		i++;
 	}
 	free(args);

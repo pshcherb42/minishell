@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_cmd_path.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:54:44 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:45:38 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/31 20:36:45 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,11 @@ char	*get_cmd_path(char *cmd, char **envp)
 	char	*full_path;
 
 	if (ft_strchr(cmd, '/'))
-		return (ft_strdup(cmd));
+	{
+		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		return (NULL);
+	}
 	path_env = find_path(envp);
 	if (!path_env)
 		return (NULL);

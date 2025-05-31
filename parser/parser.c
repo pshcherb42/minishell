@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:16 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/27 15:32:23 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/31 20:23:48 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_cmd	*parse_single_command(char *input, char **envp, int l_e_c)
 	if (!cmd)
 		return (NULL);
 	fill_cmd_from_tokens(cmd, tokens);
-	free_token_array(tokens);
+	free_args(tokens);
 	return (cmd);
 }
 

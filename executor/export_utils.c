@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/11 16:28:11 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/31 20:23:07 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static	char	**copy_envp(char **envp, int *len)
 		copy[i] = ft_strdup(envp[i]);
 		if (!copy[i])
 		{
-			free_token_array(copy);
+			free_args(copy);
 			return (NULL);
 		}
 		i++;
@@ -113,5 +113,5 @@ void	print_all(char **envp)
 		print_line(sorted[i]);
 		i++;
 	}
-	free(sorted);
+	free_args(sorted);
 }

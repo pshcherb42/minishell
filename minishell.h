@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 21:24:52 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/31 20:23:55 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,6 @@ int				handle_redirection(t_cmd *cmd, char **tokens, int i);
 // from tokenizer.c
 t_cmd			*init_and_tokenize(char *in, char **env, int lec, char ***tkn);
 void			fill_cmd_from_tokens(t_cmd *cmd, char **tokens);
-void			free_token_array(char **tokens);
 // from split_pipe.c
 void			handle_quote(char c, char *quote, int *in_quote);
 char			**split_by_pipe(char *input);
