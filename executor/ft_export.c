@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:34:15 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:45:06 by akreise          ###   ########.fr       */
+/*   Updated: 2025/05/31 19:35:01 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ int	ft_export(char **args, char ***envp)
 			ft_pstr(2, args[i]);
 			ft_pstr(2, "`: not a valid identifier\n");
 			status = 1;
-			i++;
 		}
 		else if (process_arg(args[i], envp))
 			status = 1;
