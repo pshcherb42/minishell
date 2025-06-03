@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:05:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/03 15:53:34 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:19:34 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ t_cmd	*init_and_tokenize(char *in, char **env, int lec, char ***tkn)
 	*tkn = split_args(in, env, lec);
 	if (!*tkn)
 	{
-		free(cmd->args);
-		free(cmd);
+		free_cmds(cmd);
 		return (NULL);
 	}
 	return (cmd);
@@ -57,6 +56,15 @@ void	fill_cmd_from_tokens(t_cmd *cmd, char **tokens)
 		res = handle_redirection(cmd, tokens, i);
 		if (res == -1)
 		{
+			if (j > 0)
+			{
+				while (j > 0)
+				{
+					j--;
+					free(cmd->args[j]);
+					cmd->args[j] = NULL;
+				}
+			}
 			cmd->args[0] = NULL;
 			return ;
 		}

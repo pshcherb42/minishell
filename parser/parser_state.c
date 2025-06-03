@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_state.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:58:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/03 14:46:04 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:23:17 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	process_segment(t_parse_state *state)
 	}
 	new_cmd = parse_single_command(segment, state->envp, state->last_exit_code);
 	if (!new_cmd)
-		return (1);
+		return (0);
 	if (!state->head)
 		state->head = new_cmd;
 	else
