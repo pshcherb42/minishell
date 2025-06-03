@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:38:03 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/05 14:50:53 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 17:49:42 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	**dup_env(char **envp)
 		return (NULL);
 	while (i < count)
 	{
-		new_env[i] = strdup(envp[i]);
+		new_env[i] = ft_strdup(envp[i]);
 		i++;
 	}
 	new_env[count] = NULL;
