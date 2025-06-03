@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/03 15:39:37 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 16:17:08 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,8 @@ char			*find_env_var_local(char **envp, const char *name);
 void			replace_env(const char *var_name, const char *value,
 					char **envp);
 void			update_env_vars(char *oldpwd, char **envp);
+// from cd_utils_3.c
+char			*handle_special_args(char **args, char **envp, int *error_flag);
 // from ft_echo.c
 int				ft_echo(char **args);
 // from ft_env.c

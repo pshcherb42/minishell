@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
+#    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/05/31 19:31:22 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/06/03 16:16:25 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS = \
 	executor/ft_cd.c \
 	executor/cd_utils.c \
 	executor/cd_utils_2.c \
+	executor/cd_utils_3.c \
 	executor/ft_echo.c \
 	executor/ft_env.c \
 	executor/ft_exit.c \
