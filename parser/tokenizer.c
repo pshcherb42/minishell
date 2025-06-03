@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:05:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/31 20:22:22 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:53:34 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ static int	add_arg(t_cmd *cmd, char *token, int *j)
 		if (!cmd->args)
 			return (0);
 	}
-	cmd->args[(*j)++] = ft_strdup(token);
+	cmd->args[*j] = ft_strdup(token);
+	if (!cmd->args[*j])
+		return (0);
+	(*j)++;
 	return (1);
 }
 
@@ -60,7 +63,10 @@ void	fill_cmd_from_tokens(t_cmd *cmd, char **tokens)
 		if (res == i)
 		{
 			if (!add_arg(cmd, tokens[i], &j))
+			{
+				cmd->args[j] = NULL;
 				return ;
+			}
 		}
 		if (res > i)
 			i = res;
