@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/30 19:43:43 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:24:09 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	var_exists(char **envp, const char *var_name)
 {
 	int		i;
 	int		len;
-	
+
 	len = ft_strlen(var_name);
 	i = 0;
 	while (envp[i])

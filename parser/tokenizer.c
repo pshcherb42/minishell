@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:05:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/03 17:19:34 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/03 18:32:17 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,43 +43,56 @@ static int	add_arg(t_cmd *cmd, char *token, int *j)
 	return (1);
 }
 
+static void	cleanup_args_on_error(t_cmd *cmd, int j)
+{
+	if (j > 0)
+	{
+		while (j > 0)
+		{
+			j--;
+			free(cmd->args[j]);
+			cmd->args[j] = NULL;
+		}
+	}
+	cmd->args[0] = NULL;
+}
+
+static int	process_token(t_cmd *cmd, char **tokens, int *i, int *j)
+{
+	int	res;
+
+	res = handle_redirection(cmd, tokens, *i);
+	if (res == -1)
+	{
+		cleanup_args_on_error(cmd, *j);
+		return (-1);
+	}
+	if (res == *i)
+	{
+		if (!add_arg(cmd, tokens[*i], j))
+		{
+			cmd->args[*j] = NULL;
+			return (-1);
+		}
+	}
+	if (res > *i)
+		*i = res;
+	else
+		(*i)++;
+	return (0);
+}
+
 void	fill_cmd_from_tokens(t_cmd *cmd, char **tokens)
 {
 	int	i;
 	int	j;
-	int	res;
 
 	i = 0;
 	j = 0;
 	while (tokens[i])
 	{
-		res = handle_redirection(cmd, tokens, i);
-		if (res == -1)
-		{
-			if (j > 0)
-			{
-				while (j > 0)
-				{
-					j--;
-					free(cmd->args[j]);
-					cmd->args[j] = NULL;
-				}
-			}
-			cmd->args[0] = NULL;
+		if (process_token(cmd, tokens, &i, &j) == -1)
 			return ;
-		}
-		if (res == i)
-		{
-			if (!add_arg(cmd, tokens[i], &j))
-			{
-				cmd->args[j] = NULL;
-				return ;
-			}
-		}
-		if (res > i)
-			i = res;
-		else
-			i++;
 	}
 	cmd->args[j] = NULL;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/03 14:49:31 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:23:53 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
 static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 {
 	char	*temp_infile;
-	
+
 	if (!tokens[i + 1])
 	{
 		ft_printf("minishell: syntax error near unexpected token `newline'\n");

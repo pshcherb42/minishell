@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:34:15 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/31 20:23:41 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:37:43 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	replace_new_var(char ***envp, char *arg, int name_len)
 {
 	int		i;
 	char	*new;
+	char	*eq_in_arg;
+	char	*eq_in_existing;
 
 	i = 0;
 	while ((*envp)[i])
@@ -23,6 +25,10 @@ int	replace_new_var(char ***envp, char *arg, int name_len)
 		if (!ft_strncmp((*envp)[i], arg, name_len) &&
 			((*envp)[i][name_len] == '=' || (*envp)[i][name_len] == '\0'))
 		{
+			eq_in_arg = ft_strchr(arg, '=');
+			eq_in_existing = ft_strchr((*envp)[i], '=');
+			if (!eq_in_arg && eq_in_existing)
+				return (1);
 			new = ft_strdup(arg);
 			if (!new)
 				return (1);
