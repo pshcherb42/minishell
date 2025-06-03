@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/30 21:26:25 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 12:48:24 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	execute_single_cmd(t_cmd *cmd, char ***envp, int *prev_fd)
 	pid_t	pid;
 	int		status;
 
-	if (cmd->heredoc && cmd->heredoc_fd < 0)
+	if (cmd->heredoc && !cmd->heredoc_file)
 		return (130);
 	if (!create_pipe(cmd, pipefd))
 		return (1);
@@ -89,7 +89,7 @@ int	execute_cmds(t_cmd *cmd, char ***envp, int last_exit_code)
 	prev_fd = -1;
 	if (!cmd)
 		return (1);
-	if (cmd->heredoc && cmd->heredoc_fd < 0)
+	if (cmd->heredoc && !cmd->heredoc_file)
 		return (130);
 	if (!cmd->args || !cmd->args[0])
 		return (1);
