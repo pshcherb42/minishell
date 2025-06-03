@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:20:49 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/03 12:47:04 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:19:19 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ static	void	exec_child_cmd(t_cmd *cmd, char ***envp)
 	path = get_cmd_path(cmd->args[0], *envp);
 	if (!path)
 	{
-		ft_pstr(2, "minishell; ");
+		ft_pstr(2, "minishell: ");
 		ft_pstr(2, cmd->args[0]);
-		ft_pstr(2, "; command not found\n");
+		ft_pstr(2, ": command not found\n");
 		exit(127);
 	}
 	execve(path, cmd->args, *envp);
