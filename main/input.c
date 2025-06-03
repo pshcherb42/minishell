@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:42:26 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/29 17:30:53 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 21:04:32 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,6 @@ char	*get_valid_input(void)
 	char	*input;
 
 	input = readline("minishell$ ");
-	if (g_sigquit_flag)
-	{
-		free(input);
-		g_sigquit_flag = 0;
-		printf("Quit (core dumped)\n");
-		exit(131);
-	}
 	if (!input)
 		return (NULL);
 	if (!validate_quotes(input))
