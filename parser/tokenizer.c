@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:05:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 21:32:16 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/31 20:22:22 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,4 @@ void	fill_cmd_from_tokens(t_cmd *cmd, char **tokens)
 			i++;
 	}
 	cmd->args[j] = NULL;
-}
-
-void	free_token_array(char **tokens)
-{
-	int	i;
-
-	i = 0;
-	if (!tokens)
-		return ;
-	while (tokens[i])
-	{
-		free(tokens[i]);
-		i++;
-	}
-	free(tokens);
 }

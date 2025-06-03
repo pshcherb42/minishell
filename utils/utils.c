@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:52 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 21:33:19 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/05/31 20:35:18 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	free_cmds(t_cmd *cmd)
 			free(cmd->args[i++]);
 		free(cmd->args);
 	}
+	free(cmd->infile);
+	free(cmd->outfile);
 	free(cmd);
 }
 

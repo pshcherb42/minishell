@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 16:58:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 14:49:18 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 14:46:04 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,11 @@ t_cmd	*build_command_list(t_parse_state *state)
 	{
 		if (!process_segment(state))
 		{
+			if (state->head)
+			{
+				free_cmd_list(state->head);
+				state->head = NULL;
+			}
 			while (state->segments[state->i])
 				free(state->segments[state->i++]);
 			return (NULL);

@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/30 19:43:29 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/03 15:18:22 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static	char	**copy_envp(char **envp, int *len)
 		copy[i] = ft_strdup(envp[i]);
 		if (!copy[i])
 		{
-			free_token_array(copy);
+			free_args(copy);
 			return (NULL);
 		}
 		i++;
@@ -114,5 +114,5 @@ void	print_all(char **envp)
 		free(sorted[i]);
 		i++;
 	}
-	free(sorted);
+	free_args(sorted);
 }
