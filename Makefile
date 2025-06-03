@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
+#    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/06/03 16:16:25 by akreise          ###   ########.fr        #
+#    Updated: 2025/06/03 19:10:39 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,4 +86,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
-
