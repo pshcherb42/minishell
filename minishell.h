@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/04 14:35:11 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:23:09 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,12 +104,13 @@ typedef struct s_token_state
 
 // funciones de main
 // from init.c
-void			init_shell(char **envp);
+void			init_shell(char ***envp);
 void			update_shlvl(char ***envp);
 // from env_utils.c
 void			set_env_value(const char *value, char ***envp);
 char			*find_env_var(char **envp, const char *name);
 char			**dup_env(char **envp);
+char			**create_minimal_env(void);
 // from input.c
 char			*get_valid_input(void);
 // from shell_loop.c

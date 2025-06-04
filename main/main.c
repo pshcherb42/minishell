@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:33 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/27 15:39:32 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:22:58 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	my_env = dup_env(envp);
-	init_shell(my_env);
+	init_shell(&my_env);
 	run_shell_loop(&my_env);
 	free_env(my_env);
 	rl_clear_history();

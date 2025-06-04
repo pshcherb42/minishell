@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:36:58 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/02 10:46:56 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:22:36 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	update_shlvl(char ***envp)
 	free(new_lvl);
 }
 
-void	init_shell(char **envp)
+void	init_shell(char ***envp)
 {
 	setup_signals();
-	update_shlvl(&envp);
+	update_shlvl(envp);
 }
