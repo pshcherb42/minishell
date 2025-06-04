@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/03 18:23:53 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:07:43 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
 	return (i + 1);
 }
 
-static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
+/*static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
 {
 	if (!tokens[i + 1])
 	{
@@ -57,7 +57,7 @@ static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
 	}
 	cmd->heredoc = 0;
 	return (i + 1);
-}
+}*/
 
 static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 {
@@ -68,6 +68,11 @@ static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 		ft_printf("minishell: syntax error near unexpected token `newline'\n");
 		return (-1);
 	}
+	if (cmd->heredoc_file)
+	{
+		cleanup_temp_file(cmd->heredoc_file);
+		cmd->heredoc_file = NULL;
+	}
 	temp_infile = ft_strdup(tokens[++i]);
 	if (!temp_infile)
 		return (-1);
@@ -77,11 +82,7 @@ static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 		cmd->heredoc_interrupted = 1;
 		return (-2);
 	}
-	if (cmd->infile)
-		free(cmd->infile);
-	if (cmd->heredoc_file && cmd->heredoc)
-		cleanup_temp_file(cmd->heredoc_file);
-	cmd->infile = temp_infile;
+	free(temp_infile);
 	cmd->heredoc = 1;
 	return (i + 1);
 }

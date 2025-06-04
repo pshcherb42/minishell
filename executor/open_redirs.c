@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/03 12:48:33 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/04 15:10:33 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@ static int	open_infile(t_cmd *cmd)
 	if (!cmd->infile)
 		return (1);
 	fd = open(cmd->infile, O_RDONLY);
-	if (fd < 0)
-	{
-		perror(cmd->infile);
-		return (0);
-	}
 	dup2(fd, STDIN_FILENO);
 	close(fd);
 	return (1);
@@ -61,8 +56,28 @@ static int	open_outfile(t_cmd *cmd)
 	return (1);
 }
 
+static int	validate_input_files(t_cmd *cmd)
+{
+	int	fd;
+
+	if (cmd->infile)
+	{
+		fd = open(cmd->infile, O_RDONLY);
+		if (fd < 0)
+		{
+			ft_printf("minishell: %s: No such file or directory\n",
+				cmd->infile);
+			return (0);
+		}
+		close(fd);
+	}
+	return (1);
+}
+
 int	open_redirs(t_cmd *cmd)
 {
+	if (!validate_input_files(cmd))
+		return (0);
 	if (!open_infile(cmd))
 		return (0);
 	if (!open_outfile(cmd))

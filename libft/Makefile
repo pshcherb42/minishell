@@ -6,7 +6,7 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/18 18:00:47 by pshcherb          #+#    #+#              #
-#    Updated: 2025/04/30 14:51:08 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/06/04 15:12:05 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@
 
 NAME = libft.a
 
-CC = gcc
+CC = cc
 FLAGS = -Wall -Werror -Wextra 
 
 SRCS =	get_next_line.c \

@@ -6,12 +6,12 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/06/03 19:10:39 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/06/04 15:11:58 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 LIBFT = libft/libft.a
@@ -38,6 +38,7 @@ SRCS = \
 	parser/lexer_parse.c \
 	parser/lexer_token.c \
 	parser/lexer_utils.c \
+	parser/redirection_heredoc.c \
 	executor/builtin_utils.c \
 	executor/ft_cd.c \
 	executor/cd_utils.c \

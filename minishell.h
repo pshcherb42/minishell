@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/03 16:17:08 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/04 14:35:11 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,8 @@ int				process_segment(t_parse_state *state);
 t_cmd			*build_command_list(t_parse_state *state);
 // from redirection.c
 int				handle_redirection(t_cmd *cmd, char **tokens, int i);
+// from redirection_heredoc.c
+int				handle_input_redirect(t_cmd *cmd, char **tokens, int i);
 // from tokenizer.c
 t_cmd			*init_and_tokenize(char *in, char **env, int lec, char ***tkn);
 void			fill_cmd_from_tokens(t_cmd *cmd, char **tokens);
