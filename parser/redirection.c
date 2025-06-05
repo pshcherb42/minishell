@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/04 15:07:43 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:50:10 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,19 @@ static int	handle_output_redirect(t_cmd *cmd, char **tokens, int i)
 	if (cmd->outfile)
 		free(cmd->outfile);
 	cmd->outfile = ft_strdup(tokens[++i]);
+	if (!cmd->outfile)
+	{
+		perror("minishell");
+		return (-1);
+	}
 	cmd->append = 0;
+	int fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		perror("minishell");
+		return (-1);
+	}
+	close(fd);
 	return (i + 1);
 }
 
@@ -36,7 +48,19 @@ static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
 	if (cmd->outfile)
 		free(cmd->outfile);
 	cmd->outfile = ft_strdup(tokens[++i]);
+	if (!cmd->outfile)
+	{
+		perror("minishell");
+		return (-1);
+	}
 	cmd->append = 1;
+	int fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (fd < 0)
+	{
+		perror("minishell");
+		return (-1);
+	}
+	close(fd);
 	return (i + 1);
 }
 
@@ -89,6 +113,7 @@ static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 
 int	handle_redirection(t_cmd *cmd, char **tokens, int i)
 {
+	//printf("[DEBUG] Handling redirection: token[%d] = %s\n", i, tokens[i]);
 	if (!tokens[i])
 		return (i);
 	if (!ft_strcmp(tokens[i], ">"))

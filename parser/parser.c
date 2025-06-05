@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:16 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 15:26:10 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:49:58 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,18 @@ t_cmd	*parse_input(char *input, t_env *env, int last_exit_code)
 	t_parse_state	state;
 	t_cmd			*result;
 
+	//printf("[DEBUG] Parsing input: %s\n", input);
 	if (is_empty_or_spaces(input))
+	{
+		//printf("[DEBUG] Input is empty or spaces\n");
 		return (NULL);
+	}
 	state.segments = split_by_pipe(input);
 	if (!state.segments)
+	{
+		//printf("[DEBUG] Failed to split input by pipe\n");
 		return (NULL);
+	}
 	state.head = NULL;
 	state.tail = NULL;
 	state.i = 0;
@@ -51,5 +58,6 @@ t_cmd	*parse_input(char *input, t_env *env, int last_exit_code)
 	state.last_exit_code = last_exit_code;
 	result = build_command_list(&state);
 	free(state.segments);
+	//printf("[DEBUG] Command list built\n");
 	return (result);
 }

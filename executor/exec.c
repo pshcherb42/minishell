@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/03 15:40:09 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:50:17 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,24 @@ static int	execute_single_cmd(t_cmd *cmd, t_env **env, int *prev_fd)
 	pid_t	pid;
 	int		status;
 
+	//printf("[DEBUG] Executing single command: %s\n", cmd->args[0]);
 	if (cmd->heredoc && !cmd->heredoc_file)
+	{
+		//printf("[DEBUG] Heredoc file missing\n");
 		return (130);
+	}
 	if (!create_pipe(cmd, pipefd))
+	{
+		//printf("[DEBUG] Failed to create pipe\n");
 		return (1);
+	}
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
+	{
+		perror("[DEBUG] Fork failed");
 		return (perror("fork"), 1);
+	}
 	if (pid == 0)
 		run_child(cmd, *prev_fd, pipefd, env);
 	handle_parent_pipe(cmd, pipefd, prev_fd);

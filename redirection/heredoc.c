@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:42:32 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/30 21:24:26 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:47:26 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,12 @@ static int	read_heredoc_lines(const char *delimiter, const char *filename)
 	while (1)
 	{
 		line = readline("> ");
-		if (!line || g_sigquit_flag)
+		if (!line)
+		{
+			ft_printf("minishell: warning: here-document delimited by end-of-file (wanted `%s')\n", delimiter);
+			return (0);
+		}
+		if (g_sigquit_flag)
 		{
 			if (line)
 				free(line);

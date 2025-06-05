@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:36:58 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/04 15:22:36 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:32:27 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,15 @@ void	update_shlvl(t_env **env)
 
 	shlvl_value = find_env_var(*env, "SHLVL");
 	if (!shlvl_value)
-		lvl = 0;
+		lvl = 1;
 	else
-		lvl = ft_atoi(shlvl_value) + 1;
+	{
+		lvl = ft_atoi(shlvl_value);
+		if (lvl == 0 && ft_strcmp(shlvl_value, "0") != 0)
+			lvl = 1;
+		else
+			lvl += 1;
+	}
 	if (lvl < 0)
 		lvl = 0;
 	else if (lvl > 999)
