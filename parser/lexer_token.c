@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_token.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:15:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/06 15:19:59 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/05 19:50:59 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,16 @@ static int	handle_operator(t_split_vars *vars, char *input, int start)
 	{
 		if ((input[vars->i] == '<' || input[vars->i] == '>')
 			&& input[vars->i + 1] && input[vars->i] == input[vars->i + 1])
+		{
+			if (input[vars->i + 2] && input[vars->i] == input[vars->i + 2])
+			{
+				fprintf(stderr, "minishell: syntax error near unexpected token `%c'\n", input[vars->i]);
+				vars->syntax_error = 1;
+				vars->i += 3;
+				return (0);
+			}
 			vars->i += 2;
+		}
 		else
 			vars->i += 1;
 		return (1);
