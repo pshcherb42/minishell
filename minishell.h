@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 15:22:49 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/05 16:51:15 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,10 +237,7 @@ char			*ft_strjoin_free(char *s1, const char *s2);
 int				var_exists(char **envp, const char *var_name);
 int				is_valid(const char *str);
 // from export_add_eq.c
-int				add_new(char ***envp, const char *arg,
-					const char *var_name, int name_len);
-int				ft_add_eq(char ***envp, char *arg, int name_len);
-
+int				ft_add_eq(t_env **env, char *arg, int name_len);
 // signals.c
 void			setup_signals(void);
 void			handle_sigint(int sig);
