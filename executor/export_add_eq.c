@@ -6,93 +6,65 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/26 20:43:10 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/05 16:53:28 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static char	*get_old_val(const char *entry)
+static char	*get_old_val(t_env *env_node)
 {
-	char	*eq;
-
-	eq = ft_strchr(entry, '=');
-	if (!eq)
+	if (!env_node || !env_node->value)
 		return (ft_strdup(""));
-	return (ft_strdup(eq + 1));
+	return (ft_strdup(env_node->value));
 }
 
-static char	*join_var_eq_val(char *var_name, char *value)
-{
-	char	*temp;
-	char	*final;
-
-	temp = ft_strjoin(var_name, "=");
-	if (!temp)
-		return (NULL);
-	final = ft_strjoin_free(temp, value);
-	return (final);
-}
-
-static	int	upd_existing_var(char ***envp, int idx, char *arg, char *var_name)
+static int	upd_existing_var(t_env **env, t_env *existing_node, char *arg,
+	char *var_name)
 {
 	char	*append;
 	char	*old;
 	char	*joined;
-	char	*final;
+	int		result;
 
-	append = prep_joined(arg, var_name);
-	old = get_old_val((*envp)[idx]);
-	if (!append || !old)
-		return (free(var_name), free(append), free(old), 1);
+	append = arg + ft_strlen(var_name) + 2;
+	old = get_old_val(existing_node);
+	if (!old)
+		return (free(var_name), 1);
 	joined = ft_strjoin(old, append);
 	free(old);
-	free(append);
 	if (!joined)
 		return (free(var_name), 1);
-	final = join_var_eq_val(var_name, joined);
+	result = env_list_set(env, var_name, joined);
 	free(joined);
-	if (!final)
-		return (free(var_name), 1);
-	free((*envp)[idx]);
-	(*envp)[idx] = final;
-	return (free(var_name), 0);
+	return (free(var_name), result);
 }
 
-int	add_new(char ***envp, const char *arg, const char *var_name, int name_len)
+static int	add_new(t_env **env, const char *arg, const char *var_name,
+	int name_len)
 {
 	char	*val;
-	char	*joined;
 	int		res;
 
 	val = ft_strdup(arg + name_len + 2);
 	if (!val)
 		return (free((char *)var_name), 1);
-	joined = join_var_eq_val((char *)var_name, val);
+	res = env_list_set(env, (char *)var_name, val);
 	free(val);
-	if (!joined)
-		return (free((char *)var_name), 1);
-	res = add_env_var(envp, joined);
-	free(joined);
 	free((char *)var_name);
 	return (res);
 }
 
-int	ft_add_eq(char ***envp, char *arg, int name_len)
+int	ft_add_eq(t_env **env, char *arg, int name_len)
 {
-	int		i;
 	char	*var_name;
+	t_env	*existing;
 
-	var_name = ft_substr(arg, 0, name_len);
+	var_name = strndup(arg, name_len);
 	if (!var_name)
 		return (1);
-	i = 0;
-	while ((*envp)[i])
-	{
-		if (!ft_strncmp((*envp)[i], var_name, name_len) &&
-			(*envp)[i][name_len] == '=')
-			return (upd_existing_var(envp, i, arg, var_name));
-		i++;
-	}
-	return (add_new(envp, arg, var_name, name_len));
+	existing = env_list_find(*env, var_name);
+	if (existing)
+		return (upd_existing_var(env, existing, arg, var_name));
+	return (add_new(env, arg, var_name, name_len));
 }

@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 14:34:15 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/03 18:37:43 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/05 16:48:18 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,20 +93,25 @@ static	int	process_arg_env(char *arg, t_env **env)
 	char	*eq;
 	int		name_len;
 	char	*plus;
+	char	*var_name;
+	int		result;
 
 	eq = ft_strchr(arg, '=');
 	plus = ft_strnstr(arg, "+=", ft_strlen(arg));
 	if (plus)
 	{
 		name_len = plus - arg;
-		// Implementar lógica para += si es necesario
-		return (0);
+		return (ft_add_eq(env, arg, name_len));
 	}
 	if (eq)
 	{
 		name_len = eq - arg;
-		// Reemplazar o añadir variable
-		return (env_list_set(env, strndup(arg, name_len), eq + 1));
+		var_name = strndup(arg, name_len);
+		if (!var_name)
+			return (1);
+		result = env_list_set(env, var_name, eq + 1);
+		free(var_name);
+		return (result);
 	}
 	else if (!env_list_find(*env, arg))
 		return (env_list_add(env, arg, NULL));
