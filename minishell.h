@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/04 15:23:09 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/05 15:22:49 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int				handle_redirection(t_cmd *cmd, char **tokens, int i);
 // from redirection_heredoc.c
 int				handle_input_redirect(t_cmd *cmd, char **tokens, int i);
 // from tokenizer.c
-t_cmd			*init_and_tokenize(char *in, char **env, int lec, char ***tkn);
+t_cmd			*init_and_tokenize(char *in, t_env *env, int lec, char ***tkn);
 void			fill_cmd_from_tokens(t_cmd *cmd, char **tokens);
 // from split_pipe.c
 void			handle_quote(char c, char *quote, int *in_quote);
