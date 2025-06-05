@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:33 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 16:49:26 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/05 19:30:40 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env *my_env;
+	t_env	*my_env;
 
 	//printf("[DEBUG] Entering main\n");
 	(void)argc;

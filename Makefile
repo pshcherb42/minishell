@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
+#    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/06/04 15:11:58 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/06/05 20:46:16 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,8 +56,11 @@ SRCS = \
 	executor/ft_pwd.c \
 	executor/ft_unset.c \
 	executor/exec.c \
+	executor/exec_pipeline.c \
+	executor/pipeline_utils.c \
 	executor/open_redirs.c \
 	executor/exec_child.c \
+	executor/child_utils.c \
 	executor/builtin.c \
 	executor/exec_utils.c \
 	signals/signals.c \

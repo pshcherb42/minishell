@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/03 18:24:09 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/05 20:48:05 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,22 @@ char	*prep_joined(const char *arg, const char *var_name)
 
 int	add_if_needed_env(t_env **env, char *arg)
 {
-	char *eq = ft_strchr(arg, '=');
+	char	*eq;
+	int		name_len;
+	char	*name;
+	char	*value;
+	int		res;
+
+	eq = ft_strchr(arg, '=');
 	if (!eq)
 		return (0);
-	int name_len = eq - arg;
-	char *name = strndup(arg, name_len);
-	char *value = strdup(eq + 1);
-	int res = env_list_set(env, name, value);
+	name_len = eq - arg;
+	name = ft_strndup(arg, name_len);
+	value = ft_strdup(eq + 1);
+	res = env_list_set(env, name, value);
 	free(name);
 	free(value);
-	return res;
+	return (res);
 }
 
 char	*ft_strjoin_free(char *s1, const char *s2)

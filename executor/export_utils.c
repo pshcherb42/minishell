@@ -6,100 +6,90 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 16:09:26 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/03 16:31:47 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/05 18:53:37 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*static	char	**copy_envp(char **envp, int *len)
+int	replace_new_var(char ***envp, char *arg, int name_len)
 {
-	char	**copy;
 	int		i;
+	char	*new;
+	char	*eq_in_arg;
+	char	*eq_in_existing;
 
 	i = 0;
-	while (envp[i])
-		i++;
-	*len = i;
-	copy = malloc(sizeof(char *) * (i + 1));
-	if (!copy)
-		return (NULL);
-	i = 0;
-	while (envp[i])
+	while ((*envp)[i])
 	{
-		copy[i] = ft_strdup(envp[i]);
-		if (!copy[i])
+		if (!ft_strncmp((*envp)[i], arg, name_len) &&
+			((*envp)[i][name_len] == '=' || (*envp)[i][name_len] == '\0'))
 		{
-			free_args(copy);
-			return (NULL);
+			eq_in_arg = ft_strchr(arg, '=');
+			eq_in_existing = ft_strchr((*envp)[i], '=');
+			if (!eq_in_arg && eq_in_existing)
+				return (1);
+			new = ft_strdup(arg);
+			if (!new)
+				return (1);
+			free((*envp)[i]);
+			(*envp)[i] = new;
+			return (1);
 		}
 		i++;
 	}
-	copy[i] = NULL;
-	return (copy);
+	return (0);
 }
 
-static	void	sort_envp(char **env)
+static int	copy_env_var(char ***envp, char **new_env, int count)
 {
-	int		i;
-	int		j;
-	char	*temp;
+	int	i;
 
 	i = 0;
-	while (env[i])
+	while (i < count)
 	{
-		j = i + 1;
-		while (env[j])
+		new_env[i] = ft_strdup((*envp)[i]);
+		if (!new_env[i])
 		{
-			if (ft_strcmp(env[i], env[j]) > 0)
-			{
-				temp = env[i];
-				env[i] = env[j];
-				env[j] = temp;
-			}
-			j++;
+			while (--i >= 0)
+				free(new_env[i]);
+			free(new_env);
+			return (-1);
 		}
 		i++;
 	}
-}*/
+	return (i);
+}
 
-/*static	void	print_var(const char *entry)
+int	add_env_var(char ***envp, char *arg)
 {
-	ft_pstr(1, "declare -x ");
-	ft_pstr(1, entry);
-	ft_pstr(1, "\n");
-}*/
+	int		count;
+	char	**new_env;
+	int		i;
 
-/*static	void	print_line(const char *entry)
-{
-	char	*eq;
-	char	*name;
-	char	*value;
-
-	if (ft_strncmp(entry, "_=", 2) == 0)
-		return ;
-	eq = ft_strchr(entry, '=');
-	if (eq)
+	count = 0;
+	while ((*envp)[count])
+		count++;
+	new_env = malloc(sizeof(char *) * (count + 2));
+	if (!new_env)
+		return (1);
+	i = copy_env_var(envp, new_env, count);
+	if (i == -1)
+		return (1);
+	new_env[i] = ft_strdup(arg);
+	if (!new_env[i])
 	{
-		name = ft_substr(entry, 0, eq - entry);
-		value = ft_strdup(eq + 1);
-		if (!name || !value)
-			return ;
-		ft_pstr(1, "declare -x ");
-		ft_pstr(1, name);
-		ft_pstr(1, "=\"");
-		ft_pstr(1, value);
-		ft_pstr(1, "\"\n");
-		free(name);
-		free(value);
+		free_args(new_env);
+		return (1);
 	}
-	else
-		print_var(entry);
-}*/
+	new_env[i + 1] = NULL;
+	free_args(*envp);
+	*envp = new_env;
+	return (0);
+}
 
 void	print_all_env(t_env *env)
 {
-	// Para simplificar, imprime en orden de la lista
 	while (env)
 	{
 		if (env->value)

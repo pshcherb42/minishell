@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/03 16:18:04 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/05 20:25:44 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,20 @@ char	*join_env_entry(const char *var_name, const char *value)
 	return (entry);
 }
 
+static char	*find_home_value(t_env *env)
+{
+	t_env	*cur;
+
+	cur = env;
+	while (cur)
+	{
+		if (strcmp(cur->name, "HOME") == 0)
+			return (cur->value);
+		cur = cur->next;
+	}
+	return (NULL);
+}
+
 static char	*home_tilde_env(char *arg, t_env *env)
 {
 	char	*home;
@@ -38,17 +52,7 @@ static char	*home_tilde_env(char *arg, t_env *env)
 	size_t	home_len;
 	size_t	rest_len;
 
-	home = NULL;
-	t_env *cur = env;
-	while (cur)
-	{
-		if (strcmp(cur->name, "HOME") == 0)
-		{
-			home = cur->value;
-			break;
-		}
-		cur = cur->next;
-	}
+	home = find_home_value(env);
 	if (!home)
 		return (NULL);
 	rest = arg + 1;

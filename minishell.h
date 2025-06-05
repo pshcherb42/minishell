@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 16:51:15 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/05 20:47:05 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,9 +183,19 @@ int				is_parent_builtin(const char *cmd);
 int				exec_builtin(t_cmd *cmd, t_env **env);
 // from exec.c
 int				execute_cmds(t_cmd *cmd, t_env **envp, int last_exit_code);
+pid_t			execute_single_cmd(t_cmd *cmd, t_env **env, int *prev_fd);
 // from exec_child.c
 void			run_child(t_cmd *cmd, int prev_fd, int pipefd[2], t_env **env);
 void			handle_child_exit( int status);
+// from child_utils.c
+void			exec_child_cmd(t_cmd *cmd, t_env **env);
+// from exec_pipeline.c
+int				count_commands(t_cmd *cmd);
+int				execute_builtin_in_pipeline(t_cmd *current, t_env **env,
+					int cmd_count);
+int				execute_pipeline(t_cmd *cmd, t_env **env, int last_exit_code);
+// from pipeline_utils.c
+int				execute_commands_loop(t_cmd *cmd, t_env **env, pid_t *pids);
 // from exec_utils.c
 char			*join_path(const char *dir, const char *cmd);
 void			free_split(char **arr);
@@ -209,8 +219,10 @@ void			replace_env(const char *var_name, const char *value,
 void			update_env_vars(char *oldpwd, t_env **envp);
 char			*get_target_path_env(char **args, t_env *env);
 // from cd_utils_3.c
-char			*handle_special_args(char **args, t_env **envp, int *error_flag);
-char			*handle_special_args_env(char **args, t_env *env, int *error_flag);
+char			*handle_special_args(char **args, t_env **envp,
+					int *error_flag);
+char			*handle_special_args_env(char **args, t_env *env,
+					int *error_flag);
 // from ft_echo.c
 int				ft_echo(char **args);
 // from ft_env.c
@@ -225,11 +237,10 @@ int				ft_pwd(void);
 int				ft_unset(char **args, t_env **env);
 // from ft_export.c
 int				ft_export(char **args, t_env **env);
-int				replace_new_var(char ***envp, char *arg, int name_len);
-int				add_env_var(char ***envp, char *arg);
 // from export_utils.c
-void			print_all(char **envp);
 void			print_all_env(t_env *env);
+int				add_env_var(char ***envp, char *arg);
+int				replace_new_var(char ***envp, char *arg, int name_len);
 // from export_utils_2.c
 char			*prep_joined(const char *arg, const char *var_name);
 int				add_if_needed(t_env **envp, char *arg);
