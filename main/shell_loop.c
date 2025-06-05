@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int	process_input(char *input, char ***envp, int last_exit_code)
+int	process_input(char *input, t_env **env, int last_exit_code)
 {
 	t_cmd	*cmds;
 	int		exit_code;
@@ -20,7 +20,7 @@ int	process_input(char *input, char ***envp, int last_exit_code)
 	exit_code = last_exit_code;
 	if (*input)
 		add_history(input);
-	cmds = parse_input(input, *envp, last_exit_code);
+	cmds = parse_input(input, *env, last_exit_code);
 	if (cmds)
 	{
 		if (cmds->heredoc_interrupted)
@@ -29,7 +29,7 @@ int	process_input(char *input, char ***envp, int last_exit_code)
 			free_cmd_list(cmds);
 			return (130);
 		}
-		exit_code = execute_cmds(cmds, envp, last_exit_code);
+		exit_code = execute_cmds(cmds, env, last_exit_code);
 	}
 	if (cmds)
 		cleanup_cmd_heredocs(cmds);
@@ -37,7 +37,7 @@ int	process_input(char *input, char ***envp, int last_exit_code)
 	return (exit_code);
 }
 
-void	run_shell_loop(char ***envp)
+void	run_shell_loop(t_env **env)
 {
 	char	*input;
 	int		last_exit_code;
@@ -51,7 +51,7 @@ void	run_shell_loop(char ***envp)
 			printf("exit\n");
 			break ;
 		}
-		last_exit_code = process_input(input, envp, last_exit_code);
+		last_exit_code = process_input(input, env, last_exit_code);
 		free(input);
 	}
 }

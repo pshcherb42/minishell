@@ -88,7 +88,7 @@ int	add_env_var(char ***envp, char *arg)
 	return (0);
 }
 
-static	int	process_arg(char *arg, char ***envp)
+static	int	process_arg_env(char *arg, t_env **env)
 {
 	char	*eq;
 	int		name_len;
@@ -99,28 +99,28 @@ static	int	process_arg(char *arg, char ***envp)
 	if (plus)
 	{
 		name_len = plus - arg;
-		return (ft_add_eq(envp, arg, name_len));
+		// Implementar lógica para += si es necesario
+		return (0);
 	}
 	if (eq)
 	{
 		name_len = eq - arg;
-		if (!replace_new_var(envp, arg, name_len))
-			return (add_if_needed(envp, arg));
+		// Reemplazar o añadir variable
+		return (env_list_set(env, strndup(arg, name_len), eq + 1));
 	}
-	else if (!replace_new_var(envp, arg, ft_strlen(arg))
-		&& !var_exists(*envp, arg))
-		return (add_if_needed(envp, arg));
+	else if (!env_list_find(*env, arg))
+		return (env_list_add(env, arg, NULL));
 	return (0);
 }
 
-int	ft_export(char **args, char ***envp)
+int	ft_export(char **args, t_env **env)
 {
 	int	i;
 	int	status;
 
 	if (!args[1])
 	{
-		print_all(*envp);
+		print_all_env(*env);
 		return (0);
 	}
 	i = 1;
@@ -134,7 +134,7 @@ int	ft_export(char **args, char ***envp)
 			ft_pstr(2, "`: not a valid identifier\n");
 			status = 1;
 		}
-		else if (process_arg(args[i], envp))
+		else if (process_arg_env(args[i], env))
 			status = 1;
 		i++;
 	}

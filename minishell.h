@@ -26,6 +26,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <ctype.h>
+# include "env_list.h"
 
 # define ARGS_INIT_CAPACITY 10
 
@@ -48,7 +49,7 @@ typedef struct s_cmd
 typedef struct s_expand_ctx
 {
 	const char	*input;
-	char		**envp;
+	t_env		*envp;
 	char		*result;
 	int			last_exit_code;
 	int			i;
@@ -88,7 +89,7 @@ typedef struct s_parse_state
 	t_cmd	*head;
 	t_cmd	*tail;
 	int		i;
-	char	**envp;
+	t_env	*env;
 	int		last_exit_code;
 }	t_parse_state;
 
@@ -98,28 +99,28 @@ typedef struct s_token_state
 	t_split_vars	*vars;
 	int				cap;
 	char			*input;
-	char			**envp;
+	t_env			*envp;
 	int				lec;
 }	t_token_state;
 
 // funciones de main
 // from init.c
-void			init_shell(char ***envp);
-void			update_shlvl(char ***envp);
+void			init_shell(t_env **envp);
+void			update_shlvl(t_env **envp);
 // from env_utils.c
 void			set_env_value(const char *value, char ***envp);
-char			*find_env_var(char **envp, const char *name);
+char			*find_env_var(t_env *envp, const char *name);
 char			**dup_env(char **envp);
 char			**create_minimal_env(void);
 // from input.c
 char			*get_valid_input(void);
 // from shell_loop.c
-int				process_input(char *input, char ***envp, int last_exit_code);
-void			run_shell_loop(char ***envp);
+int				process_input(char *input, t_env **envp, int last_exit_code);
+void			run_shell_loop(t_env **envp);
 
 // funciones parser
-t_cmd			*parse_single_command(char *input, char **envp, int l_e_c);
-t_cmd			*parse_input(char *input, char **envp, int last_exit_code);
+t_cmd			*parse_single_command(char *input, t_env *envp, int l_e_c);
+t_cmd			*parse_input(char *input, t_env *envp, int last_exit_code);
 // from parser_utils.c
 //char			*read_continued_input(const char *input);
 int				is_trailing_pipe(const char *input);
@@ -142,7 +143,7 @@ t_cmd			*init_cmd(void);
 char			**grow_args_array(char **old_args, int old_size, int *capacity);
 void			cleanup_cmd_heredocs(t_cmd *cmd);
 // from expand.c
-char			*expand_variables(const char *input, char **envp, int lec);
+char			*expand_variables(const char *input, t_env *envp, int lec);
 // from expand_utils.c
 void			handle_exit_code(t_expand_ctx *ctx);
 void			handle_env_var(t_expand_ctx *ctx);
@@ -153,7 +154,7 @@ char			*find_env_value(t_expand_ctx *ctx, const char *var_name);
 char			*extract_var_name(t_expand_ctx *ctx, int *i);
 // funciones lexer
 // from lexer_expand.c
-void			expand_token(t_split_vars *vars, char **envp, int l_e_c);
+void			expand_token(t_split_vars *vars, t_env *envp, int l_e_c);
 // from lexer_copy.c
 int				copy_token(t_split_vars *vars, char *input);
 int				handle_quote_char(t_split_vars *vars, char c);
@@ -167,8 +168,8 @@ char			**free_and_return_null(t_split_vars *vars, char **args);
 int				validate_quotes(const char *input);
 t_split_vars	*init_vars(void);
 // from lexer_parse.c
-int				parse_token(t_split_vars *vars, char *in, char **env, int lec);
-char			**split_args(char *input, char **envp, int last_exit_code);
+int				parse_token(t_split_vars *vars, char *in, t_env *env, int lec);
+char			**split_args(char *input, t_env *envp, int last_exit_code);
 
 // funciones ejecucción
 // from builtin_utils.c
@@ -179,11 +180,11 @@ size_t			ft_strspn(const char *s, const char *accept);
 // from builtin.c
 int				is_builtin(char *cmd);
 int				is_parent_builtin(const char *cmd);
-int				exec_builtin(t_cmd *cmd, char ***envp);
+int				exec_builtin(t_cmd *cmd, t_env **env);
 // from exec.c
-int				execute_cmds(t_cmd *cmd, char ***envp, int last_exit_code);
+int				execute_cmds(t_cmd *cmd, t_env **envp, int last_exit_code);
 // from exec_child.c
-void			run_child(t_cmd *cmd, int prev_fd, int pipefd[2], char ***envp);
+void			run_child(t_cmd *cmd, int prev_fd, int pipefd[2], t_env **env);
 void			handle_child_exit( int status);
 // from exec_utils.c
 char			*join_path(const char *dir, const char *cmd);
@@ -194,41 +195,44 @@ int				open_redirs(t_cmd *cmd);
 // from get_cmd_path.c
 char			*get_cmd_path(char *cmd, char **envp);
 // from ft_cd.c
-int				ft_cd(char **args, char **envp);
+int				ft_cd(char **args, t_env **envp);
 char			*get_current_dir(void);
 // from cd_utils.c
 void			replace_env(const char *var_name, const char *value,
 					char **envp);
-char			*get_target_path(char **args, char **envp);
+char			*get_target_path(char **args, t_env **env);
 char			*join_env_entry(const char *var_name, const char *value);
 // from cd_utils_2.c
 char			*find_env_var_local(char **envp, const char *name);
 void			replace_env(const char *var_name, const char *value,
 					char **envp);
-void			update_env_vars(char *oldpwd, char **envp);
+void			update_env_vars(char *oldpwd, t_env **envp);
+char			*get_target_path_env(char **args, t_env *env);
 // from cd_utils_3.c
-char			*handle_special_args(char **args, char **envp, int *error_flag);
+char			*handle_special_args(char **args, t_env **envp, int *error_flag);
+char			*handle_special_args_env(char **args, t_env *env, int *error_flag);
 // from ft_echo.c
 int				ft_echo(char **args);
 // from ft_env.c
 char			*ft_strchr(const char *s, int c);
-int				ft_env(char **args, char **envp);
+int				ft_env(char **args, t_env *env);
 // from ft_exit.c
 int				ft_exit(char **args);
 int				ft_exit_child(char **args);
 // from ft_pwd.c
 int				ft_pwd(void);
 // from ft_unset.c
-int				ft_unset(char **args, char ***envp);
+int				ft_unset(char **args, t_env **env);
 // from ft_export.c
-int				ft_export(char **args, char ***envp);
+int				ft_export(char **args, t_env **env);
 int				replace_new_var(char ***envp, char *arg, int name_len);
 int				add_env_var(char ***envp, char *arg);
 // from export_utils.c
 void			print_all(char **envp);
+void			print_all_env(t_env *env);
 // from export_utils_2.c
 char			*prep_joined(const char *arg, const char *var_name);
-int				add_if_needed(char ***envp, char *arg);
+int				add_if_needed(t_env **envp, char *arg);
 char			*ft_strjoin_free(char *s1, const char *s2);
 int				var_exists(char **envp, const char *var_name);
 int				is_valid(const char *str);

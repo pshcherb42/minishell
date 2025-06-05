@@ -35,12 +35,12 @@ static int	handle_escape_sequence(t_expand_ctx *ctx)
 }
 
 static void	init_expand_context(t_expand_ctx *ctx, const char *input,
-								char **envp, int lec)
+								t_env *env, int lec)
 {
 	ctx->i = 0;
 	ctx->j = 0;
 	ctx->input = input;
-	ctx->envp = envp;
+	ctx->envp = env;
 	ctx->last_exit_code = lec;
 	ctx->result = malloc(4096);
 	allocation_error(ctx->result);
@@ -62,11 +62,11 @@ static void	process_character(t_expand_ctx *ctx)
 		ctx->result[ctx->j++] = ctx->input[ctx->i++];
 }
 
-char	*expand_variables(const char *input, char **envp, int lec)
+char	*expand_variables(const char *input, t_env *env, int lec)
 {
 	t_expand_ctx	ctx;
 
-	init_expand_context(&ctx, input, envp, lec);
+	init_expand_context(&ctx, input, env, lec);
 	while (input[ctx.i])
 		process_character(&ctx);
 	ctx.result[ctx.j] = '\0';

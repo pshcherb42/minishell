@@ -22,11 +22,18 @@ char	*prep_joined(const char *arg, const char *var_name)
 	return (joined);
 }
 
-int	add_if_needed(char ***envp, char *arg)
+int	add_if_needed_env(t_env **env, char *arg)
 {
-	if (add_env_var(envp, arg))
-		return (1);
-	return (0);
+	char *eq = ft_strchr(arg, '=');
+	if (!eq)
+		return (0);
+	int name_len = eq - arg;
+	char *name = strndup(arg, name_len);
+	char *value = strdup(eq + 1);
+	int res = env_list_set(env, name, value);
+	free(name);
+	free(value);
+	return res;
 }
 
 char	*ft_strjoin_free(char *s1, const char *s2)

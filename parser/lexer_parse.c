@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int	parse_token(t_split_vars *vars, char *in, char **env, int lec)
+int	parse_token(t_split_vars *vars, char *in, t_env *env, int lec)
 {
 	int		start;
 
@@ -49,7 +49,7 @@ static int	parse_and_store_token(t_token_state *state)
 	return (1);
 }
 
-char	**split_args(char *input, char **envp, int last_exit_code)
+char	**split_args(char *input, t_env *envp, int last_exit_code)
 {
 	t_token_state	state;
 	int				ret;

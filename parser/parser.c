@@ -13,11 +13,12 @@
 #include "../minishell.h"
 #include <string.h>
 
-t_cmd	*parse_single_command(char *input, char **envp, int l_e_c)
+t_cmd	*parse_single_command(char *input, t_env *envp, int l_e_c)
 {
 	t_cmd	*cmd;
 	char	**tokens;
 
+	char **env_array = env_list_to_array(envp);
 	cmd = init_and_tokenize(input, envp, l_e_c, &tokens);
 	if (!cmd)
 		return (NULL);
@@ -31,7 +32,7 @@ t_cmd	*parse_single_command(char *input, char **envp, int l_e_c)
 	return (cmd);
 }
 
-t_cmd	*parse_input(char *input, char **envp, int last_exit_code)
+t_cmd	*parse_input(char *input, t_env *env, int last_exit_code)
 {
 	t_parse_state	state;
 	t_cmd			*result;
@@ -44,7 +45,7 @@ t_cmd	*parse_input(char *input, char **envp, int last_exit_code)
 	state.head = NULL;
 	state.tail = NULL;
 	state.i = 0;
-	state.envp = envp;
+	state.env = env;
 	state.last_exit_code = last_exit_code;
 	result = build_command_list(&state);
 	free(state.segments);

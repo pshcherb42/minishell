@@ -30,7 +30,7 @@ char	*join_env_entry(const char *var_name, const char *value)
 	return (entry);
 }
 
-static char	*home_tilde(char *arg, char **envp)
+static char	*home_tilde_env(char *arg, t_env *env)
 {
 	char	*home;
 	char	*rest;
@@ -38,7 +38,17 @@ static char	*home_tilde(char *arg, char **envp)
 	size_t	home_len;
 	size_t	rest_len;
 
-	home = find_env_var_local(envp, "HOME");
+	home = NULL;
+	t_env *cur = env;
+	while (cur)
+	{
+		if (strcmp(cur->name, "HOME") == 0)
+		{
+			home = cur->value;
+			break;
+		}
+		cur = cur->next;
+	}
 	if (!home)
 		return (NULL);
 	rest = arg + 1;
@@ -53,19 +63,19 @@ static char	*home_tilde(char *arg, char **envp)
 	return (full_path);
 }
 
-char	*get_target_path(char **args, char **envp)
+char	*get_target_path_env(char **args, t_env *env)
 {
 	char	*result;
 	int		error_flag;
 
 	error_flag = 0;
-	result = handle_special_args(args, envp, &error_flag);
+	result = handle_special_args_env(args, env, &error_flag);
 	if (result)
 		return (result);
 	if (error_flag)
 		return (NULL);
 	if (args[1] && args[1][0] == '~')
-		return (home_tilde(args[1], envp));
+		return (home_tilde_env(args[1], env));
 	if (args[1])
 		return (ft_strdup(args[1]));
 	return (NULL);

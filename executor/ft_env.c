@@ -28,21 +28,18 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-int	ft_env(char **args, char **envp)
+int	ft_env(char **args, t_env *env)
 {
-	int	i;
-
 	if (args[1])
 	{
 		ft_pstr(2, "minishell: env: too many arguments\n");
 		return (1);
 	}
-	i = 0;
-	while (envp[i])
+	while (env)
 	{
-		if (ft_strchr(envp[i], '='))
-			printf("%s\n", envp[i]);
-		i++;
+		if (env->value)
+			printf("%s=%s\n", env->name, env->value);
+		env = env->next;
 	}
 	return (0);
 }

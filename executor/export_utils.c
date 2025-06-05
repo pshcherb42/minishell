@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-static	char	**copy_envp(char **envp, int *len)
+/*static	char	**copy_envp(char **envp, int *len)
 {
 	char	**copy;
 	int		i;
@@ -61,16 +61,16 @@ static	void	sort_envp(char **env)
 		}
 		i++;
 	}
-}
+}*/
 
-static	void	print_var(const char *entry)
+/*static	void	print_var(const char *entry)
 {
 	ft_pstr(1, "declare -x ");
 	ft_pstr(1, entry);
 	ft_pstr(1, "\n");
-}
+}*/
 
-static	void	print_line(const char *entry)
+/*static	void	print_line(const char *entry)
 {
 	char	*eq;
 	char	*name;
@@ -95,23 +95,17 @@ static	void	print_line(const char *entry)
 	}
 	else
 		print_var(entry);
-}
+}*/
 
-void	print_all(char **envp)
+void	print_all_env(t_env *env)
 {
-	int		len;
-	int		i;
-	char	**sorted;
-
-	sorted = copy_envp(envp, &len);
-	if (!sorted)
-		return ;
-	sort_envp(sorted);
-	i = 0;
-	while (sorted[i])
+	// Para simplificar, imprime en orden de la lista
+	while (env)
 	{
-		print_line(sorted[i]);
-		i++;
+		if (env->value)
+			printf("declare -x %s=\"%s\"\n", env->name, env->value);
+		else
+			printf("declare -x %s\n", env->name);
+		env = env->next;
 	}
-	free_args(sorted);
 }

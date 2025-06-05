@@ -50,7 +50,7 @@ int	process_segment(t_parse_state *state)
 			segment);
 		return (0);
 	}
-	new_cmd = parse_single_command(segment, state->envp, state->last_exit_code);
+	new_cmd = parse_single_command(segment, state->env, state->last_exit_code);
 	if (!new_cmd)
 		return (0);
 	if (!state->head)

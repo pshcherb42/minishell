@@ -12,17 +12,17 @@
 
 #include "../minishell.h"
 
-void	update_shlvl(char ***envp)
+void	update_shlvl(t_env **env)
 {
-	char	*lvl_str;
+	char	*shlvl_value;
 	int		lvl;
 	char	*new_lvl;
 
-	lvl_str = find_env_var(*envp, "SHLVL");
-	if (!lvl_str)
-		lvl = 1;
+	shlvl_value = find_env_var(*env, "SHLVL");
+	if (!shlvl_value)
+		lvl = 0;
 	else
-		lvl = ft_atoi(lvl_str) + 1;
+		lvl = ft_atoi(shlvl_value) + 1;
 	if (lvl < 0)
 		lvl = 0;
 	else if (lvl > 999)
@@ -30,12 +30,12 @@ void	update_shlvl(char ***envp)
 	new_lvl = ft_itoa(lvl);
 	if (!new_lvl)
 		return ;
-	set_env_value(new_lvl, envp);
+	env_list_set(env, "SHLVL", new_lvl);
 	free(new_lvl);
 }
 
-void	init_shell(char ***envp)
+void	init_shell(t_env **env)
 {
 	setup_signals();
-	update_shlvl(envp);
+	update_shlvl(env);
 }

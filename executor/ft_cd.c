@@ -61,7 +61,7 @@ static int	try_change_dir(char *target)
 }
 
 static int	perform_cd_operation(char *target, char *oldpwd,
-		char **envp, int is_dash)
+		t_env **envp, int is_dash)
 {
 	char	*newpwd;
 
@@ -87,7 +87,7 @@ static int	perform_cd_operation(char *target, char *oldpwd,
 	return (0);
 }
 
-int	ft_cd(char **args, char **envp)
+int	ft_cd(char **args, t_env **env)
 {
 	char	*target;
 	char	*oldpwd;
@@ -96,7 +96,7 @@ int	ft_cd(char **args, char **envp)
 	if (check_args(args))
 		return (1);
 	is_dash_arg = (args[1] && ft_strcmp(args[1], "-") == 0);
-	target = get_target_path(args, envp);
+	target = get_target_path_env(args, *env);
 	if (!target)
 		return (1);
 	oldpwd = get_current_dir();
@@ -105,5 +105,5 @@ int	ft_cd(char **args, char **envp)
 		free(target);
 		return (1);
 	}
-	return (perform_cd_operation(target, oldpwd, envp, is_dash_arg));
+	return (perform_cd_operation(target, oldpwd, env, is_dash_arg));
 }

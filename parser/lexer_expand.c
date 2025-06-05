@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-void	expand_token(t_split_vars *vars, char **envp, int l_e_c)
+void	expand_token(t_split_vars *vars, t_env *envp, int l_e_c)
 {
 	if (!vars->was_single_quoted && ft_strchr(vars->raw_token, '$'))
 	{

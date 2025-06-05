@@ -36,7 +36,7 @@ static	void	handle_parent_pipe(t_cmd *cmd, int pipefd[2], int *prev_fd)
 	}
 }
 
-static int	execute_single_cmd(t_cmd *cmd, char ***envp, int *prev_fd)
+static int	execute_single_cmd(t_cmd *cmd, t_env **env, int *prev_fd)
 {
 	int		pipefd[2];
 	pid_t	pid;
@@ -51,7 +51,7 @@ static int	execute_single_cmd(t_cmd *cmd, char ***envp, int *prev_fd)
 	if (pid < 0)
 		return (perror("fork"), 1);
 	if (pid == 0)
-		run_child(cmd, *prev_fd, pipefd, envp);
+		run_child(cmd, *prev_fd, pipefd, env);
 	handle_parent_pipe(cmd, pipefd, prev_fd);
 	waitpid(pid, &status, 0);
 	handle_child_exit(status);
@@ -65,7 +65,7 @@ static int	execute_single_cmd(t_cmd *cmd, char ***envp, int *prev_fd)
 		return (1);
 }
 
-static int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd,
+static int	execute_loop(t_cmd *cmd, t_env **env, int prev_fd,
 		int last_exit_code)
 {
 	int	current_exit_code;
@@ -79,14 +79,14 @@ static int	execute_loop(t_cmd *cmd, char ***envp, int prev_fd,
 				return (ft_exit(cmd->args));
 		}
 		if (is_builtin(cmd->args[0]) && is_parent_builtin(cmd->args[0]))
-			return (exec_builtin(cmd, envp));
-		current_exit_code = execute_single_cmd(cmd, envp, &prev_fd);
+			return (exec_builtin(cmd, env));
+		current_exit_code = execute_single_cmd(cmd, env, &prev_fd);
 		cmd = cmd->next;
 	}
 	return (current_exit_code);
 }
 
-int	execute_cmds(t_cmd *cmd, char ***envp, int last_exit_code)
+int	execute_cmds(t_cmd *cmd, t_env **env, int last_exit_code)
 {
 	int	prev_fd;
 	int	status;
@@ -98,6 +98,6 @@ int	execute_cmds(t_cmd *cmd, char ***envp, int last_exit_code)
 		return (130);
 	if (!cmd->args || !cmd->args[0])
 		return (1);
-	status = execute_loop(cmd, envp, prev_fd, last_exit_code);
+	status = execute_loop(cmd, env, prev_fd, last_exit_code);
 	return (status);
 }

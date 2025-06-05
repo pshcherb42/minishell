@@ -29,19 +29,14 @@ char	*extract_var_name(t_expand_ctx *ctx, int *i)
 
 char	*find_env_value(t_expand_ctx *ctx, const char *var_name)
 {
-	int	m;
-	int	len;
-
+	t_env *cur = ctx->envp;
 	if (!var_name[0])
 		return (ft_strdup(""));
-	len = ft_strlen(var_name);
-	m = 0;
-	while (ctx->envp[m])
+	while (cur)
 	{
-		if (!ft_strncmp(ctx->envp[m], var_name, len)
-			&& ctx->envp[m][len] == '=')
-			return (ft_strdup(ctx->envp[m] + len + 1));
-		m++;
+		if (!ft_strcmp(cur->name, var_name))
+			return (cur->value ? ft_strdup(cur->value) : ft_strdup(""));
+		cur = cur->next;
 	}
 	return (ft_strdup(""));
 }

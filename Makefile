@@ -22,6 +22,7 @@ SRCS = \
 	main/env_utils.c \
 	main/input.c \
 	main/shell_loop.c \
+	main/env_list.c \
 	parser/parser.c \
 	parser/parser_utils.c \
 	parser/cmd_utils.c \
@@ -68,7 +69,7 @@ SRCS = \
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
 
-$(NAME): $(OBJS) Makefile $(LIBFT)
+$(NAME): $(OBJS) Makefile minishell.h $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME) -lreadline
 
 $(LIBFT):

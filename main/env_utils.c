@@ -36,18 +36,16 @@ char	**dup_env(char **envp)
 	return (new_env);
 }
 
-char	*find_env_var(char **envp, const char *name)
+char	*find_env_var(t_env *envp, const char *name)
 {
-	int		i;
-	size_t	len;
+	t_env	*current;
 
-	i = 0;
-	len = ft_strlen(name);
-	while (envp[i])
+	current = envp;
+	while (current)
 	{
-		if (!ft_strncmp(envp[i], name, len) && envp[i][len] == '=')
-			return (envp[i] + len + 1);
-		i++;
+		if (current->name && ft_strcmp(current->name, name) == 0)
+			return (current->value);
+		current = current->next;
 	}
 	return (NULL);
 }

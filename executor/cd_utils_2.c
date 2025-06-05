@@ -76,14 +76,14 @@ void	replace_env(const char *var_name, const char *value, char **envp)
 	add_new_env(envp, var_name, value);
 }
 
-void	update_env_vars(char *oldpwd, char **envp)
+void	update_env_vars(char *oldpwd, t_env **env)
 {
 	char	*newpwd;
 
 	newpwd = get_current_dir();
 	if (!newpwd)
 		return ;
-	replace_env("OLDPWD", oldpwd, envp);
-	replace_env("PWD", newpwd, envp);
+	env_list_set(env, "OLDPWD", oldpwd);
+	env_list_set(env, "PWD", newpwd);
 	free(newpwd);
 }

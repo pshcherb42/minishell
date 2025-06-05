@@ -32,23 +32,23 @@ int	is_builtin(char *cmd)
 		|| !ft_strcmp(cmd, "export"));
 }
 
-int	exec_builtin(t_cmd *cmd, char ***envp)
+int	exec_builtin(t_cmd *cmd, t_env **env)
 {
 	if (!cmd || !cmd->args || !cmd->args[0])
 		return (1);
 	if (!ft_strcmp(cmd->args[0], "exit"))
 		return (ft_exit_child(cmd->args));
 	else if (!ft_strcmp(cmd->args[0], "cd"))
-		return (ft_cd(cmd->args, *envp));
+		return (ft_cd(cmd->args, env));
 	else if (!ft_strcmp(cmd->args[0], "pwd"))
 		return (ft_pwd());
 	else if (!ft_strcmp(cmd->args[0], "echo"))
 		return (ft_echo(cmd->args));
 	else if (!ft_strcmp(cmd->args[0], "env"))
-		return (ft_env(cmd->args, *envp));
+		return (ft_env(cmd->args, *env));
 	else if (!ft_strcmp(cmd->args[0], "unset"))
-		return (ft_unset(cmd->args, envp));
+		return (ft_unset(cmd->args, env));
 	else if (!ft_strcmp(cmd->args[0], "export"))
-		return (ft_export(cmd->args, envp));
+		return (ft_export(cmd->args, env));
 	return (1);
 }

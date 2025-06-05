@@ -14,15 +14,15 @@
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	**my_env;
+	t_env *my_env;
 
 	(void)argc;
 	(void)argv;
-	my_env = dup_env(envp);
+	my_env = env_list_from_array(envp);
 	init_shell(&my_env);
 	run_shell_loop(&my_env);
-	free_env(my_env);
-	rl_clear_history();
+	env_list_free(my_env);
+	clear_history();
 	rl_cleanup_after_signal();
 	return (0);
 }
