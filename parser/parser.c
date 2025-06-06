@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:16 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 16:49:58 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 19:52:16 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ t_cmd	*parse_single_command(char *input, t_env *envp, int l_e_c)
 {
 	t_cmd	*cmd;
 	char	**tokens;
-	//char	**env_array;
 
+	//char	**env_array;
 	//env_array = env_list_to_array(envp);
 	cmd = init_and_tokenize(input, envp, l_e_c, &tokens);
 	if (!cmd)

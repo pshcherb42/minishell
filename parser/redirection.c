@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 16:50:10 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 19:50:14 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 static int	handle_output_redirect(t_cmd *cmd, char **tokens, int i)
 {
+	int	fd;
+
 	if (!tokens[i + 1])
 	{
 		ft_printf("minishell: syntax error near unexpected token `newline'\n");
@@ -28,7 +30,7 @@ static int	handle_output_redirect(t_cmd *cmd, char **tokens, int i)
 		return (-1);
 	}
 	cmd->append = 0;
-	int fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 	{
 		perror("minishell");
@@ -40,6 +42,8 @@ static int	handle_output_redirect(t_cmd *cmd, char **tokens, int i)
 
 static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
 {
+	int	fd;
+
 	if (!tokens[i + 1])
 	{
 		ft_printf("minishell: syntax error near unexpected token `newline'\n");
@@ -54,7 +58,7 @@ static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
 		return (-1);
 	}
 	cmd->append = 1;
-	int fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	fd = open(cmd->outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (fd < 0)
 	{
 		perror("minishell");
@@ -63,25 +67,6 @@ static int	handle_append_redirect(t_cmd *cmd, char **tokens, int i)
 	close(fd);
 	return (i + 1);
 }
-
-/*static int	handle_input_redirect(t_cmd *cmd, char **tokens, int i)
-{
-	if (!tokens[i + 1])
-	{
-		ft_printf("minishell: syntax error near unexpected token `newline'\n");
-		return (-1);
-	}
-	if (cmd->infile)
-		free(cmd->infile);
-	cmd->infile = ft_strdup(tokens[++i]);
-	if (cmd->heredoc && cmd->heredoc_fd >= 0)
-	{
-		close(cmd->heredoc_fd);
-		cmd->heredoc_fd = -1;
-	}
-	cmd->heredoc = 0;
-	return (i + 1);
-}*/
 
 static int	handle_heredoc_redirect(t_cmd *cmd, char **tokens, int i)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_lookup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:39:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/04/29 16:50:21 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 19:51:53 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,20 @@ char	*extract_var_name(t_expand_ctx *ctx, int *i)
 
 char	*find_env_value(t_expand_ctx *ctx, const char *var_name)
 {
-	t_env *cur = ctx->envp;
+	t_env	*cur;
+
+	cur = ctx->envp;
 	if (!var_name[0])
 		return (ft_strdup(""));
 	while (cur)
 	{
 		if (!ft_strcmp(cur->name, var_name))
-			return (cur->value ? ft_strdup(cur->value) : ft_strdup(""));
+		{
+			if (cur->value)
+				return (ft_strdup(cur->value));
+			else
+				return (ft_strdup(""));
+		}
 		cur = cur->next;
 	}
 	return (ft_strdup(""));

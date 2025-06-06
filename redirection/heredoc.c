@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/16 16:42:32 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 17:47:26 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 19:48:56 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,40 @@ void	handle_here_child(const char *delimiter, const char *filename)
 	exit(0);
 }
 
-static int	read_heredoc_lines(const char *delimiter, const char *filename)
+static void	print_heredoc_warning(const char *delimiter)
+{
+	ft_printf("minishell: warning: here-document delimited by ");
+	ft_printf("end-of-file (wanted `%s')\n", delimiter);
+}
+
+static int	handle_heredoc_line(char *line, const char *delimiter,
+							const char *filename)
+{
+	if (ft_strcmp(line, delimiter) == 0)
+	{
+		free(line);
+		return (1);
+	}
+	if (!write_to_temp_file(filename, line))
+	{
+		free(line);
+		return (-1);
+	}
+	free(line);
+	return (0);
+}
+
+int	read_heredoc_lines(const char *delimiter, const char *filename)
 {
 	char	*line;
+	int		result;
 
 	while (1)
 	{
 		line = readline("> ");
 		if (!line)
 		{
-			ft_printf("minishell: warning: here-document delimited by end-of-file (wanted `%s')\n", delimiter);
+			print_heredoc_warning(delimiter);
 			return (0);
 		}
 		if (g_sigquit_flag)
@@ -66,27 +90,11 @@ static int	read_heredoc_lines(const char *delimiter, const char *filename)
 				free(line);
 			return (-1);
 		}
-		if (ft_strcmp(line, delimiter) == 0)
-		{
-			free(line);
+		result = handle_heredoc_line(line, delimiter, filename);
+		if (result == 1)
 			break ;
-		}
-		if (!write_to_temp_file(filename, line))
-		{
-			free(line);
+		if (result == -1)
 			return (-1);
-		}
-		free(line);
 	}
 	return (0);
-}
-
-int	handle_heredoc(const char *delimiter, const char *filename)
-{
-	return (read_heredoc_lines(delimiter, filename));
-}
-
-int	handle_here_doc(const char *delimiter, const char *filename)
-{
-	return (read_heredoc_lines(delimiter, filename));
 }

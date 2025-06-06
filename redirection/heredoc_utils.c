@@ -1,45 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   heredoc_utilc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/06 19:34:21 by akreise          ###   ########.fr       */
+/*   Created: 2025/05/16 16:42:32 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/06/06 19:43:26 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-volatile sig_atomic_t	g_sigquit_flag = 0;
-
-void	handle_sigint(int sig)
+int	handle_heredoc(const char *delimiter, const char *filename)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	return (read_heredoc_lines(delimiter, filename));
 }
 
-void	handle_sigquit(int sig)
+int	handle_here_doc(const char *delimiter, const char *filename)
 {
-	(void)sig;
-	g_sigquit_flag = 1;
-}
-
-void	heredoc_sigint(int sig)
-{
-	(void)sig;
-	g_sigquit_flag = 1;
-	write(1, "\n", 1);
-	exit(130);
-}
-
-void	setup_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
+	return (read_heredoc_lines(delimiter, filename));
 }

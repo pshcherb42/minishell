@@ -6,7 +6,7 @@
 #    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/14 17:13:20 by pshcherb          #+#    #+#              #
-#    Updated: 2025/06/05 20:46:16 by akreise          ###   ########.fr        #
+#    Updated: 2025/06/06 19:46:45 by akreise          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ SRCS = \
 	main/input.c \
 	main/shell_loop.c \
 	main/env_list.c \
+	main/env_list_to_array.c \
+	main/env_list_utils.c \
 	parser/parser.c \
 	parser/parser_utils.c \
 	parser/cmd_utils.c \
@@ -65,6 +67,7 @@ SRCS = \
 	executor/exec_utils.c \
 	signals/signals.c \
 	redirection/heredoc.c \
+	redirection/heredoc_utils.c \
 	redirection/tmp_heredoc.c \
 	utils/utils.c \
 	utils/utils2.c

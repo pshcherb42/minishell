@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 20:47:05 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/06 19:48:22 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,12 +253,13 @@ int				ft_add_eq(t_env **env, char *arg, int name_len);
 void			setup_signals(void);
 void			handle_sigint(int sig);
 void			heredoc_sigint(int sig);
-
 // from heredoc.c
-int				handle_here_doc(const char *delimiter, const char *filename);
 void			handle_here_child(const char *delimiter, const char *filename);
 int				handle_here_father(pid_t pid, int *status, char **temp_file);
+int				read_heredoc_lines(const char *delimiter, const char *filename);
+// from heredoc_utils.c
 int				handle_heredoc(const char *delimiter, const char *filename);
+int				handle_here_doc(const char *delimiter, const char *filename);
 // from tmp_heredoc.c
 int				handle_here_fork(const char *delimiter, char **temp_file);
 int				write_to_temp_file(const char *filename, const char *line);
@@ -275,5 +276,7 @@ void			free_cmd_list(t_cmd *cmd);
 int				ft_isdigit(int c);
 void			free_env(char **env);
 void			free_args(char **args);
+char			*ft_strcpy(char *dest, const char *src);
+char			*ft_strcat(char *dest, const char *src);
 
 #endif
