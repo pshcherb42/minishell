@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 10:43:57 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 16:49:46 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 21:37:20 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	process_input(char *input, t_env **env, int last_exit_code)
     if (!cmds)
     {
         // parse_input falló (error de sintaxis o input vacío)
+		//printf("DEBUG: parse_input devolvio NULL");
         return (2); // Exit code 2 para errores de sintaxis
     }
     
@@ -64,7 +65,7 @@ int	process_input(char *input, t_env **env, int last_exit_code)
         free_cmd_list(cmds);
         return (130);
     }
-    printf("DEBUG:parse_input no devolvio NULL\n");
+    //printf("DEBUG:parse_input no devolvio NULL\n");
     exit_code = execute_cmds(cmds, env, last_exit_code);
     cleanup_cmd_heredocs(cmds);
     free_cmd_list(cmds);

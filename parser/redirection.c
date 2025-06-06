@@ -6,11 +6,19 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:03:08 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 16:50:10 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 21:37:07 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <stdbool.h>
+
+static bool	is_quoted(const char *token)
+{
+	if (!token)
+		return (false);
+	return (ft_strncmp(token, "QUOTED:", 7) == 0);
+}
 
 static int	handle_output_redirect(t_cmd *cmd, char **tokens, int i)
 {
@@ -116,6 +124,11 @@ int	handle_redirection(t_cmd *cmd, char **tokens, int i)
 	//printf("[DEBUG] Handling redirection: token[%d] = %s\n", i, tokens[i]);
 	if (!tokens[i])
 		return (i);
+	if (is_quoted(tokens[i]))
+	{
+		//printf("[DEBUG] Token is quoted, treating as literal: %s\n", tokens[i]);
+		return (i);
+	}
 	if (!ft_strcmp(tokens[i], ">"))
 		return (handle_output_redirect(cmd, tokens, i));
 	else if (!ft_strcmp(tokens[i], ">>"))

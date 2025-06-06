@@ -6,7 +6,7 @@
 #    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/18 18:00:47 by pshcherb          #+#    #+#              #
-#    Updated: 2025/06/04 15:12:05 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/06/06 19:16:05 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -79,7 +79,7 @@ all: $(NAME)
 $(NAME):    $(OBJS)
 	ar rcs $(NAME) $(OBJS)
 
-%.o: %.c Makefile 
+%.o: %.c Makefile libft.h
 	$(CC) $(FLAGS) -MMD -c $< -o $@
 
 clean:

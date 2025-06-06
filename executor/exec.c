@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/05 16:50:17 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 21:36:39 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	execute_single_cmd(t_cmd *cmd, t_env **env, int *prev_fd)
 	pid = fork();
 	if (pid < 0)
 	{
-		perror("[DEBUG] Fork failed");
+		//perror("[DEBUG] Fork failed");
 		return (perror("fork"), 1);
 	}
 	if (pid == 0)
@@ -88,6 +88,7 @@ static int	execute_loop(t_cmd *cmd, t_env **env, int prev_fd,
 			if (!cmd->next && prev_fd == -1)
 				return (ft_exit(cmd->args));
 		}
+		//printf("DEBUG: before checking builtin or no\n");
 		if (is_builtin(cmd->args[0]) && is_parent_builtin(cmd->args[0]))
 			return (exec_builtin(cmd, env));
 		current_exit_code = execute_single_cmd(cmd, env, &prev_fd);
