@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 17:05:46 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/06 21:41:46 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 21:58:33 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,14 @@ static int	process_token(t_cmd *cmd, char **tokens, int *i, int *j)
 		cleanup_args_on_error(cmd, *j);
 		return (-1);
 	}
+	//printf("Handle heredoc interruption\n");
+	if (res == -2) // Handle heredoc interruption
+	{
+		//printf("cucufu\n");
+		cleanup_args_on_error(cmd, *j);
+		cmd->heredoc_interrupted = 1;
+		return (-2);
+	}
 	if (res == *i)
 	{
 		if (!add_arg(cmd, tokens[*i], j))
@@ -94,13 +102,22 @@ void	fill_cmd_from_tokens(t_cmd *cmd, char **tokens)
 {
 	int	i;
 	int	j;
+	int	result;
 
 	i = 0;
 	j = 0;
 	while (tokens[i])
 	{
-		if (process_token(cmd, tokens, &i, &j) == -1)
+		result = process_token(cmd, tokens, &i, &j);
+		if (result == -1)
 			return ;
+		//printf("fill cmd from tokens\n");
+		if (result == -2)
+		{
+			//printf("cucufu2\n");
+			cmd->heredoc_interrupted = 1;
+			return ;
+		}
 	}
 	cmd->args[j] = NULL;
 }
