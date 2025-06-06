@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:35:54 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 20:19:03 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/06 18:53:49 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,12 +120,9 @@ t_env *env_list_from_array(char **envp)
 
 void init_minimal_env_list(t_env **env)
 {
-	char *cwd;
-	char *shlvl_str;
-	char *current_shlvl;
-	int shlvl_val;
+	char	*cwd;
+	char	*current_shlvl;
 
-	// Инициализируем PWD если её нет
 	if (!env_list_find(*env, "PWD"))
 	{
 		cwd = getcwd(NULL, 0);
@@ -137,20 +134,9 @@ void init_minimal_env_list(t_env **env)
 		else
 			env_list_add(env, "PWD", "/");
 	}
-
-	// Инициализируем или обновляем SHLVL
 	current_shlvl = find_env_var(*env, "SHLVL");
-	if (current_shlvl)
-	{
-		shlvl_val = ft_atoi(current_shlvl) + 1;
-		shlvl_str = ft_itoa(shlvl_val);
-		env_list_set(env, "SHLVL", shlvl_str);
-		free(shlvl_str);
-	}
-	else
-		env_list_add(env, "SHLVL", "1");
-
-	// Добавляем _ если её нет
+	if (!current_shlvl)
+		env_list_add(env, "SHLVL", "0");
 	if (!env_list_find(*env, "_"))
 		env_list_add(env, "_", "./minishell");
 }
