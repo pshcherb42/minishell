@@ -12,7 +12,7 @@
 
 #include "../minishell.h"
 
-int	process_input(char *input, t_env **env, int last_exit_code)
+/*int	process_input(char *input, t_env **env, int last_exit_code)
 {
 	t_cmd	*cmds;
 	int		exit_code;
@@ -32,6 +32,7 @@ int	process_input(char *input, t_env **env, int last_exit_code)
 			free_cmd_list(cmds);
 			return (130);
 		}
+		//printf("DEBUG: parse_input devolvio no NULL\n");
 		exit_code = execute_cmds(cmds, env, last_exit_code);
 	}
 	if (cmds)
@@ -39,6 +40,35 @@ int	process_input(char *input, t_env **env, int last_exit_code)
 	free_cmd_list(cmds);
 	//printf("[DEBUG] Finished processing input\n");
 	return (exit_code);
+}*/
+
+int	process_input(char *input, t_env **env, int last_exit_code)
+{
+    t_cmd	*cmds;
+    int		exit_code;
+
+    exit_code = last_exit_code;
+    if (*input)
+        add_history(input);
+    cmds = parse_input(input, *env, last_exit_code);
+    
+    if (!cmds)
+    {
+        // parse_input falló (error de sintaxis o input vacío)
+        return (2); // Exit code 2 para errores de sintaxis
+    }
+    
+    if (cmds->heredoc_interrupted)
+    {
+        cleanup_cmd_heredocs(cmds);
+        free_cmd_list(cmds);
+        return (130);
+    }
+    printf("DEBUG:parse_input no devolvio NULL\n");
+    exit_code = execute_cmds(cmds, env, last_exit_code);
+    cleanup_cmd_heredocs(cmds);
+    free_cmd_list(cmds);
+    return (exit_code);
 }
 
 void	run_shell_loop(t_env **env)

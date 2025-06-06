@@ -22,7 +22,7 @@ t_cmd	*init_and_tokenize(char *in, t_env *env, int lec, char ***tkn)
 	*tkn = split_args(in, env, lec);
 	if (!*tkn)
 	{
-		free_cmds(cmd);
+		free(cmd);
 		return (NULL);
 	}
 	return (cmd);

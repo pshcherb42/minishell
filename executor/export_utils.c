@@ -103,9 +103,9 @@ void	print_all_env(t_env *env)
 	while (env)
 	{
 		if (env->value)
-			printf("declare -x %s=\"%s\"\n", env->name, env->value);
+			ft_printf("declare -x %s=\"%s\"\n", env->name, env->value);
 		else
-			printf("declare -x %s\n", env->name);
+			ft_printf("declare -x %s\n", env->name);
 		env = env->next;
 	}
 }

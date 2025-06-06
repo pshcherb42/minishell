@@ -23,6 +23,7 @@ char	**split_by_pipe(char *input)
 	state.j = 0;
 	state.start = 0;
 	state.in_quote = 0;
+	//printf("DEBUG: handling quotes\n");
 	while (input[state.i])
 	{
 		handle_quote(input[state.i], &state.quote, &state.in_quote);

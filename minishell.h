@@ -46,6 +46,16 @@ typedef struct s_cmd
 	int				capacity;
 }	t_cmd;
 
+typedef struct s_expand_state
+{
+    char	*result;
+    const char	*input;
+    int		i;
+    int		j;
+    int		in_quotes;
+    char	quote_char;
+}	t_expand_state;
+
 typedef struct s_expand_ctx
 {
 	const char	*input;
@@ -170,7 +180,7 @@ t_split_vars	*init_vars(void);
 // from lexer_parse.c
 int				parse_token(t_split_vars *vars, char *in, t_env *env, int lec);
 char			**split_args(char *input, t_env *envp, int last_exit_code);
-
+void			cleanup_partial_args(char **args, int count);
 // funciones ejecucción
 // from builtin_utils.c
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
