@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 16:37:31 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/05/23 18:22:49 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/06 22:57:46 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,25 @@ void	handle_env_var(t_expand_ctx *ctx)
 	char	*val;
 	int		v;
 
-	if (!(ft_isalnum(ctx->input[ctx->i]) || ctx->input[ctx->i] == '_'))
+	printf("DEBUG: Expanding variable at position %d\n", ctx->i);
+	if (!(ft_isalpha(ctx->input[ctx->i]) || ctx->input[ctx->i] == '_'))
 	{
+		if (ft_isdigit(ctx->input[ctx->i]))
+		{
+			printf("DEBUG: Variable is a digit, treating as literal: %c\n", ctx->input[ctx->i]);
+			ctx->result[ctx->j++] = '$';
+			while (ft_isalnum(ctx->input[ctx->i]))
+				ctx->result[ctx->j++] = ctx->input[ctx->i++];
+			return ;
+		}
+		printf("DEBUG: Invalid variable, treating as literal: %c\n", ctx->input[ctx->i]);
 		ctx->result[ctx->j++] = '$';
 		if (ctx->input[ctx->i])
 			ctx->result[ctx->j++] = ctx->input[ctx->i++];
 		return ;
 	}
 	val = get_env_value(ctx, &ctx->i);
+	printf("DEBUG: Variable expanded to: %s\n", val ? val : "(null)");
 	v = 0;
 	while (val[v])
 		ctx->result[ctx->j++] = val[v++];

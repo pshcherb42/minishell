@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:20:20 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/06 21:36:46 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/06 22:45:26 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	parse_and_store_token(t_token_state *state)
 		state->vars->i++;
 	if (!state->input[state->vars->i])
 		return (0);
-	//printf("DEBUG: parsing token\n");
+	printf("DEBUG: parsing token\n");
 	if (!parse_token(state->vars, state->input, state->envp, state->lec))
 	{
 		if (state->vars->syntax_error)
@@ -79,7 +79,7 @@ char	**split_args(char *input, t_env *envp, int last_exit_code)
 	state.input = input;
 	state.envp = envp;
 	state.lec = last_exit_code;
-	//printf("DEBUG: preparing to parse tokens\n");
+	printf("DEBUG: preparing to parse tokens\n");
 	while (input[state.vars->i])
 	{
 		int was_quoted = is_token_quoted(input, state.vars->i);
