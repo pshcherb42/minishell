@@ -21,6 +21,6 @@ int	ft_pwd(void)
 		perror("minishell: pwd");
 		return (1);
 	}
-	printf("%s\n", cwd);
+	ft_printf("%s\n", cwd);
 	return (0);
 }

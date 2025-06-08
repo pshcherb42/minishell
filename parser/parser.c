@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:14:16 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/06 19:52:16 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/06 21:37:00 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_cmd	*parse_single_command(char *input, t_env *envp, int l_e_c)
 	cmd = init_and_tokenize(input, envp, l_e_c, &tokens);
 	if (!cmd)
 		return (NULL);
+	//printf("DEBUG: fill cmd from tokens\n");
 	fill_cmd_from_tokens(cmd, tokens);
 	free_args(tokens);
 	//free_env(env_array);

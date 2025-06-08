@@ -38,7 +38,7 @@ int	ft_env(char **args, t_env *env)
 	while (env)
 	{
 		if (env->value)
-			printf("%s=%s\n", env->name, env->value);
+			ft_printf("%s=%s\n", env->name, env->value);
 		env = env->next;
 	}
 	return (0);

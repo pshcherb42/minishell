@@ -64,7 +64,7 @@ int	ft_exit_child(char **args)
 
 int	ft_exit(char **args)
 {
-	printf("exit\n");
+	ft_printf("exit\n");
 	if (args[1])
 	{
 		if (!ft_isnumeric(args[1]) || !is_in_llrange(args[1]))

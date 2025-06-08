@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 15:34:46 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/03 18:24:20 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/06 19:26:33 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static int	try_change_dir(char *target)
 
 	if (chdir(target) != 0)
 	{
+		//printf("DEBUG: cucufu");
 		ft_pstr(2, "minishell: cd: ");
 		ft_pstr(2, target);
 		ft_pstr(2, ": ");
