@@ -20,7 +20,6 @@ static	void	set_signals(void)
 
 static	void	redirect_pipes(t_cmd *cmd, int prev_fd, int pipefd[2])
 {
-	
 	if (prev_fd != -1)
 	{
 		dup2(prev_fd, STDIN_FILENO);
@@ -36,17 +35,11 @@ static	void	redirect_pipes(t_cmd *cmd, int prev_fd, int pipefd[2])
 
 void	run_child(t_cmd *cmd, int prev_fd, int pipefd[2], t_env **env)
 {
-	//printf("DEBUG: running child\n");
 	set_signals();
 	redirect_pipes(cmd, prev_fd, pipefd);
-	//printf("DEBUG: after redirected pipes\n");
 	if (!open_redirs(cmd))
-	{
-		//printf("DEBUG: failed to open redirections\n");
 		exit(EXIT_FAILURE);
-	}
 	exec_child_cmd(cmd, env);
-	//printf("DEBUG: ran child\n");
 }
 
 void	handle_child_exit( int status)

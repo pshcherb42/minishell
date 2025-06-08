@@ -1,45 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   split_pipe_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/14 17:14:02 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/08 17:06:39 by pshcherb         ###   ########.fr       */
+/*   Created: 2025/06/08 16:55:01 by pshcherb          #+#    #+#             */
+/*   Updated: 2025/06/08 17:06:20 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-volatile sig_atomic_t	g_sigquit_flag = 0;
-
-void	handle_sigint(int sig)
+void	handle_quote(char c, char *quote, int *in_quote)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
+	if ((c == '\'') || c == '"')
+	{
+		if (!*in_quote)
+		{
+			*quote = c;
+			*in_quote = 1;
+		}
+		else if (*quote == c)
+		{
+			*in_quote = 0;
+			*quote = '\0';
+		}
+	}
 }
 
-void	handle_sigquit(int sig)
+char	*extract_segment(char *input, int start, int end)
 {
-	(void)sig;
-	g_sigquit_flag = 1;
+	return (ft_strndup(input + start, end - start));
 }
 
-void	heredoc_sigint(int sig)
+void	store_segment(t_pipe_state *state, char *segment)
 {
-	(void)sig;
-	g_sigquit_flag = 1;
-	write(1, "\n", 1);
-	exit(130);
-}
-
-void	setup_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
+	state->result[state->j++] = segment;
 }

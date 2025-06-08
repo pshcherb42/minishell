@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/06 19:48:22 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/08 17:02:17 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ typedef struct s_cmd
 
 typedef struct s_expand_state
 {
-    char	*result;
-    const char	*input;
-    int		i;
-    int		j;
-    int		in_quotes;
-    char	quote_char;
+	char		*result;
+	const char	*input;
+	int			i;
+	int			j;
+	int			in_quotes;
+	char		quote_char;
 }	t_expand_state;
 
 typedef struct s_expand_ctx
@@ -136,18 +136,35 @@ t_cmd			*parse_input(char *input, t_env *envp, int last_exit_code);
 int				is_trailing_pipe(const char *input);
 // from parser_state.c
 int				is_empty_or_spaces(const char *str);
-int				process_segment(t_parse_state *state);
 t_cmd			*build_command_list(t_parse_state *state);
+int				count_consecutive_operators(const char *str, char op);
+int				is_invalid_syntax(const char *segment);
+// from check_invalid_op_seq.c
+int				check_invalid_op_seq(const char *segment);
+// from process_segment.c
+int				process_segment(t_parse_state *state);
+// from find_invalid_token.c
+char			*find_invalid_token(const char *segment);
 // from redirection.c
 int				handle_redirection(t_cmd *cmd, char **tokens, int i);
 // from redirection_heredoc.c
 int				handle_input_redirect(t_cmd *cmd, char **tokens, int i);
 // from tokenizer.c
 t_cmd			*init_and_tokenize(char *in, t_env *env, int lec, char ***tkn);
+int				add_arg(t_cmd *cmd, char *token, int *j);
+void			cleanup_args_on_error(t_cmd *cmd, int j);
 void			fill_cmd_from_tokens(t_cmd *cmd, char **tokens);
+// from process_token.c
+int				process_token(t_cmd *cmd, char **tokens, int *i, int *j);
 // from split_pipe.c
-void			handle_quote(char c, char *quote, int *in_quote);
 char			**split_by_pipe(char *input);
+void			finalize_result(char *input, t_pipe_state *state);
+void			process_pipe_found(char *input, t_pipe_state *state);
+char			*apply_quote_prefix_if_needed(char *segment, int in_quote);
+// from split_pipe_utils.c
+void			handle_quote(char c, char *quote, int *in_quote);
+char			*extract_segment(char *input, int start, int end);
+void			store_segment(t_pipe_state *state, char *segment);
 // from cmd_utils.c
 t_cmd			*init_cmd(void);
 char			**grow_args_array(char **old_args, int old_size, int *capacity);
@@ -178,9 +195,17 @@ char			**free_and_return_null(t_split_vars *vars, char **args);
 int				validate_quotes(const char *input);
 t_split_vars	*init_vars(void);
 // from lexer_parse.c
+int				is_token_quoted(char *input, int pos);
+int				parse_and_store_token(t_token_state *state);
 int				parse_token(t_split_vars *vars, char *in, t_env *env, int lec);
 char			**split_args(char *input, t_env *envp, int last_exit_code);
 void			cleanup_partial_args(char **args, int count);
+// from split_args.c
+int				init_state(t_token_state *state, char *in, t_env *env, int lec);
+int				handle_parse_error(t_token_state *state, int ret);
+void			mark_quoted_token(t_token_state *state, int was_quoted);
+int				process_single_token(t_token_state *state);
+char			**finalize_token_array(t_token_state *state);
 // funciones ejecucción
 // from builtin_utils.c
 int				ft_strncmp(const char *s1, const char *s2, size_t n);

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: akreise <akreise@student.42.fr>            +#+  +:+       +#+         #
+#    By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/06 19:15:22 by pshcherb          #+#    #+#              #
-#    Updated: 2025/06/06 19:17:21 by pshcherb         ###   ########.fr        #
+#    Updated: 2025/06/08 16:55:33 by pshcherb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ SRCS = \
 	parser/cmd_utils.c \
 	parser/split_pipe.c \
 	parser/tokenizer.c \
+	parser/process_token.c \
 	parser/redirection.c \
 	parser/parser_state.c \
 	parser/expand.c \
@@ -39,6 +40,11 @@ SRCS = \
 	parser/lexer_init.c \
 	parser/lexer_copy.c \
 	parser/lexer_parse.c \
+	parser/split_args.c \
+	parser/find_invalid_token.c \
+	parser/process_segment.c \
+	parser/check_invalid_op_seq.c \
+	parser/split_pipe_utils.c \
 	parser/lexer_token.c \
 	parser/lexer_utils.c \
 	parser/redirection_heredoc.c \

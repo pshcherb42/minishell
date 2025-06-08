@@ -48,7 +48,6 @@ static int	try_change_dir(char *target)
 
 	if (chdir(target) != 0)
 	{
-		//printf("DEBUG: cucufu");
 		ft_pstr(2, "minishell: cd: ");
 		ft_pstr(2, target);
 		ft_pstr(2, ": ");

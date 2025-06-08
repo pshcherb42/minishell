@@ -6,7 +6,7 @@
 /*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 10:15:21 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/05 19:50:59 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/08 16:49:52 by pshcherb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,9 @@ static int	handle_operator(t_split_vars *vars, char *input, int start)
 		{
 			if (input[vars->i + 2] && input[vars->i] == input[vars->i + 2])
 			{
-				fprintf(stderr, "minishell: syntax error near unexpected token `%c'\n", input[vars->i]);
+				ft_printf("minishell: ");
+				ft_printf("syntax error ");
+				ft_printf("near unexpected token `%c'\n", input[vars->i]);
 				vars->syntax_error = 1;
 				vars->i += 3;
 				return (0);
