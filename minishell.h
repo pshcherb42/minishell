@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pshcherb <pshcherb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:13:07 by pshcherb          #+#    #+#             */
-/*   Updated: 2025/06/08 17:02:17 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:02:50 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ int				ft_echo(char **args);
 char			*ft_strchr(const char *s, int c);
 int				ft_env(char **args, t_env *env);
 // from ft_exit.c
-int				ft_exit(char **args);
+int				ft_exit(char **args, int last_exit_code);
 int				ft_exit_child(char **args);
 // from ft_pwd.c
 int				ft_pwd(void);

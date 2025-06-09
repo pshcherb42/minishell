@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 12:17:14 by akreise           #+#    #+#             */
-/*   Updated: 2025/06/06 21:36:39 by pshcherb         ###   ########.fr       */
+/*   Updated: 2025/06/09 15:02:24 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	execute_loop(t_cmd *cmd, t_env **env, int prev_fd,
 	if (!ft_strcmp(cmd->args[0], "exit"))
 	{
 		if (!cmd->next && prev_fd == -1)
-			return (ft_exit(cmd->args));
+			return (ft_exit(cmd->args, last_exit_code));
 	}
 	if (!cmd->next && prev_fd == -1
 		&& is_builtin(cmd->args[0]) && is_parent_builtin(cmd->args[0]))

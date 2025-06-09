@@ -6,7 +6,7 @@
 /*   By: akreise <akreise@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 17:33:55 by akreise           #+#    #+#             */
-/*   Updated: 2025/05/29 16:29:57 by akreise          ###   ########.fr       */
+/*   Updated: 2025/06/09 15:01:56 by akreise          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	ft_exit_child(char **args)
 	exit(0);
 }
 
-int	ft_exit(char **args)
+int	ft_exit(char **args, int last_exit_code)
 {
 	ft_printf("exit\n");
 	if (args[1])
@@ -81,5 +81,5 @@ int	ft_exit(char **args)
 		}
 		exit(ft_atoi(args[1]) % 256);
 	}
-	exit(0);
+	exit(last_exit_code);
 }
