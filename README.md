@@ -69,3 +69,51 @@ exit
 ```
 
 ![minishell-diagram2](./resources/minishell-diagram2.gif)
+
+
+If you are using Mac, you probably will get a compile time error related to rl_replace_line function. Just comment it and try to compile again.
+
+![replace-line-error](./resources/replace_line.png)
+
+## Contributing 🛠️
+
+We welcome contributions! If you want to help improve Minishell, follow these steps to set up the project for development:
+
+1. **Fork the repository**  
+Click the "Fork" button on GitHub to create your own copy of the project.
+
+2. **Clone your fork locally:**
+```bash
+git clone https://github.com/your-username/minishell.git
+cd minishell
+```
+3. **Create a new branch for your feature or fix:**
+```bash
+git checkout -b feature-name
+```
+4. **Build the project using the Makefile:**
+```bash
+make
+```
+	•	This will compile the project and create the minishell executable.
+	•	Use make clean to remove compiled files if needed.
+5. **Run Minishell locally to test your changes:**
+```bash
+./minishell
+```
+6. **Make your changes**
+Edit the code in your favorite editor and test frequently.
+
+7. **Commit your work with a clear message:**
+```bash
+git add .
+git commit -m "Add feature or fix issue"
+```
+8. **Push your branch to your fork:**
+```bash
+git push origin feature-name
+```
+9. **Open a Pull Request**
+
+Go to the original repository on GitHub and open a PR from your branch. Describe your changes clearly so we can review them.
+
