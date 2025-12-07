@@ -67,3 +67,5 @@ echo $MYVAR
 ```bash
 exit
 ```
+
+![minishell-diagram2](./resources/minishell-diagram2.gif)
