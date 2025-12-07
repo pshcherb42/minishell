@@ -20,7 +20,7 @@ It supports key shell features. These include:
 Minishell is a great tool for students and developers. Doing this project helped us understand how shells work.
 This project gave us hands-on experience. We worked with system calls, managed processes, and explored low-level programming concepts.
 
-![Minishell Workflow](./resources/minishell-diagram.git)
+![Minishell Workflow](./resources/minishell-diagram.gif)
 
 ## Installation
 
