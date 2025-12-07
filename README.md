@@ -2,7 +2,9 @@
 ## Our own simple bash.
 We did this project with my teammate to deepen our understanding of Unix shell concepts.
 It supports executing commands, handling environment variables, and implementing key shell features such as pipes, redirections, and built-in commands.
+
 ![shell_image](./resources/shell.jpeg)
+
 Minishell is a simple Unix shell made in C. It allows users to manage processes, run commands, and interact with the system in a straightforward and secure manner. 
 
 It supports key shell features. These include:
